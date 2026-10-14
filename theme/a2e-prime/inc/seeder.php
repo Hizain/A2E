@@ -127,6 +127,15 @@ function a2e_seed() {
 		);
 	}
 
+	if ( ! a2e_shop_page_id() ) {
+		a2e_ensure_post(
+			array(
+				'post_name'  => 'shop',
+				'post_title' => 'Services Shop',
+			)
+		);
+	}
+
 	if ( ( 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' ) ) && ! empty( $ids['home'] ) ) {
 		update_option( 'show_on_front', 'page' );
 		update_option( 'page_on_front', $ids['home'] );

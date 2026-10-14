@@ -26,6 +26,7 @@ function a2e_seo_defaults() {
 		'subscription-plans'                    => array( 'Monthly eBay Store Management Plans', 'Monthly Amazon to eBay dropshipping plans: new researched listings every month, daily store management, monthly reports. Secure billing through Whop, cancel anytime.' ),
 		'amazon-to-ebay-dropshipping-service'   => array( 'Amazon to eBay Dropshipping Services', 'Product research, SEO eBay listings, store setup, inventory monitoring, order fulfillment and account management. Every eBay dropshipping service from one team.' ),
 		'free-tools'                            => array( 'Free eBay Seller Tools & Calculators', '13 free eBay seller tools: fee calculator, Amazon to eBay profit calculator, title checker, sell-through rate, bulk profit, product scorecard and more. No sign-up.' ),
+		'shop'                                  => array( 'Amazon to eBay Dropshipping Services Shop', 'Order done-for-you eBay dropshipping services: monthly store management, researched listing packages, store setup and audits. Secure Whop checkout, cancel monthly plans anytime.' ),
 		'contact'                               => array( 'Contact A2E Dropshipping', 'Questions about eBay dropshipping, plans or your store? Message A2E on WhatsApp or send us a note. A real person replies within one business day.' ),
 		'quote-request'                         => array( 'Free eBay Store Audit & Quote', 'Get a free eBay store audit and a fixed-price plan for product research, listings and store management. Takes two minutes, no obligation.' ),
 		'consultation'                          => array( 'Book an eBay Dropshipping Consultation', 'Book a consultation with A2E: a store review, product research direction, listing SEO and a prioritised growth plan before you spend money.' ),
@@ -51,7 +52,15 @@ function a2e_seo_for_request() {
 	$desc     = '';
 	$tool     = a2e_current_tool();
 
-	if ( $tool ) {
+	if ( a2e_is_shop_request() ) {
+		$title  = isset( $defaults['shop'] ) ? $defaults['shop'][0] : '';
+		$desc   = isset( $defaults['shop'] ) ? $defaults['shop'][1] : '';
+		$shop   = a2e_shop_page_id();
+		$custom = $shop ? get_post_meta( $shop, '_a2e_seo_title', true ) : '';
+		$title  = $custom ? $custom : $title;
+		$custom = $shop ? get_post_meta( $shop, '_a2e_seo_desc', true ) : '';
+		$desc   = $custom ? $custom : $desc;
+	} elseif ( $tool ) {
 		$t     = a2e_tools()[ $tool ];
 		$title = $t['seo_title'];
 		$desc  = $t['meta'];
@@ -83,7 +92,7 @@ function a2e_seo_for_request() {
 		$desc  = wp_strip_all_tags( term_description() );
 	}
 
-	if ( is_singular() ) {
+	if ( is_singular() && ! a2e_is_shop_request() ) {
 		$id     = get_queried_object_id();
 		$custom = get_post_meta( $id, '_a2e_seo_title', true );
 		$custom = $custom ? $custom : get_post_meta( $id, '_a2e_meta_title', true );
@@ -145,6 +154,9 @@ add_filter( 'document_title_separator', 'a2e_title_separator' );
  * @return string
  */
 function a2e_canonical_url() {
+	if ( a2e_is_shop_request() ) {
+		return a2e_shop_url();
+	}
 	if ( a2e_current_tool() ) {
 		return a2e_tool_url( a2e_current_tool() );
 	}

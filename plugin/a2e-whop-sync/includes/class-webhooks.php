@@ -186,7 +186,7 @@ class Webhooks {
 					log( $type, sprintf( '%s’s %s subscription ended (%s).', $who, $plan, $row['status'] ) );
 					self::notify( __( 'Subscription ended', 'a2e-whop' ), sprintf( "%s's subscription to %s has ended (status: %s).", $who, $plan, $row['status'] ) );
 				} elseif ( 'membership.cancel_at_period_end_changed' === $type ) {
-					log( $type, $row['cancel_at_period_end'] ? sprintf( '%s cancelled %s — access ends %s.', $who, $plan, $row['period_end'] ) : sprintf( '%s resumed %s.', $who, $plan ) );
+					log( $type, $row['cancel_at_period_end'] ? sprintf( '%s cancelled %s; access ends %s.', $who, $plan, $row['period_end'] ) : sprintf( '%s resumed %s.', $who, $plan ) );
 					if ( $row['cancel_at_period_end'] ) {
 						self::notify( __( 'Subscription cancelled', 'a2e-whop' ), sprintf( "%s cancelled %s. Access continues until %s UTC.\n\nA quick personal message now can save the client.", $who, $plan, $row['period_end'] ) );
 					}

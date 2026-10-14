@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       A2E Whop Sync
  * Plugin URI:        https://a2edropshipping.com/
- * Description:       Create and manage subscription plans in WordPress — they are created on your Whop account automatically. Connect once with your Whop API key; checkout links, subscribers, renewals and cancellations sync back through a signed webhook. Works with the A2E Prime theme (plans appear on the pricing pages) and any theme via shortcodes.
- * Version:           1.0.0
+ * Description:       Create subscription plans and one-time services in WordPress and they are created on your Whop account automatically. Connect once with your Whop API key; checkout links, subscribers, renewals and cancellations sync back through a signed webhook. With the A2E Prime theme, plans fill the services shop, homepage and pricing page; other themes can use the shortcodes.
+ * Version:           1.1.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            A2E Dropshipping
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const OPTION  = 'a2ews_settings';
 const CPT     = 'a2ews_plan';
 
@@ -31,6 +31,7 @@ require_once A2EWS_DIR . 'includes/helpers.php';
 require_once A2EWS_DIR . 'includes/class-api.php';
 require_once A2EWS_DIR . 'includes/class-members.php';
 require_once A2EWS_DIR . 'includes/class-plans.php';
+require_once A2EWS_DIR . 'includes/class-catalog.php';
 require_once A2EWS_DIR . 'includes/class-webhooks.php';
 require_once A2EWS_DIR . 'includes/class-admin.php';
 require_once A2EWS_DIR . 'includes/class-frontend.php';
@@ -43,6 +44,7 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 function activate() {
 	Members::install();
 	Plans::register();
+	Catalog::register();
 	flush_rewrite_rules();
 }
 
@@ -53,6 +55,7 @@ add_action(
 			Members::install();
 		}
 		Plans::init();
+		Catalog::init();
 		Webhooks::init();
 		Admin::init();
 		Frontend::init();

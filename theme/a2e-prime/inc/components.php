@@ -32,7 +32,7 @@ function a2e_is_designed_page( $post = null ) {
 	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID ) {
 		return true;
 	}
-	return in_array( $post->post_name, a2e_designed_page_slugs(), true ) || a2e_tool_slug_for_post( $post );
+	return in_array( $post->post_name, a2e_designed_page_slugs(), true ) || a2e_tool_slug_for_post( $post ) || (int) $post->ID === a2e_shop_page_id();
 }
 
 /**
@@ -170,6 +170,11 @@ function a2e_breadcrumb_items() {
 	$items = array( array( __( 'Home', 'a2e' ), home_url( '/' ) ) );
 	if ( is_front_page() ) {
 		return array();
+	}
+	if ( a2e_is_shop_request() ) {
+		$shop    = a2e_shop_page_id();
+		$items[] = array( $shop ? get_the_title( $shop ) : __( 'Shop', 'a2e' ), a2e_shop_url() );
+		return $items;
 	}
 	if ( is_singular( 'post' ) ) {
 		$items[] = array( __( 'Blog', 'a2e' ), a2e_blog_url() );
@@ -324,6 +329,9 @@ function a2e_render_pricing( $args = array() ) {
 					<?php a2e_buttons( array( array( __( 'Request a custom plan', 'a2e' ), add_query_arg( 'plan', 'custom', a2e_url( 'quote-request' ) ), 'light' ) ) ); ?>
 				</div>
 			</aside>
+		<?php endif; ?>
+		<?php if ( a2e_shop_page_id() && count( a2e_shop_catalog()['plans'] ) > $count && ! a2e_is_shop_request() ) : ?>
+			<p class="pricing__more"><a class="pricing__more-link" href="<?php echo esc_url( a2e_shop_url() ); ?>"><?php a2e_the_icon( 'layers' ); ?><span><?php /* translators: %d: number of services */ printf( esc_html__( 'Browse all %d services, including one-time packages', 'a2e' ), (int) count( a2e_shop_catalog()['plans'] ) ); ?></span><?php a2e_the_icon( 'arrow-right' ); ?></a></p>
 		<?php endif; ?>
 		<p class="pricing__trust"><?php a2e_the_icon( 'lock' ); ?><?php echo esc_html( a2e_plans_from_whop() ? __( 'Secure checkout by Whop · Cancel future renewals anytime from your account', 'a2e' ) : __( 'Clear scope before you pay · No long-term contract · Cancel anytime', 'a2e' ) ); ?></p>
 	</div>

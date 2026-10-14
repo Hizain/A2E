@@ -50,7 +50,7 @@ class Frontend {
 	}
 
 	/**
-	 * [a2e_whop_plans] — simple plan cards for themes other than A2E Prime.
+	 * [a2e_whop_plans]: simple plan cards for themes other than A2E Prime.
 	 *
 	 * @return string
 	 */
@@ -80,7 +80,7 @@ class Frontend {
 	}
 
 	/**
-	 * [a2e_whop_button plan="123" label="Subscribe"] — a checkout button for one plan (WordPress plan ID).
+	 * [a2e_whop_button plan="123" label="Subscribe"]: a checkout button for one plan (WordPress plan ID).
 	 *
 	 * @param array $atts Attributes.
 	 * @return string

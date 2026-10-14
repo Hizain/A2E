@@ -137,7 +137,7 @@ class Admin {
 
 		$messages = array( __( 'Connected to Whop.', 'a2e-whop' ) );
 		$hook     = self::ensure_webhook();
-		$messages[] = true === $hook ? __( 'Webhook created — subscriptions will sync automatically.', 'a2e-whop' ) : $hook;
+		$messages[] = true === $hook ? __( 'Webhook created. Subscriptions will sync automatically.', 'a2e-whop' ) : $hook;
 
 		$synced = 0;
 		foreach ( get_posts( array( 'post_type' => CPT, 'post_status' => 'publish', 'posts_per_page' => 50, 'fields' => 'ids' ) ) as $pid ) {
@@ -336,7 +336,7 @@ class Admin {
 		?>
 		<div class="wrap a2ews">
 			<h1 class="a2ews-title"><?php esc_html_e( 'Whop Subscriptions', 'a2e-whop' ); ?></h1>
-			<p class="a2ews-lead"><?php esc_html_e( 'Connect your Whop account once. After that, create and edit plans right here in WordPress — they are created on Whop automatically, appear on your pricing pages with secure checkout, and every new subscriber, renewal and cancellation syncs back.', 'a2e-whop' ); ?></p>
+			<p class="a2ews-lead"><?php esc_html_e( 'Connect your Whop account once. After that, create and edit plans and services right here in WordPress. They are created on Whop automatically, appear in your services shop and on your pricing pages with secure checkout, and every new subscriber, renewal and cancellation syncs back.', 'a2e-whop' ); ?></p>
 			<?php self::notice(); ?>
 
 			<?php if ( $connected ) : ?>
@@ -362,7 +362,7 @@ class Admin {
 					<ol class="a2ews-steps">
 						<li><?php echo wp_kses( __( 'In Whop, open your <strong>Dashboard → Developer → API keys</strong> and create a key. The <strong>Admin</strong> role is simplest (or give it permissions for products, plans, memberships incl. email, and webhooks).', 'a2e-whop' ), array( 'strong' => array() ) ); ?> <a href="https://whop.com/dashboard/" target="_blank" rel="noopener"><?php esc_html_e( 'Open Whop ↗', 'a2e-whop' ); ?></a></li>
 						<li><?php esc_html_e( 'Paste the key below and press Connect. We detect your account and set up the webhook automatically.', 'a2e-whop' ); ?></li>
-						<li><?php esc_html_e( 'Create your plans under Whop → Plans. Done — they go live on your pricing pages.', 'a2e-whop' ); ?></li>
+						<li><?php esc_html_e( 'Create your plans under Whop → Plans. Done: they go live in your services shop and on your pricing pages.', 'a2e-whop' ); ?></li>
 					</ol>
 				</div>
 			<?php endif; ?>
@@ -376,7 +376,7 @@ class Admin {
 					<?php self::form_fields( 'a2ews_connect' ); ?>
 					<h2><?php echo $connected ? esc_html__( 'Update API key', 'a2e-whop' ) : esc_html__( 'API key', 'a2e-whop' ); ?></h2>
 					<p><label for="a2ews-key" class="screen-reader-text"><?php esc_html_e( 'Whop API key', 'a2e-whop' ); ?></label>
-						<input type="password" id="a2ews-key" name="api_key" class="large-text code" autocomplete="off" placeholder="<?php echo $connected ? esc_attr__( '•••••••• saved — paste a new key to replace it', 'a2e-whop' ) : 'apik_…'; ?>"></p>
+						<input type="password" id="a2ews-key" name="api_key" class="large-text code" autocomplete="off" placeholder="<?php echo $connected ? esc_attr__( '•••••••• saved. Paste a new key to replace it', 'a2e-whop' ) : 'apik_…'; ?>"></p>
 					<p><label><input type="checkbox" name="sandbox" value="1" <?php checked( '1', $s['sandbox'] ); ?>> <?php esc_html_e( 'Use Whop sandbox (test payments only)', 'a2e-whop' ); ?></label></p>
 					<details><summary><?php esc_html_e( 'Advanced', 'a2e-whop' ); ?></summary>
 						<p><label><?php esc_html_e( 'Account / Company ID (only if automatic detection fails)', 'a2e-whop' ); ?><br><input type="text" name="account_id" class="regular-text code" value="<?php echo esc_attr( $s['account_id'] ); ?>" placeholder="biz_…"></label></p>
@@ -447,12 +447,12 @@ class Admin {
 						$class  = $r['cancel_at_period_end'] && $active ? 'warn' : ( $active ? 'ok' : 'err' );
 						?>
 						<tr>
-							<td><strong><?php echo esc_html( $r['name'] ? $r['name'] : ( $r['username'] ? $r['username'] : '—' ) ); ?></strong><br><?php echo $r['email'] ? '<a href="mailto:' . esc_attr( $r['email'] ) . '">' . esc_html( $r['email'] ) . '</a>' : '<small>' . esc_html( $r['id'] ) . '</small>'; ?></td>
+							<td><strong><?php echo esc_html( $r['name'] ? $r['name'] : ( $r['username'] ? $r['username'] : '-' ) ); ?></strong><br><?php echo $r['email'] ? '<a href="mailto:' . esc_attr( $r['email'] ) . '">' . esc_html( $r['email'] ) . '</a>' : '<small>' . esc_html( $r['id'] ) . '</small>'; ?></td>
 							<td><?php echo $r['wp_plan_id'] ? '<a href="' . esc_url( get_edit_post_link( (int) $r['wp_plan_id'] ) ) . '">' . esc_html( get_the_title( (int) $r['wp_plan_id'] ) ) . '</a>' : '<code>' . esc_html( $r['plan_id'] ) . '</code>'; ?></td>
 							<td><span class="a2ews-pill a2ews-pill--<?php echo esc_attr( $class ); ?>"><?php echo esc_html( ucfirst( str_replace( '_', ' ', $label ) ) ); ?></span></td>
-							<td><?php echo $r['period_end'] ? esc_html( wp_date( get_option( 'date_format' ), strtotime( $r['period_end'] . ' UTC' ) ) ) : '—'; ?></td>
+							<td><?php echo $r['period_end'] ? esc_html( wp_date( get_option( 'date_format' ), strtotime( $r['period_end'] . ' UTC' ) ) ) : '-'; ?></td>
 							<td><?php echo esc_html( format_price( (float) $r['total_paid'], $r['currency'] ) ); ?></td>
-							<td><?php echo $r['created_at'] ? esc_html( wp_date( get_option( 'date_format' ), strtotime( $r['created_at'] . ' UTC' ) ) ) : '—'; ?></td>
+							<td><?php echo $r['created_at'] ? esc_html( wp_date( get_option( 'date_format' ), strtotime( $r['created_at'] . ' UTC' ) ) ) : '-'; ?></td>
 							<td class="a2ews-row-actions">
 								<?php if ( $r['manage_url'] ) : ?><a href="<?php echo esc_url( $r['manage_url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Open in Whop', 'a2e-whop' ); ?></a><?php endif; ?>
 								<?php if ( $active && ! $r['cancel_at_period_end'] && is_connected() ) : ?>

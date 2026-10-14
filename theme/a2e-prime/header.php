@@ -104,6 +104,7 @@ $a2e_monthly  = array_values(
 						</div>
 					</li>
 					<li class="nav__item"><a class="nav__link" href="<?php echo esc_url( a2e_url( 'pricing' ) ); ?>"><?php esc_html_e( 'Pricing', 'a2e' ); ?></a></li>
+					<?php if ( a2e_shop_page_id() ) : ?><li class="nav__item"><a class="nav__link<?php echo a2e_is_shop_request() ? ' is-current' : ''; ?>" href="<?php echo esc_url( a2e_shop_url() ); ?>"><?php esc_html_e( 'Shop', 'a2e' ); ?></a></li><?php endif; ?>
 					<li class="nav__item has-mega has-mega--small" data-mega>
 						<button type="button" class="nav__link" aria-expanded="false" aria-controls="mega-results"><?php esc_html_e( 'Results', 'a2e' ); ?><?php a2e_the_icon( 'chevron-down', 'nav__chev' ); ?></button>
 						<div class="mega mega--small" id="mega-results">
@@ -156,6 +157,7 @@ $a2e_monthly  = array_values(
 			</details>
 			<ul class="mnav__links">
 				<li><a href="<?php echo esc_url( a2e_url( 'pricing' ) ); ?>"><?php esc_html_e( 'Pricing', 'a2e' ); ?></a></li>
+				<?php if ( a2e_shop_page_id() ) : ?><li><a href="<?php echo esc_url( a2e_shop_url() ); ?>"><?php esc_html_e( 'Services shop', 'a2e' ); ?></a></li><?php endif; ?>
 				<li><a href="<?php echo esc_url( a2e_url( 'portfolio' ) ); ?>"><?php esc_html_e( 'Portfolio', 'a2e' ); ?></a></li>
 				<li><a href="<?php echo esc_url( get_post_type_archive_link( 'a2e_case_study' ) ); ?>"><?php esc_html_e( 'Case studies', 'a2e' ); ?></a></li>
 				<li><a href="<?php echo esc_url( get_post_type_archive_link( 'a2e_testimonial' ) ); ?>"><?php esc_html_e( 'Reviews', 'a2e' ); ?></a></li>

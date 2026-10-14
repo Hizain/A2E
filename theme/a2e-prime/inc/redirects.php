@@ -41,10 +41,12 @@ function a2e_builtin_redirects() {
 		'client-area'                    => 'account',
 	);
 	if ( ! class_exists( 'WooCommerce' ) ) {
-		$map['shop']       = 'pricing';
-		$map['cart']       = 'pricing';
-		$map['checkout']   = 'pricing';
-		$map['my-account'] = 'account';
+		$map['shop']         = 'shop';
+		$map['package-shop'] = 'shop';
+		$map['products']     = 'shop';
+		$map['cart']         = 'shop';
+		$map['checkout']     = 'shop';
+		$map['my-account']   = 'account';
 	}
 	foreach ( array_keys( a2e_tools() ) as $slug ) {
 		$map[ $slug ]          = 'free-tools/' . $slug;
@@ -113,7 +115,7 @@ function a2e_do_redirects() {
 	$map = a2e_builtin_redirects();
 	if ( isset( $map[ $path ] ) && ( is_404() || 'case-studies-overview' === $path || 'service-guides' === $path ) ) {
 		$target = $map[ $path ];
-		$url    = 'case-studies' === $target ? get_post_type_archive_link( 'a2e_case_study' ) : ( 'testimonials' === $target ? get_post_type_archive_link( 'a2e_testimonial' ) : ( 'blog' === $target ? a2e_blog_url() : ( 'wp-sitemap.xml' === $target ? home_url( '/wp-sitemap.xml' ) : a2e_url( $target ) ) ) );
+		$url    = 'case-studies' === $target ? get_post_type_archive_link( 'a2e_case_study' ) : ( 'testimonials' === $target ? get_post_type_archive_link( 'a2e_testimonial' ) : ( 'blog' === $target ? a2e_blog_url() : ( 'wp-sitemap.xml' === $target ? home_url( '/wp-sitemap.xml' ) : ( 'shop' === $target ? ( a2e_shop_page_id() ? a2e_shop_url() : a2e_url( 'pricing' ) ) : a2e_url( $target ) ) ) ) );
 		if ( $url ) {
 			wp_safe_redirect( $url . ( $query ? '?' . $query : '' ), 301, 'A2E' );
 			exit;

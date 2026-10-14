@@ -147,6 +147,18 @@ function a2e_settings_schema() {
 				'custom_text'     => array( 'Custom plan: text', 'textarea', 'Tell us your listing volume and what you want managed. We will build a plan around your store instead of forcing you into a package.', '' ),
 			),
 		),
+		'shop'     => array(
+			'title'  => __( 'Services shop', 'a2e' ),
+			'desc'   => __( 'The shop page lists every plan and one-time service from Whop → Plans, grouped by Whop → Categories. Wrap words in *asterisks* for the highlighted serif style.', 'a2e' ),
+			'fields' => array(
+				'shop_eyebrow'           => array( 'Small label above the headline', 'text', 'Services shop', '' ),
+				'shop_title'             => array( 'Headline', 'text', 'Amazon to eBay dropshipping services, *ready to order.*', '' ),
+				'shop_intro'             => array( 'Intro', 'textarea', 'Monthly store management, one-time listing packages and setup services in one place. Pick what your store needs and check out securely with Whop. A real person confirms your order within one business day.', '' ),
+				'shop_help_title'        => array( '“Not sure what to pick?” headline', 'text', 'Tell us about your store and we will *recommend the right mix.*', '' ),
+				'shop_help_text'         => array( '“Not sure what to pick?” text', 'textarea', 'Get a free store audit with a clear recommendation and a fixed price, or message us on WhatsApp. No pressure, no jargon.', '' ),
+				'shop_redirect_products' => array( 'Send old WooCommerce product pages to the shop', 'toggle', '1', 'When WooCommerce is installed, product and product-category pages redirect (301) to the shop, straight to the matching service if it was imported. Cart, checkout and account pages are not touched.' ),
+			),
+		),
 		'fees'     => array(
 			'title'  => __( 'eBay fees', 'a2e' ),
 			'desc'   => __( 'Rates used by every free calculator (eBay US, most categories). If eBay changes its fees, update them here and all tools update at once.', 'a2e' ),

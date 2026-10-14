@@ -67,6 +67,7 @@ $a2e_social   = array(
 				<p class="footer-col__title"><?php esc_html_e( 'Get started', 'a2e' ); ?></p>
 				<ul>
 					<li><a href="<?php echo esc_url( a2e_url( 'pricing' ) ); ?>"><?php esc_html_e( 'Pricing', 'a2e' ); ?></a></li>
+					<?php if ( a2e_shop_page_id() ) : ?><li><a href="<?php echo esc_url( a2e_shop_url() ); ?>"><?php esc_html_e( 'Services shop', 'a2e' ); ?></a></li><?php endif; ?>
 					<li><a href="<?php echo esc_url( a2e_url( 'subscription-plans' ) ); ?>"><?php esc_html_e( 'Monthly plans', 'a2e' ); ?></a></li>
 					<li><a href="<?php echo esc_url( a2e_url( 'quote-request' ) ); ?>"><?php esc_html_e( 'Free store audit', 'a2e' ); ?></a></li>
 					<li><a href="<?php echo esc_url( a2e_url( 'consultation' ) ); ?>"><?php esc_html_e( 'Book a consultation', 'a2e' ); ?></a></li>

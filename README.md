@@ -21,8 +21,18 @@ Source code lives in `theme/a2e-prime/` and `plugin/a2e-whop-sync/`.
 3. Check **Settings → Permalinks** is set to **Post name**.
 4. **Upload and activate `a2e-whop-sync.zip`.** If the old “A2E Whop Subscriptions” plugin is installed, deactivate it first.
 5. Go to **Whop → Connect**, paste a Whop API key (Whop dashboard → Developer → API keys; the Admin role is simplest) and press **Connect**. Your account is detected and the webhook is created for you.
-6. **Whop → Plans → Add New Plan** for each plan (name, price, billing period, setup fee, trial, features). Publishing creates it on Whop, and it appears on the homepage, `/pricing/` and `/subscription-plans/` with a secure Whop checkout button.
-7. Open **A2E → Setup guide** and tick off the rest (Search Console, Analytics, founder photo).
+6. **Whop → Categories**: create your service groups (for example *Monthly store management*, *Listing packages*, *Store setup & audits*), each with an icon and an order number.
+7. **Whop → Plans → Add New Plan** for every monthly plan and one-time service (name, price, billing, setup fee, trial, features, icon, "best for", delivery time, full description in the editor). Tick a category on the right. Publishing creates it on Whop and it appears in the **services shop**. Tick "Also show on the homepage and pricing page" only for your 3 or 4 main plans.
+8. Open **A2E → Setup guide** and tick off the rest (Search Console, Analytics, founder photo).
+
+## Moving the shop from WooCommerce to Whop
+
+1. With WooCommerce still active, open **Whop → Plans**. A blue box offers to **import your WooCommerce products as draft plans** (price, sale price, description, bullet points as features, category, and the billing period of WooCommerce Subscriptions products).
+2. Open each draft, check it, pick an icon, and press **Publish** (this creates it on Whop).
+3. Your shop page (the WooCommerce shop page, for example `/shop/`) now shows the **services shop**: no product grid, no stock or brand filters. Old product and product-category links redirect to the shop, straight to the matching service.
+4. When every service is published, you can **deactivate WooCommerce**. The shop keeps working at the same URL, and old product, cart and checkout links redirect to it (my-account goes to the Client area). WooCommerce's styles are no longer loaded on your pages.
+
+If you never used WooCommerce, the theme creates a **Services Shop** page at `/shop/`.
 
 ## Everyday editing
 
@@ -31,9 +41,13 @@ Source code lives in `theme/a2e-prime/` and `plugin/a2e-whop-sync/`.
 - **Posts**: write blog posts as usual. The theme adds a table of contents, reading progress, related posts, tool links and a call to action automatically.
 - **A2E → Leads**: every free-audit, consultation, contact and newsletter submission (also emailed to you).
 - **A2E → Redirects**: add 301 redirects, bulk-import them, and see 404s visitors hit (one click to fix).
+- **Whop → Plans / Categories**: add, edit, reorder and group everything you sell. Use **A2E → Site Settings → Services shop** for the shop headline and intro.
 - **Whop → Subscribers**: active clients, MRR estimate, renewals, “cancel at period end”, import from Whop.
 
 ## What is new
+
+- **Services shop (6.2)**: one wide page with every monthly plan and one-time service, grouped by category, with a monthly / one-time switch, a category bar, service cards (icon, best for, delivery time, features, price with optional crossed-out regular price, Whop checkout) and a details window with the full description. It also has a "how ordering works" section, buying FAQ and structured data (OfferCatalog). "Shop" is added to the menu, and the pricing tables link to it.
+- **Logo fix (6.2)**: WooCommerce's stylesheet no longer blows the logo up on shop pages.
 
 - **Homepage**: centered headline with floating supplier logos (Amazon, Walmart, AliExpress, Target, Home Depot, eBay), an interactive example product board that walks one product from supplier to an SEO eBay listing to profit after every fee (tabs for four example products, typed title, live 30-day sales chart, profit breakdown), supplier logo marquee, count-up stats, “doing it alone vs with A2E” toggle, bento services grid, 4-step process, interactive **profit simulator** that recommends a plan, reviews wall, founder note, pricing, quick fee checker, latest posts, FAQ.
 - **No long dashes**: theme copy uses plain punctuation. Long dashes in your own posts, pages and titles are shown as commas or hyphens on the live site (switch off under **A2E → Site Settings → Business → Plain punctuation**).
@@ -80,5 +94,7 @@ On a local WordPress 6.5 copy seeded with the current theme's pages and URLs:
 - all 13 tools compute in a real browser with no JavaScript errors; lead forms submit inline and save to Leads;
 - light/dark mode and phone layout were checked on screenshots;
 - the plugin was run against a mock Whop API: connect (bad and good key), webhook creation, creating one-time and recurring plans with setup fee and trial, rename, price change (new plan, old one hidden), signed webhooks (valid, duplicate, tampered, stale, wrong secret, legacy payload), paginated import, cancel at period end, and the pricing page switching to Whop checkout links.
+
+Services shop (6.2 / plugin 1.1): tested with a WooCommerce stand-in (the build environment cannot download WooCommerce itself) that copies the parts that matter here: the shop URL, product and category pages, body classes, the image stylesheet that broke the logo, and product data for the import. Checked: shop at the WooCommerce shop URL with WooCommerce on and off, product and category redirects, cart/checkout untouched while WooCommerce is active, import of products (including a sale price and a subscription product), publishing to the mock Whop API, quote-only services, category order, the details window, the monthly / one-time switch, light/dark and phone layouts. Preview the shop on the live site before switching WooCommerce off.
 
 Not yet tested against the live Whop API; do one sandbox purchase (Whop → Connect → “Use Whop sandbox”) before going live.

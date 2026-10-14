@@ -570,4 +570,90 @@
 			setTimeout(function () { btn.setAttribute('title', t); }, 1600);
 		});
 	});
+
+	/* Services shop: billing switch, category bar, details window ------------- */
+	var shop = $('[data-shop]');
+	if (shop) {
+		var kindBtns = $$('[data-shop-kind]', shop);
+		var shopCards = $$('.sv-card', shop);
+		var shopSecs = $$('[data-shop-sec]', shop);
+		var jumps = $$('[data-shop-jump]', shop);
+		var shopEmpty = $('[data-shop-empty]', shop);
+		var setKind = function (kind) {
+			kindBtns.forEach(function (b) {
+				var on = b.getAttribute('data-shop-kind') === kind;
+				b.classList.toggle('is-active', on);
+				b.setAttribute('aria-pressed', on ? 'true' : 'false');
+			});
+			shopCards.forEach(function (c) {
+				var k = c.getAttribute('data-kind');
+				c.hidden = !(kind === 'all' || k === kind);
+			});
+			var total = 0;
+			shopSecs.forEach(function (s) {
+				var n = $$('.sv-card', s).filter(function (c) { return !c.hidden; }).length;
+				s.hidden = n === 0;
+				total += n;
+			});
+			jumps.forEach(function (j) {
+				var sec = doc.getElementById(j.getAttribute('href').slice(1));
+				j.hidden = !!(sec && sec.hidden);
+			});
+			if (shopEmpty) { shopEmpty.hidden = total > 0; }
+			try { history.replaceState(null, '', kind === 'all' ? location.pathname : location.pathname + '?type=' + kind); } catch (e) {}
+		};
+		kindBtns.forEach(function (b) { b.addEventListener('click', function () { setKind(b.getAttribute('data-shop-kind')); }); });
+		var wanted = (location.search.match(/[?&]type=(subscription|one-time)/) || [])[1];
+		if (wanted && $('[data-shop-kind="' + wanted + '"]', shop)) { setKind(wanted); }
+
+		// Highlight the category in view.
+		if ('IntersectionObserver' in window && jumps.length) {
+			var secObs = new IntersectionObserver(function (entries) {
+				entries.forEach(function (en) {
+					if (!en.isIntersecting) { return; }
+					jumps.forEach(function (j) { j.classList.toggle('is-active', j.getAttribute('href') === '#' + en.target.id); });
+				});
+			}, { rootMargin: '-35% 0px -55% 0px' });
+			shopSecs.forEach(function (s) { secObs.observe(s); });
+		}
+
+		// Details window.
+		var dlg = $('[data-shop-dialog]');
+		var dlgBody = dlg ? $('[data-shop-dialog-body]', dlg) : null;
+		var lastBtn = null;
+		var closeDlg = function () { if (dlg && dlg.open) { dlg.close(); } };
+		if (dlg && typeof dlg.showModal === 'function') {
+			$$('[data-shop-details]', shop).forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var card = btn.closest('.sv-card');
+					var src = card ? $('[data-details]', card) : null;
+					if (!src) { return; }
+					dlgBody.innerHTML = src.innerHTML;
+					var title = $('.sv-detail__title', dlgBody);
+					dlg.setAttribute('aria-label', title ? title.textContent : '');
+					lastBtn = btn;
+					dlg.showModal();
+					root.classList.add('has-dialog');
+					try { history.replaceState(null, '', '#' + card.id); } catch (e) {}
+				});
+			});
+			$('[data-shop-close]', dlg).addEventListener('click', closeDlg);
+			dlg.addEventListener('click', function (e) { if (e.target === dlg) { closeDlg(); } });
+			dlg.addEventListener('close', function () {
+				root.classList.remove('has-dialog');
+				if (lastBtn) { lastBtn.focus(); }
+			});
+		} else {
+			$$('[data-shop-details]', shop).forEach(function (b) { b.hidden = true; });
+		}
+
+		// Old product links land on #plan-slug: bring that card into view and mark it.
+		if (location.hash.indexOf('#plan-') === 0) {
+			var target = doc.getElementById(location.hash.slice(1));
+			if (target) {
+				target.classList.add('is-in');
+				target.style.boxShadow = 'var(--ring), var(--shadow-2)';
+			}
+		}
+	}
 })();
