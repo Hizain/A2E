@@ -60,9 +60,10 @@ function a2e_settings_schema() {
 			'title'  => __( 'Homepage', 'a2e' ),
 			'desc'   => __( 'Headlines, buttons and numbers on the homepage. Leave a field empty to restore its default.', 'a2e' ),
 			'fields' => array(
+				'use_wp_menus'     => array( 'Use my WordPress menus instead of the built-in mega menu', 'toggle', '0', 'Off = the designed mega menu (recommended). On = menus assigned in Appearance → Menus.' ),
 				'announcement'     => array( 'Top announcement bar', 'text', 'New: 13 free eBay seller tools — fee, profit & title calculators', 'Leave empty to hide the bar.' ),
 				'announcement_url' => array( 'Announcement link', 'url', '/free-tools/', '' ),
-				'hero_kicker'      => array( 'Hero — small label', 'text', 'Amazon → eBay dropshipping, done for you', '' ),
+				'hero_kicker'      => array( 'Hero — small label', 'text', 'Research · Listings · Daily store management', '' ),
 				'hero_title'       => array( 'Hero — headline', 'text', 'Amazon to eBay dropshipping', '' ),
 				'hero_accent'      => array( 'Hero — highlighted ending', 'text', 'that turns listings into profit.', 'Shown in the gradient serif style.' ),
 				'hero_lead'        => array( 'Hero — supporting text', 'textarea', 'We find products that sell, write eBay listings that rank, and run your store every day — sourcing from Amazon, Walmart and 20+ trusted suppliers. One expert team. One simple monthly plan. Cancel anytime.', '' ),

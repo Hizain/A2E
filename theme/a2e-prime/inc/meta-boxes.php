@@ -83,7 +83,7 @@ function a2e_render_meta_box( $post, $args ) {
 	$boxes = a2e_meta_box_fields();
 	$box   = $boxes[ $args['args']['box'] ];
 	wp_nonce_field( 'a2e_meta_' . $args['args']['box'], 'a2e_meta_nonce_' . $args['args']['box'] );
-	if ( 'a2e_header' === $args['args']['box'] && a2e_is_designed_page( $post ) ) {
+	if ( 'a2e_header' === $args['args']['box'] && ( a2e_is_designed_page( $post ) || 'a2e_service' === $post->post_type ) ) {
 		echo '<p class="a2e-meta__note"><strong>' . esc_html__( 'This page uses an A2E designed layout.', 'a2e' ) . '</strong> ' . esc_html__( 'Its sections come from the theme (texts editable under A2E → Site Settings). Use the fields below to change the headline and SEO. Tick “also show the editor content” to add your own blocks under the layout.', 'a2e' ) . '</p>';
 	}
 	echo '<div class="a2e-meta">';

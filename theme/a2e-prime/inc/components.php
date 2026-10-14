@@ -437,6 +437,15 @@ function a2e_render_services( $slugs = array(), $variant = 'cards' ) {
 		?>
 		<a class="svc-card svc-card--<?php echo esc_attr( $slug ); ?>" href="<?php echo esc_url( a2e_service_url( $slug ) ); ?>" data-reveal style="--d:<?php echo (int) ( $i % 4 ); ?>">
 			<span class="svc-card__icon"><?php a2e_the_icon( $s['icon'] ); ?></span>
+			<?php if ( 'bento' === $variant && 0 === $i ) : ?>
+				<span class="svc-flow" aria-hidden="true">
+					<span class="svc-flow__col"><?php foreach ( array( 'amazon', 'walmart', 'aliexpress' ) as $b ) { echo '<span class="svc-flow__chip">' . a2e_brand_mark( $b, 'sm' ) . '</span>'; } // phpcs:ignore ?></span>
+					<span class="svc-flow__line"><i></i></span>
+					<span class="svc-flow__core"><img src="<?php echo esc_url( a2e_img( 'brand/a2e-icon-64.png' ) ); ?>" width="40" height="40" alt=""></span>
+					<span class="svc-flow__line"><i></i></span>
+					<span class="svc-flow__chip svc-flow__chip--ebay"><?php echo a2e_brand_mark( 'ebay' ); // phpcs:ignore ?></span>
+				</span>
+			<?php endif; ?>
 			<h3 class="svc-card__title"><?php echo esc_html( $s['title'] ); ?></h3>
 			<p class="svc-card__text"><?php echo esc_html( $s['short'] ); ?></p>
 			<ul class="svc-card__points">
@@ -488,7 +497,7 @@ function a2e_render_reviews( $limit = 12, $variant = 'wall' ) {
 	$cards = array();
 	while ( $query->have_posts() ) {
 		$query->the_post();
-		$name    = preg_replace( '/\s+-\s+.*$/', '', get_the_title() );
+		$name    = preg_replace( '/\s+[-–—]\s+.*$/u', '', get_post_field( 'post_title', get_the_ID() ) );
 		$cards[] = array(
 			'name'    => $name,
 			'text'    => wp_strip_all_tags( get_the_content() ),
