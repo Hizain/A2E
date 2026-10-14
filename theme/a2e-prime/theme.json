@@ -1,0 +1,56 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.5/theme.json",
+	"version": 2,
+	"settings": {
+		"appearanceTools": true,
+		"layout": {
+			"contentSize": "720px",
+			"wideSize": "1100px"
+		},
+		"color": {
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"palette": [
+				{ "slug": "brand", "color": "#2B4CF2", "name": "A2E Blue" },
+				{ "slug": "sky", "color": "#1D8CF8", "name": "Sky" },
+				{ "slug": "violet", "color": "#7A3CF0", "name": "Violet" },
+				{ "slug": "ink", "color": "#0B1030", "name": "Ink" },
+				{ "slug": "muted", "color": "#4B5375", "name": "Muted" },
+				{ "slug": "surface", "color": "#F6F7FC", "name": "Soft surface" },
+				{ "slug": "white", "color": "#FFFFFF", "name": "White" },
+				{ "slug": "green", "color": "#0D9B5F", "name": "Profit green" }
+			],
+			"gradients": [
+				{ "slug": "brand", "gradient": "linear-gradient(120deg,#1D8CF8 0%,#2B4CF2 46%,#7A3CF0 100%)", "name": "A2E gradient" },
+				{ "slug": "night", "gradient": "linear-gradient(160deg,#0B1440 0%,#150C4A 100%)", "name": "Night" }
+			]
+		},
+		"typography": {
+			"fluid": true,
+			"fontFamilies": [
+				{ "slug": "sans", "name": "Geist", "fontFamily": "\"Geist\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif" },
+				{ "slug": "serif", "name": "Instrument Serif", "fontFamily": "\"Instrument Serif\", ui-serif, Georgia, serif" },
+				{ "slug": "mono", "name": "Geist Mono", "fontFamily": "\"Geist Mono\", ui-monospace, Menlo, monospace" }
+			],
+			"fontSizes": [
+				{ "slug": "small", "size": "0.9rem", "name": "Small" },
+				{ "slug": "medium", "size": "1.08rem", "name": "Medium" },
+				{ "slug": "large", "size": "1.35rem", "name": "Large" },
+				{ "slug": "x-large", "size": "clamp(1.7rem, 3vw, 2.3rem)", "name": "Extra large" }
+			]
+		},
+		"spacing": {
+			"units": [ "px", "rem", "em", "%", "vw" ]
+		}
+	},
+	"styles": {
+		"typography": { "fontFamily": "var(--wp--preset--font-family--sans)" },
+		"elements": {
+			"link": { "color": { "text": "var(--wp--preset--color--brand)" } },
+			"button": {
+				"color": { "background": "var(--wp--preset--color--brand)", "text": "#ffffff" },
+				"border": { "radius": "999px" }
+			}
+		}
+	}
+}

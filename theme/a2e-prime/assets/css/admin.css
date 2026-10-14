@@ -1,0 +1,19 @@
+/* A2E admin screens */
+.a2e-admin__title { display: flex; align-items: center; gap: 10px; font-weight: 650; }
+.a2e-admin__title::before { content: ""; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(120deg, #1d8cf8, #2b4cf2 46%, #7a3cf0); }
+.a2e-admin__lead { font-size: 14px; color: #50575e; max-width: 760px; }
+.a2e-admin__desc { margin: 16px 0 0; max-width: 760px; }
+.a2e-admin .form-table th { width: 260px; }
+.a2e-media { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.a2e-media__preview img { display: block; max-height: 48px; max-width: 160px; border-radius: 6px; border: 1px solid #dcdcde; background: #f6f7f7; padding: 3px; }
+.a2e-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 20px 0; }
+.a2e-card { background: #fff; border: 1px solid #dcdcde; border-radius: 10px; padding: 18px 20px; }
+.a2e-card h2 { margin-top: 0; font-size: 15px; }
+.a2e-setup { list-style: none; margin: 20px 0; padding: 0; max-width: 860px; display: grid; gap: 10px; }
+.a2e-setup__item { display: grid; grid-template-columns: 32px 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; background: #fff; border: 1px solid #dcdcde; border-radius: 10px; }
+.a2e-setup__item p { margin: 2px 0 0; color: #50575e; }
+.a2e-setup__check { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #c3c4c7; font-weight: 700; color: #fff; }
+.a2e-setup__item.is-done .a2e-setup__check { background: #00a32a; border-color: #00a32a; }
+.a2e-meta__note { background: #f0f6fc; border-left: 4px solid #2271b1; padding: 8px 12px; margin: 6px 0 12px; }
+.a2e-meta label { display: block; font-weight: 600; margin-bottom: 4px; }
+#adminmenu .toplevel_page_a2e-settings .wp-menu-image::before { color: #8aa2ff; }

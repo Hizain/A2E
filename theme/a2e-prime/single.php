@@ -21,7 +21,7 @@ while ( have_posts() ) :
 			<div class="container phero__inner">
 				<div class="phero__copy">
 					<?php a2e_breadcrumbs(); ?>
-					<?php if ( $a2e_cats ) : ?><a class="tag" href="<?php echo esc_url( get_category_link( $a2e_cats[0] ) ); ?>"><?php echo esc_html( $a2e_cats[0]->name ); ?></a><?php endif; ?>
+					<?php if ( $a2e_cats && 'uncategorized' !== $a2e_cats[0]->slug ) : ?><a class="tag" href="<?php echo esc_url( get_category_link( $a2e_cats[0] ) ); ?>"><?php echo esc_html( $a2e_cats[0]->name ); ?></a><?php endif; ?>
 					<h1 class="phero__title"><?php the_title(); ?></h1>
 					<?php if ( has_excerpt() ) : ?><p class="phero__intro"><?php echo esc_html( get_the_excerpt() ); ?></p><?php endif; ?>
 					<div class="phero__meta">

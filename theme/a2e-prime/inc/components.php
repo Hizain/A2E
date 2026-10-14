@@ -174,7 +174,7 @@ function a2e_breadcrumb_items() {
 	if ( is_singular( 'post' ) ) {
 		$items[] = array( __( 'Blog', 'a2e' ), a2e_blog_url() );
 		$cats    = get_the_category();
-		if ( $cats ) {
+		if ( $cats && 'uncategorized' !== $cats[0]->slug ) {
 			$items[] = array( $cats[0]->name, get_category_link( $cats[0] ) );
 		}
 		$items[] = array( get_the_title(), get_permalink() );
