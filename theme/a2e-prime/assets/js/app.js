@@ -391,7 +391,7 @@
 			e.preventDefault();
 			var btn = $('[type="submit"]', form);
 			if (btn) { btn.disabled = true; btn.style.opacity = '.7'; }
-			fetch(form.action, { method: 'POST', body: new FormData(form), credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+			fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
 				.then(function (r) { return r.json(); })
 				.then(function (res) {
 					result.hidden = false;

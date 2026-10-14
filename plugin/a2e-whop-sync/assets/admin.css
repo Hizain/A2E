@@ -1,0 +1,35 @@
+.a2ews-title { display: flex; align-items: center; gap: 10px; font-weight: 650; }
+.a2ews-title::before { content: ""; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(120deg, #1d8cf8, #2b4cf2 46%, #7a3cf0); }
+.a2ews-lead { max-width: 780px; font-size: 14px; color: #50575e; }
+.a2ews-card { background: #fff; border: 1px solid #dcdcde; border-radius: 12px; padding: 20px 22px; margin: 16px 0; }
+.a2ews-card h2 { margin-top: 0; }
+.a2ews-card--ok { border-left: 4px solid #00a32a; }
+.a2ews-card__row { display: flex; gap: 14px; align-items: center; }
+.a2ews-card__row h2 { margin: 0; font-size: 16px; font-weight: 500; }
+.a2ews-card__row p { margin: 2px 0 0; color: #50575e; }
+.a2ews-dot { width: 12px; height: 12px; border-radius: 50%; background: #00a32a; box-shadow: 0 0 0 5px rgba(0, 163, 42, .15); }
+.a2ews-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; }
+.a2ews-actions form { margin: 0; }
+.a2ews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; }
+.a2ews-grid .a2ews-card { margin: 0; }
+.a2ews-steps { margin: 0 0 0 18px; line-height: 1.7; }
+.a2ews-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 16px 0; }
+.a2ews-stats > div { background: #fff; border: 1px solid #dcdcde; border-radius: 12px; padding: 14px 16px; }
+.a2ews-stats span { display: block; color: #646970; font-size: 12px; }
+.a2ews-stats strong { display: block; font-size: 22px; margin-top: 4px; }
+#a2ews_widget .a2ews-stats { grid-template-columns: 1fr 1fr; }
+.a2ews-pill { display: inline-block; padding: 2px 9px; border-radius: 999px; background: #f0f0f1; color: #50575e; font-size: 12px; font-weight: 600; }
+.a2ews-pill--ok { background: #e7f6ec; color: #00661c; }
+.a2ews-pill--warn { background: #fcf3dc; color: #8a5a00; }
+.a2ews-pill--err { background: #fce8e8; color: #a10e0e; }
+.a2ews-error { color: #a10e0e; }
+.a2ews-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 10px 0; }
+.a2ews-toolbar form { margin: 0; display: flex; gap: 6px; }
+.a2ews-toolbar .subsubsub { margin: 0; }
+.a2ews-row-actions a { display: inline-block; margin-right: 10px; }
+.a2ews-danger { color: #b32d2e; }
+.a2ews-inline { margin-top: 14px; }
+.a2ews-mini-log { margin: 8px 0; }
+.a2ews-mini-log li { margin: 0 0 6px; }
+.a2ews-mini-log span { color: #646970; }
+.a2ews-form th { width: 220px; }

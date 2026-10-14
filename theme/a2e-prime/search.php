@@ -31,7 +31,7 @@ a2e_page_hero(
 			<div class="pagination"><?php the_posts_pagination( array( 'mid_size' => 1, 'prev_text' => '←', 'next_text' => '→' ) ); ?></div>
 		<?php else : ?>
 			<p class="empty-note"><?php esc_html_e( 'Nothing matched that search. Try a different word, or browse our free tools.', 'a2e' ); ?></p>
-			<?php a2e_render_tools_grid( 6 ); ?>
+			<?php a2e_render_tools_grid( 8 ); ?>
 		<?php endif; ?>
 	</div>
 </section>

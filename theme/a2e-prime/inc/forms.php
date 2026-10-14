@@ -257,8 +257,10 @@ function a2e_handle_lead() {
 		exit;
 	};
 
+	// Logged-out visitors are checked by honeypot, fill time and rate limit instead of a nonce,
+	// so forms keep working on pages served from a full-page cache (cached nonces expire).
 	$nonce = isset( $_POST['a2e_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['a2e_nonce'] ) ) : '';
-	if ( ! wp_verify_nonce( $nonce, 'a2e_lead' ) || ! empty( $_POST['a2e_website'] ) ) {
+	if ( ( is_user_logged_in() && ! wp_verify_nonce( $nonce, 'a2e_lead' ) ) || ! empty( $_POST['a2e_website'] ) ) {
 		$fail( 'spam' );
 	}
 	$started = isset( $_POST['a2e_t'] ) ? absint( $_POST['a2e_t'] ) : 0;

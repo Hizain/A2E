@@ -32,7 +32,7 @@ get_header();
 <section class="section section--tight">
 	<div class="container">
 		<?php a2e_section_head( array( 'eyebrow' => __( 'Popular right now', 'a2e' ), 'title' => __( 'Free tools sellers use every day', 'a2e' ) ) ); ?>
-		<?php a2e_render_tools_grid( 6 ); ?>
+		<?php a2e_render_tools_grid( 8 ); ?>
 	</div>
 </section>
 <?php
