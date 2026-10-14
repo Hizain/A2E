@@ -1,6 +1,6 @@
 <?php
 /**
- * /pricing/ — plans, comparison table, billing FAQ.
+ * /pricing/: plans, comparison table, billing FAQ.
  *
  * @package A2E_Prime
  */
@@ -47,7 +47,7 @@ $a2e_plans = a2e_get_plans();
 					<?php foreach ( $a2e_rows as $a2e_row ) : ?>
 						<tr><td><?php echo esc_html( $a2e_row[0] ); ?></td>
 							<?php foreach ( array_keys( $a2e_cols ) as $a2e_i ) : $a2e_v = isset( $a2e_row[1][ $a2e_i ] ) ? $a2e_row[1][ $a2e_i ] : 0; ?>
-								<td><?php echo 1 === $a2e_v ? a2e_icon( 'check', '', __( 'Included', 'a2e' ) ) : ( $a2e_v ? '<strong>' . esc_html( $a2e_v ) . '</strong>' : '<span class="no">—</span>' ); // phpcs:ignore ?></td>
+								<td><?php echo 1 === $a2e_v ? a2e_icon( 'check', '', __( 'Included', 'a2e' ) ) : ( $a2e_v ? '<strong>' . esc_html( $a2e_v ) . '</strong>' : '<span class="no">' . a2e_icon( 'minus', '', __( 'Not included', 'a2e' ) ) . '</span>' ); // phpcs:ignore ?></td>
 							<?php endforeach; ?>
 						</tr>
 					<?php endforeach; ?>
@@ -65,10 +65,10 @@ $a2e_plans = a2e_get_plans();
 		<ol class="steps">
 			<?php
 			$a2e_week = array(
-				array( 'check-circle', __( 'Day 1 — Welcome', 'a2e' ), __( 'You get a welcome message and a short onboarding form for your store, goals and access.', 'a2e' ) ),
-				array( 'scan', __( 'Day 1–2 — Store review', 'a2e' ), __( 'We review your store, policies and niches and confirm your delivery schedule in writing.', 'a2e' ) ),
-				array( 'search', __( 'Day 2–5 — Research', 'a2e' ), __( 'Products are researched and profit-checked; you can see the shortlist before anything goes live.', 'a2e' ) ),
-				array( 'rocket', __( 'Week 1+ — Listings go live', 'a2e' ), __( 'Listings start going live and, on monthly plans, daily management begins.', 'a2e' ) ),
+				array( 'check-circle', __( 'Day 1: Welcome', 'a2e' ), __( 'You get a welcome message and a short onboarding form for your store, goals and access.', 'a2e' ) ),
+				array( 'scan', __( 'Days 1-2: Store review', 'a2e' ), __( 'We review your store, policies and niches and confirm your delivery schedule in writing.', 'a2e' ) ),
+				array( 'search', __( 'Days 2-5: Research', 'a2e' ), __( 'Products are researched and profit-checked; you can see the shortlist before anything goes live.', 'a2e' ) ),
+				array( 'rocket', __( 'Week 1+: Listings go live', 'a2e' ), __( 'Listings start going live and, on monthly plans, daily management begins.', 'a2e' ) ),
 			);
 			foreach ( $a2e_week as $a2e_i => $a2e_s ) {
 				printf( '<li class="step" data-reveal style="--d:%1$d"><span class="step__num">%2$s</span><span class="step__icon">%3$s</span><h3 class="step__title">%4$s</h3><p class="step__text">%5$s</p></li>', (int) $a2e_i, esc_html( sprintf( '%02d', $a2e_i + 1 ) ), a2e_icon( $a2e_s[0] ), esc_html( $a2e_s[1] ), esc_html( $a2e_s[2] ) ); // phpcs:ignore
@@ -86,8 +86,8 @@ $a2e_plans = a2e_get_plans();
 			array(
 				array( __( 'How do I pay?', 'a2e' ), __( 'Checkout is handled by Whop, a secure payments platform that accepts cards and other local payment methods. Card details never touch this website.', 'a2e' ) ),
 				array( __( 'Can I cancel anytime?', 'a2e' ), __( 'Yes. Cancel future renewals from your account whenever you like. Your plan stays active until the end of the period you paid for.', 'a2e' ) ),
-				array( __( 'Can I switch plans?', 'a2e' ), __( 'Yes — upgrade or downgrade at the end of a billing period. Message us and we will move you over.', 'a2e' ) ),
-				array( __( 'Do you offer refunds?', 'a2e' ), __( 'Work starts soon after purchase, so payments for work already started are generally non-refundable. If something is not right, tell us — we always try to fix it first.', 'a2e' ) ),
+				array( __( 'Can I switch plans?', 'a2e' ), __( 'Yes. Upgrade or downgrade at the end of a billing period. Message us and we will move you over.', 'a2e' ) ),
+				array( __( 'Do you offer refunds?', 'a2e' ), __( 'Work starts soon after purchase, so payments for work already started are generally non-refundable. If something is not right, tell us and we will always try to fix it first.', 'a2e' ) ),
 				array( __( 'Is there a setup fee?', 'a2e' ), __( 'Only where shown on the plan (for example a one-time store audit and setup on Growth). Scale Management has no setup fee.', 'a2e' ) ),
 			)
 		);

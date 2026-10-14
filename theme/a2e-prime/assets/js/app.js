@@ -1,5 +1,5 @@
 /**
- * A2E Prime — front-end interactions (no dependencies).
+ * A2E Prime: front-end interactions (no dependencies).
  */
 (function () {
 	'use strict';
@@ -155,84 +155,173 @@
 		});
 	});
 
-	/* Hero dashboard ------------------------------------------------------------ */
-	var hv = $('[data-hv]');
-	if (hv) {
-		var dash = $('[data-tilt]', hv);
-		if (dash && !reduce && window.matchMedia('(hover: hover)').matches) {
-			hv.addEventListener('pointermove', function (e) {
-				var r = hv.getBoundingClientRect();
-				var x = (e.clientX - r.left) / r.width - 0.5;
-				var y = (e.clientY - r.top) / r.height - 0.5;
-				dash.style.setProperty('--ry', (-9 + x * 10).toFixed(2) + 'deg');
-				dash.style.setProperty('--rx', (6 - y * 8).toFixed(2) + 'deg');
-			});
-			hv.addEventListener('pointerleave', function () { dash.style.removeProperty('--ry'); dash.style.removeProperty('--rx'); });
-		}
+	/* Hero: floating supplier tiles ----------------------------------------- */
+	var floats = $('[data-floats]');
+	var heroEl = $('.hero');
+	if (floats && heroEl && !reduce && window.matchMedia('(hover: hover)').matches) {
+		heroEl.addEventListener('pointermove', function (e) {
+			var r = heroEl.getBoundingClientRect();
+			floats.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+			floats.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+		});
+		heroEl.addEventListener('pointerleave', function () {
+			floats.style.removeProperty('--px');
+			floats.style.removeProperty('--py');
+		});
+	}
 
-		// Chart hover tooltip.
-		var chartBox = $('[data-chart]', hv);
-		if (chartBox) {
-			var data = [];
-			try { data = JSON.parse(chartBox.getAttribute('data-chart')); } catch (err) { data = []; }
-			var svg = $('svg', chartBox);
-			var tip = $('[data-tip]', chartBox);
-			var cursor = $('.chart__cursor', chartBox);
-			var dot = $('[data-dot]', chartBox);
-			var wrap = $('.chart__wrap', chartBox);
-			var vb = svg.viewBox.baseVal;
-			chartBox.addEventListener('pointermove', function (e) {
-				if (!data.length) { return; }
-				var r = wrap.getBoundingClientRect();
-				var x = (e.clientX - r.left) / r.width * vb.width;
-				var best = data[0];
-				data.forEach(function (d) { if (Math.abs(d.x - x) < Math.abs(best.x - x)) { best = d; } });
-				var idx = data.indexOf(best) + 1;
-				cursor.setAttribute('x1', best.x); cursor.setAttribute('x2', best.x);
-				dot.style.left = (best.x / vb.width * 100) + '%'; dot.style.top = (best.y / vb.height * 100) + '%';
-				tip.hidden = false;
-				tip.innerHTML = 'Week ' + idx + ' · <b>' + money(best.s, 0) + '</b> sales · <b>' + money(best.p, 0) + '</b> profit';
-				var sr = chartBox.getBoundingClientRect();
-				tip.style.left = (r.left - sr.left + best.x / vb.width * r.width) + 'px';
-				tip.style.top = (r.top - sr.top + best.y / vb.height * r.height) + 'px';
-				chartBox.classList.add('is-hover');
-			});
-			chartBox.addEventListener('pointerleave', function () {
-				tip.hidden = true;
-				chartBox.classList.remove('is-hover');
-				var last = data[data.length - 1];
-				if (last) { dot.style.left = (last.x / vb.width * 100) + '%'; dot.style.top = (last.y / vb.height * 100) + '%'; }
-			});
-		}
+	/* Hero: example board (supplier → listing → profit) --------------------- */
+	var jr = $('[data-journey]');
+	if (jr) {
+		var ex = [];
+		try { ex = JSON.parse(jr.getAttribute('data-journey')) || []; } catch (err) { ex = []; }
+		var tabs = $$('[data-jr-tab]', jr);
+		var panel = $('.jr__grid', jr);
+		var checks = $$('[data-jr-check]', jr);
+		var links = $$('.jr__link', jr);
+		var segs = $$('[data-jr-seg]', jr);
+		var f = function (k) { return $('[data-jr="' + k + '"]', jr); };
+		var searchIcon = jr.getAttribute('data-search-icon') || '';
+		var DUR = 8500;
+		var cur = 0, elapsed = 0, last = 0, held = false, inView = false, loop = 0, seen = false;
+		var timers = [], frames = [];
+		var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
 
-		// Donut ↔ legend highlight.
-		var donut = $('.donut', hv);
-		$$('[data-seg]', hv).forEach(function (el) {
-			var i = el.getAttribute('data-seg');
-			el.addEventListener('pointerenter', function () {
-				donut.classList.add('has-hl');
-				$$('[data-seg="' + i + '"]', hv).forEach(function (x) { x.classList.add('is-hl'); });
+		var later = function (fn, ms) { timers.push(setTimeout(fn, ms)); };
+		var stopAll = function () {
+			timers.forEach(clearTimeout); timers = [];
+			frames.forEach(cancelAnimationFrame); frames = [];
+			f('title').classList.remove('is-typing');
+		};
+		var tween = function (ms, step) {
+			var t0 = 0;
+			var run = function (now) {
+				if (!t0) { t0 = now; }
+				var p = Math.min(1, (now - t0) / ms);
+				step(p);
+				if (p < 1) { frames.push(requestAnimationFrame(run)); }
+			};
+			frames.push(requestAnimationFrame(run));
+		};
+		var specsHtml = function (d) {
+			return d.specs.map(function (s) { return '<li><span>' + esc(s[0]) + '</span>' + esc(s[1]) + '</li>'; }).join('');
+		};
+		var fill = function (d) {
+			f('mark').innerHTML = d.mark;
+			f('art').innerHTML = d.artSvg;
+			f('name').textContent = d.name;
+			f('cost').textContent = d.costFmt;
+			f('sold').textContent = d.soldText;
+			f('bars').innerHTML = d.bars.map(function (h, k) { return '<i style="--i:' + k + ';height:' + (+h) + '%"></i>'; }).join('');
+			f('str').textContent = d.strText;
+			f('specs').innerHTML = specsHtml(d);
+			f('searches').innerHTML = (d.searches || []).map(function (q) { return '<li>' + searchIcon + esc(q) + '</li>'; }).join('');
+			f('price').textContent = d.priceFmt;
+			f('priceRow').textContent = d.priceFmt;
+			f('costRow').textContent = '−' + d.costFmt;
+			f('fees').textContent = '−' + d.feesFmt;
+			f('profitRow').textContent = d.profitFmt;
+			f('margin').textContent = d.marginFmt;
+			f('month').innerHTML = d.monthHtml;
+		};
+		var finish = function (d) {
+			checks.forEach(function (c) { c.classList.add('is-on'); });
+			f('title').textContent = d.title;
+			f('chars').textContent = d.chars;
+			f('meter').style.width = (d.chars / 80 * 100) + '%';
+			segs.forEach(function (s, k) { s.style.width = d.split[k] + '%'; });
+			f('profit').textContent = '+' + d.profitFmt;
+		};
+		var select = function (i) {
+			tabs.forEach(function (t, k) {
+				var on = k === i;
+				t.classList.toggle('is-active', on);
+				t.setAttribute('aria-selected', on ? 'true' : 'false');
+				t.tabIndex = on ? 0 : -1;
+				t.style.setProperty('--p', 0);
 			});
-			el.addEventListener('pointerleave', function () {
-				donut.classList.remove('has-hl');
-				$$('[data-seg].is-hl', hv).forEach(function (x) { x.classList.remove('is-hl'); });
+			panel.setAttribute('aria-labelledby', tabs[i].id);
+		};
+		var play = function (i, animate) {
+			stopAll();
+			cur = i; elapsed = 0;
+			select(i);
+			var d = ex[i];
+			if (!d) { return; }
+			if (!animate) { fill(d); finish(d); return; }
+
+			panel.classList.add('is-swap');
+			later(function () {
+				fill(d);
+				checks.forEach(function (c) { c.classList.remove('is-on'); });
+				f('title').textContent = '';
+				f('chars').textContent = '0';
+				f('meter').style.width = '0%';
+				$$('li', f('specs')).concat($$('li', f('searches'))).forEach(function (li) { li.classList.add('is-off'); });
+				segs.forEach(function (s) { s.style.width = '0%'; });
+				f('profit').textContent = '+$0.00';
+				panel.classList.remove('is-swap');
+			}, 230);
+			checks.forEach(function (c, k) { later(function () { c.classList.add('is-on'); }, 520 + k * 300); });
+			later(function () { links[0].classList.remove('is-go'); void links[0].offsetWidth; links[0].classList.add('is-go'); }, 1400);
+			later(function () {
+				var title = f('title');
+				title.classList.add('is-typing');
+				tween(Math.min(1300, d.title.length * 16), function (p) {
+					var n = Math.round(p * d.title.length);
+					title.textContent = d.title.slice(0, n);
+					f('chars').textContent = n;
+					f('meter').style.width = (n / 80 * 100) + '%';
+					if (p >= 1) { title.classList.remove('is-typing'); }
+				});
+			}, 1600);
+			later(function () {
+				$$('li', f('specs')).concat($$('li', f('searches'))).forEach(function (li, k) { later(function () { li.classList.remove('is-off'); }, k * 90); });
+			}, 3000);
+			later(function () { links[1].classList.remove('is-go'); void links[1].offsetWidth; links[1].classList.add('is-go'); }, 3500);
+			later(function () {
+				segs.forEach(function (s, k) { s.style.width = d.split[k] + '%'; });
+				tween(1000, function (p) {
+					var e = 1 - Math.pow(1 - p, 3);
+					f('profit').textContent = '+' + money(d.profit * e);
+				});
+			}, 3700);
+		};
+
+		var tick = function (now) {
+			loop = 0;
+			if (!inView || reduce || ex.length < 2) { last = 0; return; }
+			if (last && !held && !doc.hidden) { elapsed += now - last; }
+			last = now;
+			var p = Math.min(1, elapsed / DUR);
+			if (tabs[cur]) { tabs[cur].style.setProperty('--p', p.toFixed(3)); }
+			if (p >= 1) { play((cur + 1) % ex.length, true); }
+			loop = requestAnimationFrame(tick);
+		};
+		var startLoop = function () { if (!loop) { last = 0; loop = requestAnimationFrame(tick); } };
+
+		tabs.forEach(function (t, k) {
+			t.addEventListener('click', function () { play(k, !reduce); startLoop(); });
+			t.addEventListener('keydown', function (e) {
+				var dir = e.key === 'ArrowRight' ? 1 : (e.key === 'ArrowLeft' ? -1 : 0);
+				if (!dir) { return; }
+				e.preventDefault();
+				var n = (k + dir + tabs.length) % tabs.length;
+				tabs[n].focus();
+				play(n, !reduce);
 			});
 		});
+		jr.addEventListener('pointerenter', function () { held = true; });
+		jr.addEventListener('pointerleave', function () { held = false; });
+		jr.addEventListener('focusin', function () { held = true; });
+		jr.addEventListener('focusout', function () { held = false; });
 
-		// Rotating order feed.
-		var feed = $('[data-feed]', hv);
-		if (feed && !reduce) {
-			setInterval(function () {
-				if (doc.hidden) { return; }
-				var rows = $$('.feed__row', feed);
-				var on = rows.filter(function (r) { return r.classList.contains('is-on'); });
-				var next = rows.filter(function (r) { return !r.classList.contains('is-on'); })[0];
-				if (!next || !on.length) { return; }
-				on[on.length - 1].classList.remove('is-on', 'is-new');
-				feed.appendChild(on[on.length - 1]);
-				next.classList.add('is-on', 'is-new');
-				feed.insertBefore(next, feed.firstChild);
-			}, 2800);
+		if ('IntersectionObserver' in window) {
+			new IntersectionObserver(function (entries) {
+				inView = entries[0].isIntersecting;
+				if (inView && !seen && !reduce) { seen = true; play(0, true); }
+				if (inView) { startLoop(); }
+			}, { threshold: 0.25 }).observe(jr);
 		}
 	}
 
@@ -347,7 +436,7 @@
 			var pr = $('[data-qf-out="profit"]', qf);
 			pr.textContent = money(r.profit);
 			pr.classList.toggle('is-bad', r.profit < 0);
-			$('[data-qf-out="margin"]', qf).textContent = price > 0 ? (r.profit / price * 100).toFixed(1) + '%' : '—';
+			$('[data-qf-out="margin"]', qf).textContent = price > 0 ? (r.profit / price * 100).toFixed(1) + '%' : '-';
 		};
 		$$('input', qf).forEach(function (i) { i.addEventListener('input', runQf); });
 		runQf();

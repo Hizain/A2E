@@ -67,7 +67,7 @@ while ( have_posts() ) :
 					<?php echo get_option( 'show_avatars' ) ? get_avatar( $a2e_author, 64 ) : '<span class="author-box__initial">' . esc_html( strtoupper( substr( get_the_author(), 0, 1 ) ) ) . '</span>'; // phpcs:ignore ?>
 					<div>
 						<p class="author-box__name"><?php the_author(); ?></p>
-						<p><?php echo esc_html( get_the_author_meta( 'description' ) ? get_the_author_meta( 'description' ) : sprintf( /* translators: %s: year */ __( 'Part of the A2E Dropshipping team — helping eBay sellers research, list and grow since %s.', 'a2e' ), a2e_opt( 'since' ) ) ); ?></p>
+						<p><?php echo esc_html( get_the_author_meta( 'description' ) ? get_the_author_meta( 'description' ) : sprintf( /* translators: %s: year */ __( 'Part of the A2E Dropshipping team, helping eBay sellers research, list and grow since %s.', 'a2e' ), a2e_opt( 'since' ) ) ); ?></p>
 					</div>
 				</div>
 			</div>

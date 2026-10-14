@@ -1,6 +1,6 @@
 <?php
 /**
- * /free-tools/ — tool hub with search and category filters.
+ * /free-tools/: tool hub with search and category filters.
  *
  * @package A2E_Prime
  */
@@ -10,7 +10,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Free seller tools', 'a2e' ),
 		'title'   => __( '13 free eBay tools to <em>price, list and grow.</em>', 'a2e' ),
-		'intro'   => __( 'Fee and profit calculators, title and description generators, research scorecards and growth planners — the same tools our team uses every day. Free, no sign-up, and nothing you type leaves your browser.', 'a2e' ),
+		'intro'   => __( 'Fee and profit calculators, title and description generators, research scorecards and growth planners. The same tools our team uses every day. Free, no sign-up, and nothing you type leaves your browser.', 'a2e' ),
 		'class'   => 'phero--center',
 		/* translators: %s: month and year */
 		'meta'    => '<span>' . a2e_icon( 'check-circle' ) . esc_html__( '100% free', 'a2e' ) . '</span><span>' . a2e_icon( 'lock' ) . esc_html__( 'No sign-up', 'a2e' ) . '</span><span>' . a2e_icon( 'refresh' ) . esc_html( sprintf( __( 'eBay fee rates checked %s', 'a2e' ), a2e_opt( 'fee_checked' ) ) ) . '</span>',
@@ -56,7 +56,7 @@ a2e_page_hero(
 				array( __( 'Are these eBay tools really free?', 'a2e' ), __( 'Yes. Every tool is free to use as often as you like, with no sign-up and no email required.', 'a2e' ) ),
 				array( __( 'Which eBay fees do the calculators use?', 'a2e' ), sprintf( /* translators: 1: rate 2: month */ __( 'The default eBay US rate for most categories (%1$s%% final value fee plus the per-order fee), with options for other categories, seller level, ads and international sales. Rates were last checked in %2$s.', 'a2e' ), a2e_opt( 'fee_rate' ), a2e_opt( 'fee_checked' ) ) ),
 				array( __( 'Do you store what I type?', 'a2e' ), __( 'No. All calculations run in your browser. Nothing you enter is uploaded or saved on our servers.', 'a2e' ) ),
-				array( __( 'Can you do the research and pricing for me?', 'a2e' ), __( 'Yes — that is what our plans are for. We research products, price them for profit and list them on your store.', 'a2e' ) ),
+				array( __( 'Can you do the research and pricing for me?', 'a2e' ), __( 'Yes, that is what our plans are for. We research products, price them for profit and list them on your store.', 'a2e' ) ),
 			)
 		);
 		?>

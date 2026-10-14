@@ -114,7 +114,7 @@ while ( have_posts() ) :
 
 	<section class="section">
 		<div class="container container--mid">
-			<?php a2e_section_head( array( 'eyebrow' => __( 'FAQ', 'a2e' ), 'title' => esc_html( $a2e_s['title'] ) . ' — <em>' . esc_html__( 'questions', 'a2e' ) . '</em>' ) ); ?>
+			<?php a2e_section_head( array( 'eyebrow' => __( 'FAQ', 'a2e' ), 'title' => esc_html( $a2e_s['title'] ) . ' <em>' . esc_html__( 'questions, answered', 'a2e' ) . '</em>' ) ); ?>
 			<?php a2e_render_faq( $a2e_s['faq'] ); ?>
 		</div>
 	</section>

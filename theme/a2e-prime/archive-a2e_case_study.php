@@ -9,7 +9,7 @@ get_header();
 a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Case studies', 'a2e' ),
-		'title'   => __( 'How we fix eBay stores — <em>step by step.</em>', 'a2e' ),
+		'title'   => __( 'How we fix eBay stores, <em>step by step.</em>', 'a2e' ),
 		'intro'   => __( 'Store foundations, research systems and listing clean-ups: the problem, the work and what changed.', 'a2e' ),
 		'class'   => 'phero--center',
 	)

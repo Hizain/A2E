@@ -18,10 +18,10 @@
 	function $(s, c) { return (c || document).querySelector(s); }
 	function $$(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
 	function money(v) {
-		if (!isFinite(v)) { return '—'; }
+		if (!isFinite(v)) { return '-'; }
 		return (v < 0 ? '−' : '') + CUR + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 	}
-	function pct(v, d) { return isFinite(v) ? v.toFixed(d === undefined ? 1 : d) + '%' : '—'; }
+	function pct(v, d) { return isFinite(v) ? v.toFixed(d === undefined ? 1 : d) + '%' : '-'; }
 	function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 	function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 	function category(id) {
@@ -121,8 +121,8 @@
 			out(root, 'orderFee', money(r.orderFee));
 			out(root, 'ad', money(r.ad));
 			out(root, 'intl', money(r.intl));
-			out(root, 'feePct', r.base ? pct(r.all / r.base * 100) : '—');
-			out(root, 'margin', r.base ? pct(profit / r.base * 100) : '—', profit < 0 ? 'bad' : '');
+			out(root, 'feePct', r.base ? pct(r.all / r.base * 100) : '-');
+			out(root, 'margin', r.base ? pct(profit / r.base * 100) : '-', profit < 0 ? 'bad' : '');
 			out(root, 'payout', money(r.base - r.all));
 			out(root, 'total', money(r.total));
 			var sum = Math.max(r.base, cost + r.all, 0.01);
@@ -143,12 +143,12 @@
 			var targetPrice = solve(function (p) { return profitAt(p) - target / 100 * (p + o.shipping); });
 			out(root, 'profit', money(profit), profit < 0 ? 'bad' : '');
 			out(root, 'margin', pct(margin), profit < 0 ? 'bad' : '');
-			out(root, 'roi', totalCost ? pct(profit / totalCost * 100) : '—');
+			out(root, 'roi', totalCost ? pct(profit / totalCost * 100) : '-');
 			out(root, 'fees', money(r.all));
 			out(root, 'totalCost', money(totalCost));
 			out(root, 'breakEven', money(breakEven));
 			out(root, 'targetPrice', money(targetPrice) + ' for ' + pct(target, 0));
-			if (margin >= target) { verdict(root, 'good', 'Worth listing.', 'Margin meets your ' + pct(target, 0) + ' target after every fee.'); } else if (profit > 1 && margin >= 5) { verdict(root, 'warn', 'Thin margin.', 'Profitable, but below target — try ' + money(targetPrice) + ' or a cheaper supplier.'); } else { verdict(root, 'bad', 'Skip it.', 'Fees and costs eat the margin at this price.'); }
+			if (margin >= target) { verdict(root, 'good', 'Worth listing.', 'Margin meets your ' + pct(target, 0) + ' target after every fee.'); } else if (profit > 1 && margin >= 5) { verdict(root, 'warn', 'Thin margin.', 'Profitable, but below target. Try ' + money(targetPrice) + ' or a cheaper supplier.'); } else { verdict(root, 'bad', 'Skip it.', 'Fees and costs eat the margin at this price.'); }
 		},
 
 		'ebay-price-calculator': function (root, d) {
@@ -166,7 +166,7 @@
 			out(root, 'listPrice', money(price));
 			out(root, 'fees', money(f.all));
 			out(root, 'profit', money(profit));
-			out(root, 'marginOut', price ? pct(profit / price * 100) : '—');
+			out(root, 'marginOut', price ? pct(profit / price * 100) : '-');
 			out(root, 'charm', money(charm));
 		},
 
@@ -208,20 +208,20 @@
 			var issues = [];
 			var score = 40;
 			var len = title.length;
-			if (!len) { out(root, 'score', '—'); out(root, 'chars', ''); list(root, 'issues', []); ring(root, 0); return; }
-			if (len > 80) { issues.push(['bad', 'Over 80 characters — eBay will not accept it. Trim ' + (len - 80) + ' characters.']); } else if (len >= 70) { score += 35; issues.push(['ok', 'Great length: ' + len + ' of 80 characters used.']); } else if (len >= 55) { score += 25; issues.push(['warn', 'Good, but ' + (80 - len) + ' characters are unused — add a feature, size or compatible model.']); } else if (len >= 40) { score += 12; issues.push(['warn', 'Short title: you are missing searches. Use more of the 80 characters.']); } else { score += 3; issues.push(['bad', 'Very short title — add brand, model, key features and size/colour.']); }
+			if (!len) { out(root, 'score', '-'); out(root, 'chars', ''); list(root, 'issues', []); ring(root, 0); return; }
+			if (len > 80) { issues.push(['bad', 'Over 80 characters, so eBay will not accept it. Trim ' + (len - 80) + ' characters.']); } else if (len >= 70) { score += 35; issues.push(['ok', 'Great length: ' + len + ' of 80 characters used.']); } else if (len >= 55) { score += 25; issues.push(['warn', 'Good, but ' + (80 - len) + ' characters are unused. Add a feature, size or compatible model.']); } else if (len >= 40) { score += 12; issues.push(['warn', 'Short title: you are missing searches. Use more of the 80 characters.']); } else { score += 3; issues.push(['bad', 'Very short title. Add brand, model, key features and size/colour.']); }
 			var ws = title.split(/\s+/);
 			if (ws.length >= 8) { score += 10; }
-			if (/\d/.test(title)) { score += 10; issues.push(['ok', 'Includes a model, size or quantity number.']); } else { issues.push(['warn', 'No numbers — buyers often search model numbers, sizes or pack quantities.']); }
+			if (/\d/.test(title)) { score += 10; issues.push(['ok', 'Includes a model, size or quantity number.']); } else { issues.push(['warn', 'No numbers. Buyers often search model numbers, sizes or pack quantities.']); }
 			var caps = ws.filter(function (w) { return w.length > 3 && w === w.toUpperCase() && /[A-Z]/.test(w); });
-			if (caps.length / ws.length > 0.3) { score -= 10; issues.push(['bad', 'Too many ALL-CAPS words — harder to read and looks spammy.']); }
+			if (caps.length / ws.length > 0.3) { score -= 10; issues.push(['bad', 'Too many ALL-CAPS words. They are harder to read and look spammy.']); }
 			var spam = title.match(/l@@k|\bwow\b|\bamazing\b|\bawesome\b|\bgreat\b|\bnice\b|\bcheap\b|\bbest\b|\blook\b|\bhot\b|\bsale\b/gi);
 			if (spam) { score -= 6 * spam.length; issues.push(['bad', 'Filler words that buyers do not search: ' + spam.join(', ') + '.']); }
-			if (/[!*~]{1,}|@@/.test(title)) { score -= 8; issues.push(['bad', 'Remove symbols like ! * ~ @@ — they waste characters.']); }
+			if (/[!*~]{1,}|@@/.test(title)) { score -= 8; issues.push(['bad', 'Remove symbols like ! * ~ @@. They waste characters.']); }
 			var lower = ws.map(function (w) { return w.toLowerCase().replace(/[^a-z0-9]/g, ''); }).filter(Boolean);
 			var dupes = lower.filter(function (w, i) { return w.length > 2 && lower.indexOf(w) !== i; });
 			if (dupes.length) { score -= 5 * dupes.length; issues.push(['warn', 'Repeated words do not rank you higher: ' + dupes.join(', ') + '.']); }
-			if (!spam && !caps.length && !dupes.length) { score += 5; issues.push(['ok', 'Clean wording — no filler, caps or repeats.']); }
+			if (!spam && !caps.length && !dupes.length) { score += 5; issues.push(['ok', 'Clean wording: no filler, caps or repeats.']); }
 			score = clamp(Math.round(score), 0, 100);
 			var st = score >= 75 ? 'good' : (score >= 50 ? 'warn' : 'bad');
 			out(root, 'score', String(score));
@@ -239,7 +239,7 @@
 			out(root, 'str', pct(str));
 			out(root, 'rating', rating);
 			out(root, 'perDay', perDay.toFixed(2));
-			out(root, 'daysToSell', perDay > 0 ? Math.round(active / perDay) + ' days' : '—');
+			out(root, 'daysToSell', perDay > 0 ? Math.round(active / perDay) + ' days' : '-');
 			var fill = $('[data-meter-fill]', root);
 			if (fill) { fill.style.left = clamp(str, 0, 100) + '%'; }
 		},
@@ -271,8 +271,8 @@
 			out(root, 'maxRate', max > 0 ? pct(max) : 'No room for ads', max <= 0 ? 'bad' : '');
 			out(root, 'adFee', money(ad));
 			out(root, 'profitBefore', money(before));
-			out(root, 'breakEven', breakEven > 0 ? pct(breakEven) : '—');
-			out(root, 'marginAfter', base ? pct(after / base * 100) : '—', after < 0 ? 'bad' : '');
+			out(root, 'breakEven', breakEven > 0 ? pct(breakEven) : '-');
+			out(root, 'marginAfter', base ? pct(after / base * 100) : '-', after < 0 ? 'bad' : '');
 		},
 
 		'ebay-store-name-generator': function (root, d, ev) {
@@ -345,8 +345,8 @@
 			var n = res.length;
 			out(root, 'count', String(n));
 			out(root, 'listCount', String(res.filter(function (r) { return r.v === 'list'; }).length));
-			out(root, 'avgMargin', n ? pct(res.reduce(function (a, r) { return a + r.margin; }, 0) / n) : '—');
-			out(root, 'avgProfit', n ? money(res.reduce(function (a, r) { return a + r.profit; }, 0) / n) : '—');
+			out(root, 'avgMargin', n ? pct(res.reduce(function (a, r) { return a + r.margin; }, 0) / n) : '-');
+			out(root, 'avgProfit', n ? money(res.reduce(function (a, r) { return a + r.profit; }, 0) / n) : '-');
 		},
 
 		'ebay-product-research-scorecard': function (root, d) {
@@ -377,8 +377,8 @@
 			out(root, 'orders', Math.round(orders).toLocaleString('en-US'));
 			out(root, 'revenue', money(orders * price));
 			var needed = rate * p > 0 ? Math.ceil(goal / (rate * p)) : NaN;
-			out(root, 'needed', isFinite(needed) ? needed.toLocaleString('en-US') : '—');
-			var months = !isFinite(needed) ? '—' : (needed <= L ? 'Already there' : (g > 0 ? Math.ceil((needed - L) / g) + ' months' : 'Add listings to grow'));
+			out(root, 'needed', isFinite(needed) ? needed.toLocaleString('en-US') : '-');
+			var months = !isFinite(needed) ? '-' : (needed <= L ? 'Already there' : (g > 0 ? Math.ceil((needed - L) / g) + ' months' : 'Add listings to grow'));
 			out(root, 'months', months);
 			var chart = $('[data-chart]', root);
 			if (chart) {

@@ -1,4 +1,4 @@
-# A2E Dropshipping — website rebuild
+# A2E Dropshipping: website rebuild
 
 A full rebuild of [a2edropshipping.com](https://a2edropshipping.com/): a new WordPress theme (**A2E Prime**) and a subscription plugin (**A2E Whop Sync**) that lets you create plans in WordPress and have them created on your Whop account automatically.
 
@@ -26,17 +26,18 @@ Source code lives in `theme/a2e-prime/` and `plugin/a2e-whop-sync/`.
 
 ## Everyday editing
 
-- **A2E → Site Settings** — contact details, review numbers, homepage headline and buttons, stats, FAQ, fallback plans, eBay fee rates, Google codes, supplier logos.
-- **Any page or service guide → “A2E — page header & SEO” box** — headline, intro, SEO title and meta description, noindex. Wrap words in `*asterisks*` to get the gradient serif highlight.
-- **Posts** — write blog posts as usual. The theme adds a table of contents, reading progress, related posts, tool links and a call to action automatically.
-- **A2E → Leads** — every free-audit, consultation, contact and newsletter submission (also emailed to you).
-- **A2E → Redirects** — add 301 redirects, bulk-import them, and see 404s visitors hit (one click to fix).
-- **Whop → Subscribers** — active clients, MRR estimate, renewals, “cancel at period end”, import from Whop.
+- **A2E → Site Settings**: contact details, review numbers, homepage headline and buttons, stats, FAQ, fallback plans, eBay fee rates, Google codes, supplier logos.
+- **Any page or service guide → “A2E page header & SEO” box**: headline, intro, SEO title and meta description, noindex. Wrap words in `*asterisks*` to get the gradient serif highlight.
+- **Posts**: write blog posts as usual. The theme adds a table of contents, reading progress, related posts, tool links and a call to action automatically.
+- **A2E → Leads**: every free-audit, consultation, contact and newsletter submission (also emailed to you).
+- **A2E → Redirects**: add 301 redirects, bulk-import them, and see 404s visitors hit (one click to fix).
+- **Whop → Subscribers**: active clients, MRR estimate, renewals, “cancel at period end”, import from Whop.
 
 ## What is new
 
-- **Homepage**: animated example store dashboard (sales/profit chart with hover, supplier sourcing donut, live-style order feed from Amazon/Walmart/AliExpress/Home Depot/Target → eBay), supplier logo marquee, count-up stats, “doing it alone vs with A2E” toggle, bento services grid, 4-step process, interactive **profit simulator** that recommends a plan, reviews wall, founder note, pricing, quick fee checker, latest posts, FAQ.
-- **Light and dark mode** — follows the visitor's system setting, with a toggle in the header and footer (no flash on load).
+- **Homepage**: centered headline with floating supplier logos (Amazon, Walmart, AliExpress, Target, Home Depot, eBay), an interactive example product board that walks one product from supplier to an SEO eBay listing to profit after every fee (tabs for four example products, typed title, live 30-day sales chart, profit breakdown), supplier logo marquee, count-up stats, “doing it alone vs with A2E” toggle, bento services grid, 4-step process, interactive **profit simulator** that recommends a plan, reviews wall, founder note, pricing, quick fee checker, latest posts, FAQ.
+- **No long dashes**: theme copy uses plain punctuation. Long dashes in your own posts, pages and titles are shown as commas or hyphens on the live site (switch off under **A2E → Site Settings → Business → Plain punctuation**).
+- **Light and dark mode**: follows the visitor's system setting, with a toggle in the header and footer (no flash on load).
 - **13 free tools** for search traffic, each on its own SEO page with an explainer, FAQ and structured data:
   eBay Fee Calculator · Amazon to eBay Profit Calculator · eBay Listing Price Calculator · eBay Title Builder & Checker · eBay Sell-Through Rate Calculator · eBay Defect Rate Calculator · eBay Promoted Listings Calculator · eBay Store Name Generator · eBay Description Template Generator · **new:** Bulk eBay Profit Calculator · eBay Product Research Scorecard · eBay Dropshipping Income Calculator · eBay Store Management Cost Calculator.
 - **Designed pages**: services hub, 10 service guides, pricing (with comparison table), monthly plans, free-tools hub with search and filters, multi-step free-audit form, consultation, contact, portfolio, case studies, reviews, interactive checklist (progress saved in the browser), About, Client area, blog, 404.
@@ -49,7 +50,7 @@ Every URL from the current site keeps working. The URL list was taken from the l
 
 | URL | Result |
 |---|---|
-| `/`, `/pricing/`, `/subscription-plans/`, `/amazon-to-ebay-dropshipping-service/`, `/free-tools/` + all 9 tool pages, `/contact/`, `/consultation/`, `/quote-request/`, `/portfolio/`, `/amazon-to-ebay-dropshipping-checklist/`, `/privacy-policy/`, `/terms-of-service/`, `/blog/`, every blog post, `/service-guides/*` (10), `/case-studies/*`, `/portfolio/*`, `/testimonials/` | 200 — same URL, new design |
+| `/`, `/pricing/`, `/subscription-plans/`, `/amazon-to-ebay-dropshipping-service/`, `/free-tools/` + all 9 tool pages, `/contact/`, `/consultation/`, `/quote-request/`, `/portfolio/`, `/amazon-to-ebay-dropshipping-checklist/`, `/privacy-policy/`, `/terms-of-service/`, `/blog/`, every blog post, `/service-guides/*` (10), `/case-studies/*`, `/portfolio/*`, `/testimonials/` | 200, same URL, new design |
 | `/case-studies-overview/` | 301 → `/case-studies/` (removes a duplicate page) |
 | `/testimonials/{name}/` | 301 → `/testimonials/` (as before) |
 | `/services/`, `/service-guides/`, `/tools/`, `/blogs/`, `/about-us/`, `/reviews/`, `/plans/`, `/quote/`, `/free-audit/`, `/checklist/`, `/shop/`, `/cart/`, `/checkout/`, `/my-account/`, `/service-guides/pricing-service/`, `/service-guides/consultation/`, `/{tool-slug}/` | 301 → the matching page |
@@ -59,7 +60,7 @@ Anything not on that list that still gets traffic appears in **A2E → Redirects
 ## Things to confirm before launch
 
 - **Numbers**: the homepage stats (528 reviews, 25K+ products, 500+ stores, 8+ years) and the founder note come from the current site. Edit them under **A2E → Site Settings** if anything has changed.
-- **Example dashboard**: the hero dashboard is labelled *Example store* and uses illustrative figures; no real-time claims are made.
+- **Example product board**: the hero board is labelled *Example product* and uses illustrative figures (fees are calculated with your fee settings); no real-time claims are made.
 - **eBay's dropshipping policy** does not allow buying from another retailer to ship straight to your buyer. The copy describes a multi-supplier, policy-aware workflow and the FAQ says so plainly. Keep that wording.
 - **Supplier logos** are typeset wordmarks in brand colours (Amazon and Walmart do not allow their logos in open icon sets). If you hold the rights to official logo files, upload them under **Site Settings → Supplier logos**. A trademark/non-affiliation notice is in the footer.
 - **eBay fees** default to the US rates for most categories (13.6% + $0.30/$0.40 per order, checked October 2026). Update them under **Site Settings → eBay fees** if eBay changes them.

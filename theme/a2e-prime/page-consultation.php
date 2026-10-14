@@ -10,7 +10,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Consultation', 'a2e' ),
 		'title'   => __( 'A clear, prioritised plan <em>before you spend.</em>', 'a2e' ),
-		'intro'   => __( 'Not sure what your store needs first? We review your store with you and map the next steps — product research direction, listing SEO, account health and which plan (if any) makes sense.', 'a2e' ),
+		'intro'   => __( 'Not sure what your store needs first? We review your store with you and map the next steps: product research direction, listing SEO, account health and which plan (if any) makes sense.', 'a2e' ),
 	)
 );
 ?>
@@ -25,7 +25,7 @@ a2e_page_hero(
 				<div class="aside-card">
 					<p class="aside-card__title"><?php esc_html_e( 'What we can cover', 'a2e' ); ?></p>
 					<ul class="check-list">
-						<?php foreach ( array( __( 'A review of your store, listings and results', 'a2e' ), __( 'Product research direction and profit checks', 'a2e' ), __( 'eBay listing SEO: titles, item specifics, descriptions', 'a2e' ), __( 'Stock, pricing and order routines', 'a2e' ), __( 'Account health and how to protect it', 'a2e' ), __( 'Which service or plan makes sense — if any', 'a2e' ) ) as $a2e_item ) : ?>
+						<?php foreach ( array( __( 'A review of your store, listings and results', 'a2e' ), __( 'Product research direction and profit checks', 'a2e' ), __( 'eBay listing SEO: titles, item specifics, descriptions', 'a2e' ), __( 'Stock, pricing and order routines', 'a2e' ), __( 'Account health and how to protect it', 'a2e' ), __( 'Which service or plan makes sense, if any', 'a2e' ) ) as $a2e_item ) : ?>
 							<li><?php a2e_the_icon( 'check' ); ?><?php echo esc_html( $a2e_item ); ?></li>
 						<?php endforeach; ?>
 					</ul>

@@ -14,15 +14,23 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 	<div class="hero__bg" aria-hidden="true">
 		<span class="aurora aurora--a"></span><span class="aurora aurora--b"></span><span class="aurora aurora--c"></span>
 		<span class="grid-fade"></span>
+		<span class="hero__beam"></span>
 	</div>
-	<div class="container hero__inner">
+
+	<div class="container hero__head">
+		<div class="hero__floats" aria-hidden="true" data-floats>
+			<?php
+			$a2e_floats = array( 'amazon', 'walmart', 'aliexpress', 'target', 'homedepot', 'ebay' );
+			foreach ( $a2e_floats as $a2e_n => $a2e_key ) {
+				echo '<span class="ft ft--' . esc_attr( $a2e_key ) . '" style="--i:' . (int) $a2e_n . '">' . a2e_brand_mark( $a2e_key, 'md' ) . ( 'ebay' === $a2e_key ? '<span class="ft__sold">' . a2e_icon( 'check' ) . esc_html__( 'Sold', 'a2e' ) . '</span>' : '' ) . '</span>'; // phpcs:ignore
+			}
+			?>
+		</div>
+
 		<div class="hero__copy">
-			<a class="hero__pill" href="<?php echo esc_url( get_post_type_archive_link( 'a2e_testimonial' ) ); ?>">
-				<span class="hero__pill-stars"><?php echo a2e_stars( (float) a2e_opt( 'rating' ) ); // phpcs:ignore ?></span>
-				<span><?php /* translators: 1: rating 2: reviews 3: year */ printf( esc_html__( '%1$s from %2$s reviews · since %3$s', 'a2e' ), '<strong>' . esc_html( a2e_opt( 'rating' ) ) . '</strong>', esc_html( a2e_opt( 'reviews' ) ), esc_html( a2e_opt( 'since' ) ) ); ?></span>
-				<?php a2e_the_icon( 'arrow-right' ); ?>
-			</a>
-			<p class="hero__kicker"><?php echo esc_html( a2e_opt( 'hero_kicker' ) ); ?></p>
+			<?php if ( a2e_opt( 'hero_kicker' ) ) : ?>
+				<p class="hero__kicker"><span class="hero__kicker-dot" aria-hidden="true"></span><?php echo esc_html( a2e_opt( 'hero_kicker' ) ); ?></p>
+			<?php endif; ?>
 			<h1 class="hero__title">
 				<span class="hero__title-main"><?php echo esc_html( a2e_opt( 'hero_title' ) ); ?></span>
 				<em class="hero__title-accent"><?php echo esc_html( a2e_opt( 'hero_accent' ) ); ?></em>
@@ -38,15 +46,22 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 				);
 				?>
 			</div>
-			<?php if ( $a2e_points ) : ?>
-				<ul class="hero__points">
-					<?php foreach ( $a2e_points as $a2e_point ) : ?><li><?php a2e_the_icon( 'check-circle' ); ?><?php echo esc_html( $a2e_point ); ?></li><?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
+			<ul class="hero__trust">
+				<li class="hero__rating">
+					<a href="<?php echo esc_url( get_post_type_archive_link( 'a2e_testimonial' ) ); ?>">
+						<?php echo a2e_stars( (float) a2e_opt( 'rating' ) ); // phpcs:ignore ?>
+						<span><?php /* translators: 1: rating 2: reviews */ printf( esc_html__( '%1$s from %2$s reviews', 'a2e' ), '<strong>' . esc_html( a2e_opt( 'rating' ) ) . '</strong>', esc_html( a2e_opt( 'reviews' ) ) ); ?></span>
+					</a>
+				</li>
+				<?php foreach ( $a2e_points as $a2e_point ) : ?>
+					<li><?php a2e_the_icon( 'check-circle' ); ?><?php echo esc_html( $a2e_point ); ?></li>
+				<?php endforeach; ?>
+			</ul>
 		</div>
-		<div class="hero__visual">
-			<?php get_template_part( 'template-parts/hero-visual' ); ?>
-		</div>
+	</div>
+
+	<div class="container hero__stage">
+		<?php get_template_part( 'template-parts/hero-board' ); ?>
 	</div>
 
 	<div class="container hero__suppliers">
@@ -68,7 +83,7 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 					array(
 						'eyebrow' => __( 'Why most eBay stores stall', 'a2e' ),
 						'title'   => __( 'Dropshipping is simple. <em>Doing it well, every day,</em> is not.', 'a2e' ),
-						'intro'   => __( 'Stores rarely fail from one big mistake. They fail from a hundred small ones: the wrong products, weak titles, a missed price change, a slow reply. We replace guesswork with a system — and run it for you.', 'a2e' ),
+						'intro'   => __( 'Stores rarely fail from one big mistake. They fail from a hundred small ones: the wrong products, weak titles, a missed price change, a slow reply. We replace guesswork with a system, and we run it for you.', 'a2e' ),
 						'align'   => 'left',
 					)
 				);
@@ -122,7 +137,7 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 			array(
 				'eyebrow' => __( 'Profit simulator', 'a2e' ),
 				'title'   => __( 'See what steady, researched listings <em>could add up to.</em>', 'a2e' ),
-				'intro'   => __( 'Move the sliders to match your store. Growth comes from adding profit-checked listings every month — exactly what our plans do.', 'a2e' ),
+				'intro'   => __( 'Move the sliders to match your store. Growth comes from adding profit-checked listings every month, which is exactly what our plans do.', 'a2e' ),
 			)
 		);
 		get_template_part( 'template-parts/simulator' );
@@ -185,9 +200,9 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 					<label class="quickfee__field"><span><?php esc_html_e( 'Sold price', 'a2e' ); ?></span><span class="quickfee__input"><i>$</i><input type="number" inputmode="decimal" value="49.99" min="0" step="any" data-qf="price" aria-label="<?php esc_attr_e( 'Sold price', 'a2e' ); ?>"></span></label>
 					<label class="quickfee__field"><span><?php esc_html_e( 'Item cost', 'a2e' ); ?></span><span class="quickfee__input"><i>$</i><input type="number" inputmode="decimal" value="30" min="0" step="any" data-qf="cost" aria-label="<?php esc_attr_e( 'Item cost', 'a2e' ); ?>"></span></label>
 					<div class="quickfee__out">
-						<div><span><?php esc_html_e( 'eBay fees', 'a2e' ); ?></span><strong data-qf-out="fees">—</strong></div>
-						<div><span><?php esc_html_e( 'You keep', 'a2e' ); ?></span><strong class="is-good" data-qf-out="profit">—</strong></div>
-						<div><span><?php esc_html_e( 'Margin', 'a2e' ); ?></span><strong data-qf-out="margin">—</strong></div>
+						<div><span><?php esc_html_e( 'eBay fees', 'a2e' ); ?></span><strong data-qf-out="fees">-</strong></div>
+						<div><span><?php esc_html_e( 'You keep', 'a2e' ); ?></span><strong class="is-good" data-qf-out="profit">-</strong></div>
+						<div><span><?php esc_html_e( 'Margin', 'a2e' ); ?></span><strong data-qf-out="margin">-</strong></div>
 					</div>
 					<a class="link-arrow" href="<?php echo esc_url( a2e_tool_url( 'ebay-fee-calculator' ) ); ?>"><?php esc_html_e( 'Open the full fee calculator', 'a2e' ); ?> <?php a2e_the_icon( 'arrow-right' ); ?></a>
 				</div>

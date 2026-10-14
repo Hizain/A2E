@@ -25,23 +25,23 @@ function a2e_services() {
 			'title'    => 'Amazon to eBay Dropshipping',
 			'nav'      => 'Done-for-you dropshipping',
 			'icon'     => 'layers',
-			'short'    => 'The complete operation — research, listings, store setup and daily management — run by one team.',
-			'seo'      => 'Amazon to eBay Dropshipping Service — Done For You | A2E',
+			'short'    => 'Research, listings, store setup and daily management, all run by one team.',
+			'seo'      => 'Done-For-You Amazon to eBay Dropshipping Service | A2E',
 			'meta'     => 'Done-for-you Amazon to eBay dropshipping: profit-checked product research, SEO eBay listings, store setup, stock & price monitoring and monthly management.',
 			'headline' => 'Your complete eBay dropshipping operation, <em>run for you.</em>',
-			'intro'    => 'Finding products, writing listings, watching prices, answering buyers — every day. We run the whole workflow as one connected team, so your store keeps growing even on the days you are busy.',
+			'intro'    => 'Finding products, writing listings, watching prices, answering buyers: every single day. We run the whole workflow as one connected team, so your store keeps growing even on the days you are busy.',
 			'outcomes' => array( 'One team instead of three freelancers', 'Every product profit-checked after fees', 'A clear report every month' ),
 			'deliver'  => array(
-				array( 'scan', 'Profit-first product research', 'Demand, competition, VeRO and margin after every eBay fee — checked before a single product goes live.' ),
+				array( 'scan', 'Profit-first product research', 'Demand, competition, VeRO and margin after every eBay fee, all checked before a single product goes live.' ),
 				array( 'pen', 'Listings built to rank', 'Keyword-rich 80-character titles, complete item specifics and clean, mobile-friendly descriptions.' ),
 				array( 'store', 'Store foundation', 'Business policies, categories, branding and handling times that earn buyer trust from day one.' ),
 				array( 'refresh', 'Stock & price monitoring', 'Supplier changes are caught early, so you never sell at a loss or cancel an order.' ),
 				array( 'chat', 'Orders & buyer care', 'Order routines, tracking checks and fast, polite replies that protect your feedback.' ),
-				array( 'chart', 'Monthly reporting', 'What sold, what changed and what we are doing next — in plain English.' ),
+				array( 'chart', 'Monthly reporting', 'What sold, what changed and what we are doing next, in plain English.' ),
 			),
 			'best_for' => array( 'New sellers who want it done properly from the start', 'Busy store owners who want their evenings back', 'Sellers tired of managing separate freelancers' ),
 			'faq'      => array(
-				array( 'What does your Amazon to eBay dropshipping service include?', 'Product research, SEO listings, store setup, stock and price routines, order and buyer-message workflows and monthly account management — the exact mix depends on the plan you choose.' ),
+				array( 'What does your Amazon to eBay dropshipping service include?', 'Product research, SEO listings, store setup, stock and price routines, order and buyer-message workflows and monthly account management. The exact mix depends on the plan you choose.' ),
 				array( 'Is Amazon to eBay dropshipping allowed on eBay?', 'eBay allows dropshipping but holds you responsible for delivery, and it does not allow buying from another retailer or marketplace to ship straight to your buyer. We build a compliant multi-supplier sourcing and fulfilment workflow and review it against the current rules during onboarding.' ),
 				array( 'Can you run the whole store for me?', 'Yes. Scale Management and custom plans cover the full workflow, from research to daily store care and reporting.' ),
 				array( 'Is this suitable for beginners?', 'Yes. Beginners usually start with store setup plus a starter listing batch, or a free audit to plan the first steps.' ),
@@ -52,14 +52,14 @@ function a2e_services() {
 			'title'    => 'Product Research',
 			'nav'      => 'Product research',
 			'icon'     => 'scan',
-			'short'    => 'Products chosen on sold data and real margins — not recycled “winning product” lists.',
+			'short'    => 'Products chosen on sold data and real margins, not recycled “winning product” lists.',
 			'seo'      => 'eBay Product Research Service for Dropshipping | A2E',
-			'meta'     => 'eBay product research for dropshipping sellers: sold history, sell-through, competition, VeRO and profit after fees — a shortlist that is ready to list.',
+			'meta'     => 'eBay product research for dropshipping sellers: sold history, sell-through, competition, VeRO and profit after fees. You get a shortlist that is ready to list.',
 			'headline' => 'Products picked on data, <em>not guesswork.</em>',
-			'intro'    => 'Research is where a store gets its edge — or wastes months. Every product we hand you has passed demand, competition, restriction and profit-after-fees checks.',
+			'intro'    => 'Research is where a store gets its edge, or wastes months. Every product we hand you has passed demand, competition, restriction and profit-after-fees checks.',
 			'outcomes' => array( 'Shortlists, not giant spreadsheets', 'VeRO & restricted brands filtered out', 'Margin checked after every fee' ),
 			'deliver'  => array(
-				array( 'chart', 'Sold history & sell-through', 'We look at what actually sold on eBay in the last 30–90 days, not what people list.' ),
+				array( 'chart', 'Sold history & sell-through', 'We look at what actually sold on eBay in the last 30-90 days, not what people list.' ),
 				array( 'users', 'Competition gaps', 'Products where existing listings are weak, so a better listing can win the sale.' ),
 				array( 'dollar', 'Profit after fees', 'Final value fee, per-order fee, ads and tax are all deducted before a product qualifies.' ),
 				array( 'shield', 'VeRO & policy checks', 'Brand restrictions and prohibited items are removed before they can hurt your account.' ),
@@ -68,7 +68,7 @@ function a2e_services() {
 			),
 			'best_for' => array( 'Sellers whose listings get views but no sales', 'New stores choosing their first niches', 'Anyone who wants a repeatable research system' ),
 			'faq'      => array(
-				array( 'How many products do you research?', 'It depends on your plan — from 100 products on the Starter package to 500 every month on Scale Management. We focus on quality, never padding the numbers.' ),
+				array( 'How many products do you research?', 'It depends on your plan: from 100 products on the Starter package to 500 every month on Scale Management. We focus on quality, never padding the numbers.' ),
 				array( 'Do you check for restricted brands?', 'Yes. Every product is checked for VeRO brand restrictions and prohibited items before it reaches your list.' ),
 				array( 'Can I use the research without your listing service?', 'Yes. Research-only batches are available as a custom plan.' ),
 			),
@@ -78,24 +78,24 @@ function a2e_services() {
 			'title'    => 'Product Listing & eBay SEO',
 			'nav'      => 'Listings & eBay SEO',
 			'icon'     => 'pen',
-			'short'    => 'Titles, item specifics and descriptions written for eBay search — and for buyers.',
+			'short'    => 'Titles, item specifics and descriptions written for eBay search and for real buyers.',
 			'seo'      => 'eBay Listing Service & Listing SEO for Dropshippers | A2E',
 			'meta'     => 'Professional eBay listing service: keyword-rich titles, complete item specifics, correct categories and clean descriptions that rank in eBay search and convert.',
-			'headline' => 'eBay listings built to be found — <em>and bought.</em>',
+			'headline' => 'eBay listings built to be found <em>and bought.</em>',
 			'intro'    => 'A listing has two jobs: appear when buyers search, and convince them to buy. We write every listing around how buyers actually search on eBay.',
 			'outcomes' => array( 'Keyword-rich 80-character titles', 'Complete item specifics', 'Mobile-first descriptions' ),
 			'deliver'  => array(
 				array( 'type', 'Titles that use all 80 characters', 'Primary keywords first, then the details buyers filter by.' ),
 				array( 'list', 'Complete item specifics', 'Brand, model, size, colour and every filter eBay search relies on.' ),
-				array( 'grid', 'Correct category & condition', 'The right category is a ranking factor — we get it right first time.' ),
+				array( 'grid', 'Correct category & condition', 'The right category is a ranking factor. We get it right the first time.' ),
 				array( 'file', 'Clean descriptions', 'Scannable, mobile-friendly and free of policy-breaking links.' ),
 				array( 'dollar', 'Competitive pricing', 'Checked against sold comparables and your minimum margin.' ),
-				array( 'repeat', 'Rewrites of old listings', 'We re-optimise listings that get views but no sales — or no views at all.' ),
+				array( 'repeat', 'Rewrites of old listings', 'We re-optimise listings that get views but no sales, or no views at all.' ),
 			),
 			'best_for' => array( 'Stores with low impressions or clicks', 'Sellers scaling past 100 listings', 'Anyone rewriting a tired catalogue' ),
 			'faq'      => array(
 				array( 'Do you optimise listings for eBay search?', 'Yes. Titles, item specifics, category and description structure are all written for eBay search (Cassini) and buyer intent.' ),
-				array( 'Can you rewrite my existing listings?', 'Yes — clean-ups of existing catalogues are one of our most requested jobs.' ),
+				array( 'Can you rewrite my existing listings?', 'Yes. Clean-ups of existing catalogues are one of our most requested jobs.' ),
 				array( 'Do you use templates with external links?', 'No. Descriptions are clean HTML that follows eBay’s active-content and links policy.' ),
 			),
 			'tools'    => array( 'ebay-title-generator', 'ebay-description-template-generator', 'ebay-price-calculator' ),
@@ -106,7 +106,7 @@ function a2e_services() {
 			'icon'     => 'store',
 			'short'    => 'Policies, categories, branding and settings done right before you scale.',
 			'seo'      => 'eBay Store Setup Service for Dropshipping Sellers | A2E',
-			'meta'     => 'Professional eBay store setup: business policies, handling times, store categories, branding and a launch plan — a trustworthy foundation before you list at volume.',
+			'meta'     => 'Professional eBay store setup: business policies, handling times, store categories, branding and a launch plan. A trustworthy foundation before you list at volume.',
 			'headline' => 'An eBay store buyers trust <em>from the first visit.</em>',
 			'intro'    => 'Missing policies, random categories and a blank profile make even good listings look risky. We build a clean, professional foundation before you start listing at volume.',
 			'outcomes' => array( 'Policies set up correctly', 'Branding that builds trust', 'A plan for your first listings' ),
@@ -114,14 +114,14 @@ function a2e_services() {
 				array( 'file', 'Business policies', 'Shipping, returns and payment policies that are clear and realistic.' ),
 				array( 'timer', 'Handling times you can meet', 'Set around your suppliers, so late shipments never become defects.' ),
 				array( 'grid', 'Store categories', 'Organised around your niches so buyers can browse.' ),
-				array( 'sparkle', 'Name, logo & banner', 'A store identity that looks established — try our free name generator.' ),
+				array( 'sparkle', 'Name, logo & banner', 'A store identity that looks established. Try our free name generator too.' ),
 				array( 'gauge', 'Selling-limit plan', 'A realistic ramp-up that respects your account’s limits.' ),
 				array( 'rocket', 'Launch checklist', 'Everything ticked off before your first listing goes live.' ),
 			),
 			'best_for' => array( 'Brand-new eBay accounts', 'Stores that grew without a structure', 'Sellers relaunching in a new niche' ),
 			'faq'      => array(
 				array( 'Do I need an existing eBay account?', 'No. We help with brand-new accounts and improve existing ones. Account age and selling limits affect how fast you can scale, and we plan around them.' ),
-				array( 'Can you improve a store that is already live?', 'Yes. We audit and clean up existing stores — categories, policies, branding and listing presentation.' ),
+				array( 'Can you improve a store that is already live?', 'Yes. We audit and clean up existing stores: categories, policies, branding and listing presentation.' ),
 			),
 			'tools'    => array( 'ebay-store-name-generator', 'ebay-description-template-generator', 'ebay-title-generator' ),
 		),
@@ -130,16 +130,16 @@ function a2e_services() {
 			'nav'      => 'Account management',
 			'icon'     => 'gauge',
 			'short'    => 'Daily store care: listings, stock and prices, orders, buyer messages and account health.',
-			'seo'      => 'eBay Account Management Service — Monthly Store Management | A2E',
+			'seo'      => 'eBay Account Management Service: Monthly Store Management | A2E',
 			'meta'     => 'Monthly eBay account management: new listings, stock and price checks, orders, buyer messages, account health monitoring and a clear monthly report.',
 			'headline' => 'Daily store care, <em>without you doing it.</em>',
-			'intro'    => 'A store does not improve on its own. It needs new listings, fast reactions to supplier changes, quick buyer replies and someone watching account health. That is what we do — every day.',
+			'intro'    => 'A store does not improve on its own. It needs new listings, fast reactions to supplier changes, quick buyer replies and someone watching account health. That is what we do, every day.',
 			'outcomes' => array( 'Above Standard is the goal', 'Fast buyer replies', 'Monthly report & priorities' ),
 			'deliver'  => array(
 				array( 'plus', 'New listings every month', 'Fresh, researched products keep your store growing (volume by plan).' ),
 				array( 'refresh', 'Stock & price checks', 'Supplier changes are caught before they turn into losses or cancellations.' ),
 				array( 'cart', 'Order handling', 'Orders processed within your handling time, with tracking checks.' ),
-				array( 'chat', 'Buyer messages', 'Polite, fast answers using approved templates — escalated when needed.' ),
+				array( 'chat', 'Buyer messages', 'Polite, fast answers using approved templates, escalated when needed.' ),
 				array( 'shield', 'Account health watch', 'Defect rate, late shipments and cases monitored every week.' ),
 				array( 'chart', 'Monthly report', 'Results, wins, risks and next month’s priorities.' ),
 			),
@@ -159,7 +159,7 @@ function a2e_services() {
 			'seo'      => 'eBay Dropshipping Order Fulfillment Service | A2E',
 			'meta'     => 'Order fulfillment workflows for eBay dropshipping: order processing, tracking uploads, delay and return templates and escalation rules that protect account health.',
 			'headline' => 'Every order handled the same way, <em>every time.</em>',
-			'intro'    => 'Fulfilment is where weak stores get exposed: late tracking, silent buyers and slow answers become defects fast. We set up — and on management plans, run — a routine that keeps every order on track.',
+			'intro'    => 'Fulfilment is where weak stores get exposed: late tracking, silent buyers and slow answers become defects fast. We set up a routine that keeps every order on track, and on management plans we run it for you.',
 			'outcomes' => array( 'Tracking uploaded on time', 'Templates for every problem', 'Clear escalation rules' ),
 			'deliver'  => array(
 				array( 'clipboard', 'Order checks', 'Every order verified and processed within your handling time.' ),
@@ -184,10 +184,10 @@ function a2e_services() {
 			'seo'      => 'eBay Dropshipping Inventory & Price Monitoring | A2E',
 			'meta'     => 'Inventory management for eBay dropshipping: supplier stock checks, price monitoring, margin alerts and listing updates that prevent losses and cancellations.',
 			'headline' => 'Protect your margin <em>and your account.</em>',
-			'intro'    => 'When a supplier runs out or raises a price, an unmonitored listing either sells at a loss or forces a cancellation — and cancellations count against you. We catch those changes first.',
+			'intro'    => 'When a supplier runs out or raises a price, an unmonitored listing either sells at a loss or forces a cancellation, and cancellations count against you. We catch those changes first.',
 			'outcomes' => array( 'Fewer cancellations', 'No selling at a loss', 'Weekly inventory report' ),
 			'deliver'  => array(
-				array( 'refresh', 'Supplier stock checks', 'Frequency matched to your volume — daily for active stores.' ),
+				array( 'refresh', 'Supplier stock checks', 'Frequency matched to your volume, daily for active stores.' ),
 				array( 'trend', 'Price-change monitoring', 'Margin alerts when supplier prices move.' ),
 				array( 'gear', 'Revise / end rules', 'Clear rules for when a listing is repriced, paused or ended.' ),
 				array( 'badge', 'Supplier reliability notes', 'We track which suppliers are dependable.' ),
@@ -205,9 +205,9 @@ function a2e_services() {
 			'title'    => 'Dropshipping Automation',
 			'nav'      => 'Automation',
 			'icon'     => 'workflow',
-			'short'    => 'Automate the routine checks — keep humans on anything that affects buyers or profit.',
+			'short'    => 'Automate the routine checks and keep humans on anything that affects buyers or profit.',
 			'seo'      => 'eBay Dropshipping Automation Setup | A2E',
-			'meta'     => 'Practical eBay dropshipping automation: stock and price monitoring, reporting and listing updates set up for your store — with human review where it matters.',
+			'meta'     => 'Practical eBay dropshipping automation: stock and price monitoring, reporting and listing updates set up for your store, with human review where it matters.',
 			'headline' => 'Automate the routine. <em>Keep judgement human.</em>',
 			'intro'    => 'Good automation saves hours; bad automation scales mistakes. We set up tools for repetitive monitoring and reporting and keep a person on anything that can affect buyers, profit or account health.',
 			'outcomes' => array( 'Hours saved every week', 'Tools that fit your store', 'Human review on risky tasks' ),
@@ -230,7 +230,7 @@ function a2e_services() {
 			'title'    => 'eBay Virtual Assistant Services',
 			'nav'      => 'Virtual assistants',
 			'icon'     => 'headset',
-			'short'    => 'Trained eBay VAs working from written SOPs — consistent work without babysitting.',
+			'short'    => 'Trained eBay VAs working from written SOPs. Consistent work without babysitting.',
 			'seo'      => 'eBay Virtual Assistant Services for Dropshipping | A2E',
 			'meta'     => 'eBay virtual assistant services with clear SOPs: research support, listing drafts, stock checks, buyer messages and weekly reporting.',
 			'headline' => 'VA support with <em>a clear playbook.</em>',
@@ -246,7 +246,7 @@ function a2e_services() {
 			),
 			'best_for' => array( 'Owners who want to delegate safely', 'Stores with a backlog of admin' ),
 			'faq'      => array(
-				array( 'Is VA support monthly?', 'Usually, yes — VA support works best as monthly help with a defined task list.' ),
+				array( 'Is VA support monthly?', 'Usually, yes. VA support works best as monthly help with a defined task list.' ),
 				array( 'Can you write the SOPs first?', 'Yes. We can document your routines so the work is clear before ongoing support starts.' ),
 			),
 			'tools'    => array( 'ebay-store-management-cost-calculator' ),
@@ -255,11 +255,11 @@ function a2e_services() {
 			'title'    => 'Custom Plans',
 			'nav'      => 'Custom plans',
 			'icon'     => 'sparkle',
-			'short'    => '500+ listings a month or a specific mix of services — built around your store.',
+			'short'    => '500+ listings a month or a specific mix of services, built around your store.',
 			'seo'      => 'Custom eBay Dropshipping Management Plans | A2E',
 			'meta'     => 'Custom Amazon to eBay dropshipping plans for 500+ listings a month or a mix of research, listings, automation, VA support and management.',
 			'headline' => 'A plan built <em>around your store.</em>',
-			'intro'    => 'When a standard package does not fit — you need more than 500 listings a month, or a specific mix of services — we build a custom plan with a clear scope and a fixed monthly price.',
+			'intro'    => 'When a standard package does not fit (you need more than 500 listings a month, or a specific mix of services), we build a custom plan with a clear scope and a fixed monthly price.',
 			'outcomes' => array( 'Clear written scope', 'Fixed monthly price', 'Billed through Whop' ),
 			'deliver'  => array(
 				array( 'rocket', 'High-volume listing', 'Research and listing at whatever volume your account supports.' ),
@@ -311,9 +311,9 @@ function a2e_service_url( $slug ) {
  */
 function a2e_process_steps() {
 	return array(
-		array( 'scan', 'Free store audit', 'Tell us where your store is today. We review it and send a clear plan with a fixed price — usually within one business day.' ),
+		array( 'scan', 'Free store audit', 'Tell us where your store is today. We review it and send a clear plan with a fixed price, usually within one business day.' ),
 		array( 'search', 'Profit-checked research', 'We shortlist products with proven demand, low competition and healthy margins after every eBay fee.' ),
-		array( 'pen', 'Listings go live', 'SEO titles, complete item specifics and clean descriptions — built to rank and convert.' ),
+		array( 'pen', 'Listings go live', 'SEO titles, complete item specifics and clean descriptions, built to rank and convert.' ),
 		array( 'gauge', 'We manage & report', 'Daily stock, price, order and buyer care, plus a monthly report on what sold and what is next.' ),
 	);
 }
@@ -335,28 +335,156 @@ function a2e_compare_rows() {
 }
 
 /**
- * Example dashboard data for the hero visual (clearly labelled as an example on the page).
+ * Example products for the hero board (labelled as example figures on the page).
+ * Fees use the theme's eBay fee settings: final value fee on the total including sales tax,
+ * plus the per-order fee.
  *
  * @return array
  */
-function a2e_hero_demo_data() {
-	return array(
-		'weeks'   => array( 1820, 2140, 2010, 2690, 2950, 3320, 3180, 3870, 4210, 4630, 4480, 5240 ),
-		'profit'  => array( 260, 310, 290, 400, 455, 520, 500, 610, 670, 745, 720, 850 ),
-		'mix'     => array(
-			array( 'amazon', 34 ),
-			array( 'walmart', 22 ),
-			array( 'aliexpress', 17 ),
-			array( 'homedepot', 15 ),
-			array( 'target', 12 ),
+function a2e_hero_examples() {
+	$fee_cfg = a2e_fee_settings();
+	$rate    = $fee_cfg['categories'][0]['rate'] / 100;
+	$tax     = 0.07;
+	$items   = array(
+		array(
+			'supplier' => 'amazon',
+			'tab'      => __( 'Kitchen scale', 'a2e' ),
+			'art'      => 'scale',
+			'name'     => __( 'Digital kitchen scale, 11 lb', 'a2e' ),
+			'cost'     => 13.85,
+			'price'    => 27.99,
+			'sold'     => 142,
+			'str'      => 68,
+			'monthly'  => 30,
+			'title'    => 'Digital Kitchen Food Scale 11lb 5kg Grams Ounces LCD Tare Stainless Steel Baking',
+			'searches' => array( 'kitchen scale', 'food scale', 'scale grams oz' ),
+			'specs'    => array( array( __( 'Capacity', 'a2e' ), '11 lb / 5 kg' ), array( __( 'Display', 'a2e' ), 'Backlit LCD' ), array( __( 'Material', 'a2e' ), 'Stainless steel' ), array( __( 'Power', 'a2e' ), 'Battery' ) ),
 		),
-		'orders'  => array(
-			array( 'amazon', 'Cordless stick vacuum filter (2-pack)', 6.42 ),
-			array( 'walmart', 'Stainless steel air fryer liner set', 4.85 ),
-			array( 'homedepot', 'LED motion sensor stair lights', 9.10 ),
-			array( 'aliexpress', 'Magnetic phone car mount', 5.36 ),
-			array( 'target', 'Ceramic plant pot, 3-piece', 7.80 ),
-			array( 'amazon', 'Resistance band set with handles', 8.25 ),
+		array(
+			'supplier' => 'walmart',
+			'tab'      => __( 'Dog bed', 'a2e' ),
+			'art'      => 'bed',
+			'name'     => __( 'Orthopedic dog bed, large', 'a2e' ),
+			'cost'     => 31.40,
+			'price'    => 54.99,
+			'sold'     => 96,
+			'str'      => 61,
+			'monthly'  => 18,
+			'title'    => 'Orthopedic Dog Bed Large Memory Foam Bolster Washable Cover Non-Slip Gray 36x27',
+			'searches' => array( 'dog bed large', 'orthopedic bed', 'memory foam' ),
+			'specs'    => array( array( __( 'Size', 'a2e' ), 'Large, 36 x 27 in' ), array( __( 'Fill', 'a2e' ), 'Memory foam' ), array( __( 'Cover', 'a2e' ), 'Washable' ), array( __( 'Color', 'a2e' ), 'Gray' ) ),
+		),
+		array(
+			'supplier' => 'homedepot',
+			'tab'      => __( 'Stair lights', 'a2e' ),
+			'art'      => 'lights',
+			'name'     => __( 'LED stair lights, pack of 6', 'a2e' ),
+			'cost'     => 19.97,
+			'price'    => 36.99,
+			'sold'     => 118,
+			'str'      => 72,
+			'monthly'  => 26,
+			'title'    => 'LED Motion Sensor Stair Lights 6 Pack Wireless Battery Indoor Step Night Light',
+			'searches' => array( 'stair lights', 'motion sensor', 'step light' ),
+			'specs'    => array( array( __( 'Pack size', 'a2e' ), '6 lights' ), array( __( 'Sensor', 'a2e' ), 'Motion, 10 ft' ), array( __( 'Power', 'a2e' ), 'AAA battery' ), array( __( 'Use', 'a2e' ), 'Indoor' ) ),
+		),
+		array(
+			'supplier' => 'target',
+			'tab'      => __( 'Plant pots', 'a2e' ),
+			'art'      => 'pots',
+			'name'     => __( 'Ceramic plant pots, set of 3', 'a2e' ),
+			'cost'     => 17.99,
+			'price'    => 32.99,
+			'sold'     => 87,
+			'str'      => 57,
+			'monthly'  => 22,
+			'title'    => 'Ceramic Plant Pots Set of 3 Modern White Planters with Drainage Holes 6 5 4 Inch',
+			'searches' => array( 'ceramic planter', 'plant pots', 'drainage pot' ),
+			'specs'    => array( array( __( 'Set', 'a2e' ), '3 pots' ), array( __( 'Material', 'a2e' ), 'Ceramic' ), array( __( 'Sizes', 'a2e' ), '6, 5 and 4 in' ), array( __( 'Drainage', 'a2e' ), 'Yes, with plugs' ) ),
 		),
 	);
+	$items = apply_filters( 'a2e_hero_examples', $items );
+
+	$money = function ( $v, $dp = 2 ) {
+		return '$' . number_format( (float) $v, $dp );
+	};
+	foreach ( $items as $i => $it ) {
+		$total   = $it['price'] * ( 1 + $tax );
+		$fees    = round( $total * $rate + ( $total > $fee_cfg['orderLimit'] ? $fee_cfg['orderLarge'] : $fee_cfg['orderSmall'] ), 2 );
+		$profit  = round( $it['price'] - $it['cost'] - $fees, 2 );
+		$title   = substr( $it['title'], 0, 80 );
+		$monthly = (int) $it['monthly'];
+		$items[ $i ] = array_merge(
+			$it,
+			array(
+				'title'     => $title,
+				'chars'     => strlen( $title ),
+				'fees'      => $fees,
+				'profit'    => $profit,
+				'margin'    => $it['price'] > 0 ? round( $profit / $it['price'] * 100, 1 ) : 0,
+				'costFmt'   => $money( $it['cost'] ),
+				'priceFmt'  => $money( $it['price'] ),
+				'feesFmt'   => $money( $fees ),
+				'profitFmt' => $money( $profit ),
+				/* translators: %s: margin percent */
+				'marginFmt' => sprintf( __( '%s%% margin', 'a2e' ), number_format( $it['price'] > 0 ? $profit / $it['price'] * 100 : 0, 1 ) ),
+				/* translators: %s: number of sales */
+				'soldText'  => sprintf( __( '%s sold', 'a2e' ), number_format( (int) $it['sold'] ) ),
+				'bars'      => a2e_hero_bars( (int) $it['sold'], $i ),
+				/* translators: %s: sell-through percent */
+				'strText'   => sprintf( __( '%s%% sell-through rate', 'a2e' ), (int) $it['str'] ),
+				'monthHtml' => '<small>' . esc_html( sprintf( /* translators: %s: sales per month */ __( 'One listing at %s sales a month', 'a2e' ), (int) $monthly ) ) . '</small><b>' . esc_html( sprintf( /* translators: %s: monthly profit */ __( '%s profit a month', 'a2e' ), $money( $profit * $monthly, 0 ) ) ) . '</b>',
+				'mark'      => a2e_brand_mark( $it['supplier'], 'sm' ),
+				'artSvg'    => a2e_hero_art( $it['art'] ),
+				'split'     => array(
+					round( $it['cost'] / $it['price'] * 100, 1 ),
+					round( $fees / $it['price'] * 100, 1 ),
+					round( max( 0, $profit ) / $it['price'] * 100, 1 ),
+				),
+			)
+		);
+	}
+	return $items;
+}
+
+/**
+ * Daily eBay sales for the hero mini chart: 30 bars as heights in percent, with a gentle upward
+ * trend. Deterministic so the page renders the same every time.
+ *
+ * @param int $sold Sales in 30 days.
+ * @param int $seed Seed.
+ * @return array
+ */
+function a2e_hero_bars( $sold, $seed ) {
+	$vals = array();
+	for ( $d = 0; $d < 30; $d++ ) {
+		$wave   = sin( ( $d + 1 ) * 1.7 + $seed * 2.3 ) * 0.5 + 0.5;
+		$vals[] = max( 0.15, ( 0.6 + 0.5 * $d / 29 ) * ( 0.55 + 0.75 * $wave ) ) * max( 1, $sold ) / 30;
+	}
+	$max = max( $vals );
+	return array_map(
+		function ( $v ) use ( $max ) {
+			return round( $v / $max * 100 );
+		},
+		$vals
+	);
+}
+
+/**
+ * Small product illustrations for the hero board.
+ *
+ * @param string $key scale|bed|lights|pots.
+ * @return string SVG markup.
+ */
+function a2e_hero_art( $key ) {
+	$art = array(
+		'scale'  => '<rect x="5" y="11" width="38" height="5" rx="2.5" class="a-soft"/><rect x="8" y="18" width="32" height="22" rx="7" class="a-body"/><rect x="14.5" y="23.5" width="19" height="8" rx="2" class="a-screen"/><path d="M18 27.5h2.2M22.6 27.5h2.2M27.2 27.5h2.2" class="a-ink"/><circle cx="24" cy="35.5" r="1.6" class="a-dot"/>',
+		'bed'    => '<ellipse cx="24" cy="29" rx="20" ry="11.5" class="a-body"/><ellipse cx="24" cy="31" rx="13.5" ry="6.5" class="a-soft"/><circle cx="20.5" cy="29.6" r="1.4" class="a-dot"/><circle cx="24" cy="28.6" r="1.4" class="a-dot"/><circle cx="27.5" cy="29.6" r="1.4" class="a-dot"/><ellipse cx="24" cy="33.4" rx="3.2" ry="2.4" class="a-dot"/>',
+		'lights' => '<path d="M5 41h10v-8h10v-8h10v-8h8" class="a-line"/><circle cx="12" cy="37" r="5" class="a-glow"/><circle cx="22" cy="29" r="5" class="a-glow"/><circle cx="32" cy="21" r="5" class="a-glow"/><rect x="10" y="36" width="4" height="2.4" rx="1.2" class="a-light"/><rect x="20" y="28" width="4" height="2.4" rx="1.2" class="a-light"/><rect x="30" y="20" width="4" height="2.4" rx="1.2" class="a-light"/>',
+		'pots'   => '<path d="M24 22c-1-6 2-11 7-13-1 6-3 10-7 13zM24 22c-2-5-6-8-11-8 2 5 5 8 11 8z" class="a-leaf"/><path d="M15 23h18l-2.4 17h-13.2z" class="a-body"/><path d="M5 31h9l-1.4 9H6.4z" class="a-soft"/><path d="M34 33h9l-1.2 7h-6.6z" class="a-soft"/><path d="M15 23h18" class="a-ink"/>',
+	);
+	if ( ! isset( $art[ $key ] ) ) {
+		return '';
+	}
+	return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">' . $art[ $key ] . '</svg>';
 }

@@ -86,7 +86,7 @@ function a2e_normalize_path( $path ) {
 
 /**
  * Apply redirects. Custom rules run on every request (so a live page can be moved);
- * built-in rules only run when the request would otherwise 404 — or for the overview page
+ * built-in rules only run when the request would otherwise 404, or for the overview page
  * that is now the /case-studies/ archive.
  */
 function a2e_do_redirects() {
@@ -233,7 +233,7 @@ function a2e_render_redirects_page() {
 	?>
 	<div class="wrap a2e-admin">
 		<h1 class="a2e-admin__title"><?php esc_html_e( 'Redirects', 'a2e' ); ?></h1>
-		<p class="a2e-admin__lead"><?php esc_html_e( 'Every URL from the previous site keeps working. Add your own permanent (301) redirects here — for example when you rename a blog post — and fix any 404s visitors hit.', 'a2e' ); ?></p>
+		<p class="a2e-admin__lead"><?php esc_html_e( 'Every URL from the previous site keeps working. Add your own permanent (301) redirects here (for example when you rename a blog post) and fix any 404s visitors hit.', 'a2e' ); ?></p>
 		<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Saved.', 'a2e' ); ?></p></div><?php endif; ?>
 
 		<div class="a2e-cards">
@@ -244,7 +244,7 @@ function a2e_render_redirects_page() {
 					<input type="hidden" name="a2e_redirect_action" value="add">
 					<p><label><?php esc_html_e( 'Old path', 'a2e' ); ?><br><input type="text" name="from" class="regular-text" placeholder="/old-page/" required value="<?php echo isset( $_GET['from'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['from'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification ?>"></label></p>
 					<p><label><?php esc_html_e( 'New path or full URL', 'a2e' ); ?><br><input type="text" name="to" class="regular-text" placeholder="/new-page/" required></label></p>
-					<p><label><?php esc_html_e( 'Type', 'a2e' ); ?> <select name="code"><option value="301"><?php esc_html_e( '301 — permanent (best for SEO)', 'a2e' ); ?></option><option value="302"><?php esc_html_e( '302 — temporary', 'a2e' ); ?></option></select></label></p>
+					<p><label><?php esc_html_e( 'Type', 'a2e' ); ?> <select name="code"><option value="301"><?php esc_html_e( '301: permanent (best for SEO)', 'a2e' ); ?></option><option value="302"><?php esc_html_e( '302: temporary', 'a2e' ); ?></option></select></label></p>
 					<?php submit_button( __( 'Add redirect', 'a2e' ), 'primary', 'submit', false ); ?>
 				</form>
 			</div>
@@ -292,7 +292,7 @@ function a2e_render_redirects_page() {
 						<td><code>/<?php echo esc_html( $path ); ?>/</code></td>
 						<td><?php echo (int) $row['hits']; ?></td>
 						<td><?php echo esc_html( human_time_diff( (int) $row['last'] ) ); ?></td>
-						<td><?php echo $row['ref'] ? '<a href="' . esc_url( $row['ref'] ) . '" target="_blank" rel="noopener">' . esc_html( wp_html_excerpt( $row['ref'], 50, '…' ) ) . '</a>' : '—'; ?></td>
+						<td><?php echo $row['ref'] ? '<a href="' . esc_url( $row['ref'] ) . '" target="_blank" rel="noopener">' . esc_html( wp_html_excerpt( $row['ref'], 50, '…' ) ) . '</a>' : '-'; ?></td>
 						<td><a class="button button-small" href="<?php echo esc_url( add_query_arg( array( 'page' => 'a2e-redirects', 'from' => '/' . $path . '/' ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Redirect', 'a2e' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>
@@ -302,7 +302,7 @@ function a2e_render_redirects_page() {
 			<form method="post" style="margin-top:1em"><?php wp_nonce_field( 'a2e_redirects' ); ?><input type="hidden" name="a2e_redirect_action" value="clear_log"><?php submit_button( __( 'Clear 404 log', 'a2e' ), 'secondary small', 'submit', false ); ?></form>
 		<?php endif; ?>
 
-		<details style="margin-top:2em"><summary><strong><?php /* translators: %d: number of rules */ printf( esc_html__( 'Built-in redirects (%d) — always on', 'a2e' ), count( $builtin ) ); ?></strong></summary>
+		<details style="margin-top:2em"><summary><strong><?php /* translators: %d: number of rules */ printf( esc_html__( 'Built-in redirects (%d), always on', 'a2e' ), count( $builtin ) ); ?></strong></summary>
 			<table class="widefat striped" style="margin-top:1em"><tbody>
 				<?php foreach ( $builtin as $from => $to ) : ?><tr><td><code>/<?php echo esc_html( $from ); ?></code></td><td>→ <code>/<?php echo esc_html( $to ); ?>/</code></td></tr><?php endforeach; ?>
 			</tbody></table>

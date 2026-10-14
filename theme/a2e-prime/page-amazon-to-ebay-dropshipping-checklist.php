@@ -1,6 +1,6 @@
 <?php
 /**
- * /amazon-to-ebay-dropshipping-checklist/ — interactive checklist.
+ * /amazon-to-ebay-dropshipping-checklist/: interactive checklist.
  *
  * @package A2E_Prime
  */
@@ -10,7 +10,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Free checklist', 'a2e' ),
 		'title'   => __( 'The Amazon to eBay dropshipping <em>checklist we use.</em>', 'a2e' ),
-		'intro'   => __( 'Store setup, product research, listings, inventory, orders and weekly account health. Tick items off as you go — your progress is saved in this browser, so bookmark the page and come back each week.', 'a2e' ),
+		'intro'   => __( 'Store setup, product research, listings, inventory, orders and weekly account health. Tick items off as you go. Your progress is saved in this browser, so bookmark the page and come back each week.', 'a2e' ),
 	)
 );
 ?>

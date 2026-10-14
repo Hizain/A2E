@@ -1,6 +1,6 @@
 <?php
 /**
- * /subscription-plans/ — monthly plans and how subscriptions work.
+ * /subscription-plans/: monthly plans and how subscriptions work.
  *
  * @package A2E_Prime
  */
@@ -10,7 +10,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Monthly management', 'a2e' ),
 		'title'   => __( 'Your eBay store, <em>growing every month.</em>', 'a2e' ),
-		'intro'   => __( 'Stores grow from steady work: new researched products every month, better listings, fast stock and price checks and quick answers to buyers. Our monthly plans give you that rhythm — without hiring and training a team.', 'a2e' ),
+		'intro'   => __( 'Stores grow from steady work: new researched products every month, better listings, fast stock and price checks and quick answers to buyers. Our monthly plans give you that rhythm without hiring and training a team.', 'a2e' ),
 		'class'   => 'phero--center',
 		'actions' => array( array( __( 'Compare all plans', 'a2e' ), a2e_url( 'pricing' ), 'ghost', 'arrow-right' ) ),
 	)
@@ -28,7 +28,7 @@ a2e_page_hero(
 			$a2e_items = array(
 				array( 'credit-card', __( 'Choose a plan', 'a2e' ), __( 'Check out securely through Whop. Your plan starts immediately.', 'a2e' ) ),
 				array( 'clipboard', __( 'Quick onboarding', 'a2e' ), __( 'We confirm your store details, goals and access, then share your delivery schedule.', 'a2e' ) ),
-				array( 'repeat', __( 'Work every month', 'a2e' ), __( 'We research, list and manage according to your plan — no reminders needed.', 'a2e' ) ),
+				array( 'repeat', __( 'Work every month', 'a2e' ), __( 'We research, list and manage according to your plan. No reminders needed.', 'a2e' ) ),
 				array( 'chart', __( 'Clear reporting', 'a2e' ), __( 'A monthly summary of what was done, what sold and what is next.', 'a2e' ) ),
 				array( 'gear', __( 'Flexible', 'a2e' ), __( 'Upgrade, downgrade or cancel future renewals from your account.', 'a2e' ) ),
 				array( 'shield', __( 'Your account stays yours', 'a2e' ), __( 'You keep full ownership and control of your store, listings and customers.', 'a2e' ) ),

@@ -11,7 +11,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'The A2E blog', 'a2e' ),
 		'title'   => __( 'Amazon to eBay dropshipping, <em>explained properly.</em>', 'a2e' ),
-		'intro'   => __( 'Practical guides on product research, listing SEO, fees and pricing, account health and scaling — written by people who run eBay stores every day.', 'a2e' ),
+		'intro'   => __( 'Practical guides on product research, listing SEO, fees and pricing, account health and scaling, written by people who run eBay stores every day.', 'a2e' ),
 		'class'   => 'phero--center',
 	)
 );

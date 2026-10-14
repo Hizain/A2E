@@ -36,8 +36,8 @@ function a2e_setup() {
 
 	register_nav_menus(
 		array(
-			'primary' => __( 'Header menu (optional — replaces the built-in mega menu)', 'a2e' ),
-			'footer'  => __( 'Footer — extra links', 'a2e' ),
+			'primary' => __( 'Header menu (optional, replaces the built-in mega menu)', 'a2e' ),
+			'footer'  => __( 'Footer: extra links', 'a2e' ),
 		)
 	);
 
@@ -124,6 +124,60 @@ function a2e_heading_ids( $content ) {
 	return a2e_heading_ids_raw( $content );
 }
 add_filter( 'the_content', 'a2e_heading_ids', 12 );
+
+/**
+ * Show long dashes in posts, pages and titles as plain punctuation (A2E → Site Settings → Business).
+ * Runs after wptexturize, so a typed " - " that WordPress turned into an en dash shows as " - " again.
+ * Code, scripts and styles are left alone, and the saved text is never changed.
+ *
+ * @param string $text  Text or HTML.
+ * @param string $pause What a dash between words becomes.
+ * @return string
+ */
+function a2e_plain_dashes( $text, $pause = ', ' ) {
+	if ( ! is_string( $text ) || '' === $text || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || '1' !== a2e_opt( 'plain_dashes' ) ) {
+		return $text;
+	}
+	$en = '(?:\x{2013}|&#8211;|&#x2013;|&ndash;)';
+	$em = '(?:\x{2014}|&#8212;|&#x2014;|&mdash;)';
+	if ( ! preg_match( '/' . $en . '|' . $em . '/iu', $text ) ) {
+		return $text;
+	}
+	$rules = array(
+		'/(\d)\s*(?:' . $en . '|' . $em . ')\s*(?=\d)/iu' => '$1-',  // Number ranges such as 2019 to 2020.
+		'/(^|\n|<(?:p|li|h[1-6]|blockquote|cite|figcaption|td|th|div)\b[^>]*>)([ \t]*)' . $em . '\s*/iu' => '$1$2', // Leading dash, e.g. a quote attribution.
+		'/(<\/(?:strong|b)>)\s*(?:' . $en . '|' . $em . ')\s*/iu' => '$1: ', // <strong>Label</strong> - text.
+		'/\s+' . $en . '\s+/iu'                             => ' - ',
+		'/(?<=\S)' . $en . '(?=\S)/iu'                      => '-',
+		'/\s*' . $em . '\s*(?=<\/|$)/iu'                    => '',     // Trailing dash.
+		'/\s*' . $em . '\s*/iu'                             => $pause,
+		'/,\s*([,.;:!?)])/u'                                => '$1',
+		'/\(\s*,\s*/u'                                      => '(',
+	);
+	$parts = preg_split( '#(<(?:pre|code|script|style|textarea)\b[^>]*>.*?</(?:pre|code|script|style|textarea)>)#is', $text, -1, PREG_SPLIT_DELIM_CAPTURE );
+	foreach ( $parts as $i => $part ) {
+		if ( 0 === $i % 2 && '' !== $part ) {
+			$parts[ $i ] = preg_replace( array_keys( $rules ), array_values( $rules ), $part );
+		}
+	}
+	return implode( '', $parts );
+}
+foreach ( array( 'the_content', 'the_excerpt', 'get_the_excerpt', 'widget_text_content' ) as $a2e_hook ) {
+	add_filter( $a2e_hook, 'a2e_plain_dashes', 20 );
+}
+unset( $a2e_hook );
+
+/**
+ * In titles a dash between words becomes a colon, e.g. "eBay Fees Explained: 2026 Guide".
+ *
+ * @param string $title Title.
+ * @return string
+ */
+function a2e_plain_dashes_title( $title ) {
+	return a2e_plain_dashes( $title, ': ' );
+}
+add_filter( 'the_title', 'a2e_plain_dashes_title', 20 );
+add_filter( 'single_post_title', 'a2e_plain_dashes_title', 20 );
 
 /**
  * Table of contents built from the post's H2/H3 headings.

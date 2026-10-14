@@ -28,7 +28,7 @@ function a2e_setup_items() {
 		array( '/%postname%/' === get_option( 'permalink_structure' ), __( 'Pretty permalinks', 'a2e' ), __( 'Settings → Permalinks must be “Post name” so every existing URL keeps working.', 'a2e' ), admin_url( 'options-permalink.php' ), __( 'Check permalinks', 'a2e' ) ),
 		array( (bool) a2e_opt( 'whatsapp' ), __( 'WhatsApp & contact details', 'a2e' ), __( 'Used on every “Chat on WhatsApp” button and in Google’s business data.', 'a2e' ), admin_url( 'admin.php?page=a2e-settings&tab=business' ), __( 'Edit business details', 'a2e' ) ),
 		array( true, __( 'Logos (light & dark)', 'a2e' ), __( 'The A2E logos are bundled. Upload different ones in Customize → Site Identity and Site Settings → Business (dark mode logo).', 'a2e' ), admin_url( 'customize.php?autofocus[section]=title_tagline' ), __( 'Open Customizer', 'a2e' ) ),
-		array( $whop_active, __( 'Connect Whop for subscriptions', 'a2e' ), __( 'Install the A2E Whop Sync plugin, paste your Whop API key once, then create plans in WordPress — they are created on Whop and appear on the pricing pages automatically.', 'a2e' ), function_exists( 'A2E\WhopSync\settings_url' ) ? call_user_func( 'A2E\WhopSync\settings_url' ) : admin_url( 'plugins.php' ), __( 'Set up Whop', 'a2e' ) ),
+		array( $whop_active, __( 'Connect Whop for subscriptions', 'a2e' ), __( 'Install the A2E Whop Sync plugin, paste your Whop API key once, then create plans in WordPress. They are created on Whop and appear on the pricing pages automatically.', 'a2e' ), function_exists( 'A2E\WhopSync\settings_url' ) ? call_user_func( 'A2E\WhopSync\settings_url' ) : admin_url( 'plugins.php' ), __( 'Set up Whop', 'a2e' ) ),
 		array( (bool) a2e_opt( 'gsc_verify' ) || a2e_seo_plugin_active(), __( 'Google Search Console', 'a2e' ), __( 'Verify the site and submit /wp-sitemap.xml so Google indexes the new tools and pages quickly.', 'a2e' ), admin_url( 'admin.php?page=a2e-settings&tab=tracking' ), __( 'Add verification code', 'a2e' ) ),
 		array( (bool) a2e_opt( 'ga4_id' ), __( 'Google Analytics 4 (optional)', 'a2e' ), __( 'See which tools and pages bring visitors and leads.', 'a2e' ), admin_url( 'admin.php?page=a2e-settings&tab=tracking' ), __( 'Add Measurement ID', 'a2e' ) ),
 		array( (bool) a2e_opt( 'founder_photo' ), __( 'Founder photo (recommended)', 'a2e' ), __( 'A real face next to the founder note builds trust and helps Google’s “experience” signals.', 'a2e' ), admin_url( 'admin.php?page=a2e-settings&tab=business' ), __( 'Upload photo', 'a2e' ) ),
@@ -43,8 +43,8 @@ function a2e_render_setup_page() {
 	$done  = count( array_filter( wp_list_pluck( $items, 0 ) ) );
 	?>
 	<div class="wrap a2e-admin">
-		<h1 class="a2e-admin__title"><?php esc_html_e( 'A2E Prime — setup guide', 'a2e' ); ?></h1>
-		<p class="a2e-admin__lead"><?php /* translators: 1: done 2: total */ printf( esc_html__( '%1$d of %2$d done. Everything else — pages, tools, service guides and redirects — is already in place.', 'a2e' ), (int) $done, count( $items ) ); ?></p>
+		<h1 class="a2e-admin__title"><?php esc_html_e( 'A2E Prime setup guide', 'a2e' ); ?></h1>
+		<p class="a2e-admin__lead"><?php /* translators: 1: done 2: total */ printf( esc_html__( '%1$d of %2$d done. Everything else (pages, tools, service guides and redirects) is already in place.', 'a2e' ), (int) $done, count( $items ) ); ?></p>
 		<ol class="a2e-setup">
 			<?php foreach ( $items as $item ) : ?>
 				<li class="a2e-setup__item<?php echo $item[0] ? ' is-done' : ''; ?>">
@@ -56,10 +56,10 @@ function a2e_render_setup_page() {
 		</ol>
 		<h2><?php esc_html_e( 'Writing blog posts that rank', 'a2e' ); ?></h2>
 		<ul class="ul-disc">
-			<li><?php esc_html_e( 'Use one clear H1 (the post title) and H2/H3 headings — the theme builds a table of contents from them automatically.', 'a2e' ); ?></li>
-			<li><?php esc_html_e( 'Fill in “A2E — page header & SEO” below the editor: a ~60 character SEO title and a ~155 character description.', 'a2e' ); ?></li>
-			<li><?php esc_html_e( 'Link to a free tool in every post (e.g. the fee or profit calculator) — it keeps readers on the site and turns them into leads.', 'a2e' ); ?></li>
-			<li><?php esc_html_e( 'Add a featured image (1600×840) — it is used for the card, the article header and social sharing.', 'a2e' ); ?></li>
+			<li><?php esc_html_e( 'Use one clear H1 (the post title) and H2/H3 headings. The theme builds a table of contents from them automatically.', 'a2e' ); ?></li>
+			<li><?php esc_html_e( 'Fill in “A2E page header & SEO” below the editor: a ~60 character SEO title and a ~155 character description.', 'a2e' ); ?></li>
+			<li><?php esc_html_e( 'Link to a free tool in every post (e.g. the fee or profit calculator). It keeps readers on the site and turns them into leads.', 'a2e' ); ?></li>
+			<li><?php esc_html_e( 'Add a featured image (1600×840). It is used for the card, the article header and social sharing.', 'a2e' ); ?></li>
 		</ul>
 	</div>
 	<?php
@@ -89,7 +89,7 @@ function a2e_designed_editor_notice() {
 	if ( ! $post || ! ( a2e_is_designed_page( $post ) || 'a2e_service' === $post->post_type ) ) {
 		return;
 	}
-	echo '<div class="notice notice-info"><p>' . esc_html__( 'This page uses an A2E designed layout. Change its headline and SEO in the “A2E — page header & SEO” box below; site-wide texts live in A2E → Site Settings. Content you add here appears under the layout when “also show the editor content” is ticked.', 'a2e' ) . '</p></div>';
+	echo '<div class="notice notice-info"><p>' . esc_html__( 'This page uses an A2E designed layout. Change its headline and SEO in the “A2E page header & SEO” box below; site-wide texts live in A2E → Site Settings. Content you add here appears under the layout when “also show the editor content” is ticked.', 'a2e' ) . '</p></div>';
 }
 add_action( 'admin_notices', 'a2e_designed_editor_notice' );
 

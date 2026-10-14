@@ -1,6 +1,6 @@
 <?php
 /**
- * /quote-request/ — free store audit (multi-step form).
+ * /quote-request/: free store audit (multi-step form).
  *
  * @package A2E_Prime
  */
@@ -10,7 +10,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Free store audit', 'a2e' ),
 		'title'   => __( 'Get a free audit and <em>a fixed-price plan.</em>', 'a2e' ),
-		'intro'   => __( 'Answer four quick questions. A real person reviews your store and replies with a clear recommendation and price — no pressure, no jargon.', 'a2e' ),
+		'intro'   => __( 'Answer four quick questions. A real person reviews your store and replies with a clear recommendation and price. No pressure, no jargon.', 'a2e' ),
 		'meta'    => '<span>' . a2e_icon( 'clock' ) . esc_html__( 'Takes 2 minutes', 'a2e' ) . '</span><span>' . a2e_icon( 'check-circle' ) . esc_html__( 'No obligation', 'a2e' ) . '</span><span>' . a2e_icon( 'chat' ) . esc_html__( 'Reply within one business day', 'a2e' ) . '</span>',
 	)
 );

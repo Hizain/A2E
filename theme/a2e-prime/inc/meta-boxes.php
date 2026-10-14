@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function a2e_meta_box_fields() {
 	return array(
 		'a2e_header'      => array(
-			'title'   => __( 'A2E — page header & SEO', 'a2e' ),
+			'title'   => __( 'A2E page header & SEO', 'a2e' ),
 			'screens' => array( 'page', 'post', 'a2e_service', 'a2e_case_study', 'a2e_portfolio' ),
 			'context' => 'normal',
 			'fields'  => array(
@@ -36,7 +36,7 @@ function a2e_meta_box_fields() {
 			'screens' => array( 'a2e_testimonial' ),
 			'context' => 'side',
 			'fields'  => array(
-				'_a2e_rating'  => array( __( 'Rating (1–5)', 'a2e' ), 'text', '5' ),
+				'_a2e_rating'  => array( __( 'Rating (1-5)', 'a2e' ), 'text', '5' ),
 				'_a2e_country' => array( __( 'Country', 'a2e' ), 'text', '' ),
 				'_a2e_source'  => array( __( 'Service', 'a2e' ), 'text', '' ),
 			),
@@ -56,7 +56,7 @@ function a2e_meta_box_fields() {
 			'screens' => array( 'a2e_case_study' ),
 			'context' => 'side',
 			'fields'  => array(
-				'_a2e_case_stats' => array( __( 'Key results — one per line as “value | label”, e.g. “+42% | impressions in 60 days”', 'a2e' ), 'textarea', '' ),
+				'_a2e_case_stats' => array( __( 'Key results, one per line as “value | label”, e.g. “+42% | impressions in 60 days”', 'a2e' ), 'textarea', '' ),
 				'_a2e_case_tag'   => array( __( 'Service tag', 'a2e' ), 'text', '' ),
 			),
 		),

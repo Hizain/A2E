@@ -39,7 +39,7 @@ function a2e_checklist_groups() {
 		),
 		__( 'Product research', 'a2e' )     => array(
 			__( 'Sold history on eBay (not just active listings) for every product', 'a2e' ),
-			__( 'Sell-through rate checked — aim for products that sell consistently', 'a2e' ),
+			__( 'Sell-through rate checked: aim for products that sell consistently', 'a2e' ),
 			__( 'Profit worked out after eBay fees, ad spend and tax', 'a2e' ),
 			__( 'VeRO / brand restrictions and prohibited items checked', 'a2e' ),
 			__( 'Supplier stock and delivery times confirmed', 'a2e' ),

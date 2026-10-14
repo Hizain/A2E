@@ -1,6 +1,6 @@
 <?php
 /**
- * /about/ — story, values, founder (E-E-A-T).
+ * /about/: story, values, founder (E-E-A-T).
  *
  * @package A2E_Prime
  */
@@ -12,7 +12,7 @@ a2e_page_hero(
 		'eyebrow' => __( 'About A2E', 'a2e' ),
 		/* translators: %s: year */
 		'title'   => sprintf( __( 'Helping eBay sellers grow <em>since %s.</em>', 'a2e' ), esc_html( a2e_opt( 'since' ) ) ),
-		'intro'   => __( 'A2E Dropshipping is a small, focused team that researches, lists and manages eBay dropshipping stores. We built it on one idea: careful, honest work beats shortcuts — every single day.', 'a2e' ),
+		'intro'   => __( 'A2E Dropshipping is a small, focused team that researches, lists and manages eBay dropshipping stores. We built it on one idea: careful, honest work beats shortcuts, every single day.', 'a2e' ),
 		'class'   => 'phero--center',
 	)
 );
@@ -28,7 +28,7 @@ a2e_page_hero(
 			$a2e_values = array(
 				array( 'dollar', __( 'Profit before volume', 'a2e' ), __( 'A product only makes the list if it makes money after every eBay fee. Hundreds of listings that do not sell help no one.', 'a2e' ) ),
 				array( 'shield', __( 'Account health first', 'a2e' ), __( 'We work within eBay’s rules and protect your metrics, because a suspended account undoes every other win.', 'a2e' ) ),
-				array( 'chat', __( 'Plain-English honesty', 'a2e' ), __( 'If something will not work for your store, we say so — before you spend a cent.', 'a2e' ) ),
+				array( 'chat', __( 'Plain-English honesty', 'a2e' ), __( 'If something will not work for your store, we say so before you spend a cent.', 'a2e' ) ),
 				array( 'repeat', __( 'Consistency wins', 'a2e' ), __( 'Stores grow from steady work every week, not one big push. That rhythm is what our plans deliver.', 'a2e' ) ),
 				array( 'users', __( 'One team, one plan', 'a2e' ), __( 'Research, listings and management handled by people who talk to each other.', 'a2e' ) ),
 				array( 'lock', __( 'Your store stays yours', 'a2e' ), __( 'Your account, listings, customers and profits always belong to you.', 'a2e' ) ),

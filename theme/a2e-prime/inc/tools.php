@@ -82,7 +82,7 @@ function a2e_tf( $type, $name, $label, $value = '', $o = array() ) {
  * @return string
  */
 function a2e_tout( $key, $label, $class = '' ) {
-	return '<div class="tout ' . esc_attr( $class ) . '"><span class="tout__label">' . esc_html( $label ) . '</span><strong class="tout__value" data-out="' . esc_attr( $key ) . '">—</strong></div>';
+	return '<div class="tout ' . esc_attr( $class ) . '"><span class="tout__label">' . esc_html( $label ) . '</span><strong class="tout__value" data-out="' . esc_attr( $key ) . '">-</strong></div>';
 }
 
 /**
@@ -203,7 +203,7 @@ function a2e_render_tool( $slug ) {
 				</fieldset>
 			</form>
 			<div class="tool__results" aria-live="polite">
-				<div class="verdict" data-verdict><span class="verdict__dot"></span><strong data-out="verdict">—</strong><span data-out="verdictText"></span></div>
+				<div class="verdict" data-verdict><span class="verdict__dot"></span><strong data-out="verdict">-</strong><span data-out="verdictText"></span></div>
 				<div class="tool__hero-out">
 					<?php echo a2e_tout( 'profit', __( 'Profit per sale', 'a2e' ), 'big good' ); // phpcs:ignore ?>
 					<?php echo a2e_tout( 'margin', __( 'Margin', 'a2e' ), 'big' ); // phpcs:ignore ?>
@@ -275,13 +275,13 @@ function a2e_render_tool( $slug ) {
 			</form>
 			<div class="tool__results" aria-live="polite">
 				<div data-panel="build">
-					<p class="tool__label"><?php esc_html_e( 'Title ideas — click to copy', 'a2e' ); ?></p>
+					<p class="tool__label"><?php esc_html_e( 'Title ideas (click to copy)', 'a2e' ); ?></p>
 					<ul class="title-list" data-out-list="titles"></ul>
 				</div>
 				<div data-panel="check" hidden>
 					<div class="score">
 						<svg class="score__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="score__track"/><circle cx="60" cy="60" r="52" class="score__bar" data-ring/></svg>
-						<div class="score__num"><strong data-out="score">—</strong><span>/100</span></div>
+						<div class="score__num"><strong data-out="score">-</strong><span>/100</span></div>
 					</div>
 					<p class="score__chars" data-out="chars"></p>
 					<ul class="issues" data-out-list="issues"></ul>
@@ -395,9 +395,9 @@ function a2e_render_tool( $slug ) {
 			<form class="tool__form" onsubmit="return false">
 				<div class="tf-grid">
 					<?php
-					echo $f( 'text', 'title', __( 'Product title', 'a2e' ), 'Washable HEPA Filter for Dyson V8 V7 — 2 Pack', array( 'wide' => true ) ); // phpcs:ignore
-					echo $f( 'textarea', 'intro', __( 'One-line benefit', 'a2e' ), 'Restore full suction and trap 99% of fine dust — rinse, dry and reuse.', array( 'rows' => 2, 'wide' => true ) ); // phpcs:ignore
-					echo $f( 'textarea', 'features', __( 'Key features (one per line)', 'a2e' ), "Fits Dyson V7 and V8 cordless vacuums\nWashable and reusable HEPA filter\nTwist-on fit — no tools needed\n2 filters included", array( 'rows' => 4 ) ); // phpcs:ignore
+					echo $f( 'text', 'title', __( 'Product title', 'a2e' ), 'Washable HEPA Filter for Dyson V8 V7, 2 Pack', array( 'wide' => true ) ); // phpcs:ignore
+					echo $f( 'textarea', 'intro', __( 'One-line benefit', 'a2e' ), 'Restore full suction and trap 99% of fine dust. Rinse, dry and reuse.', array( 'rows' => 2, 'wide' => true ) ); // phpcs:ignore
+					echo $f( 'textarea', 'features', __( 'Key features (one per line)', 'a2e' ), "Fits Dyson V7 and V8 cordless vacuums\nWashable and reusable HEPA filter\nTwist-on fit, no tools needed\n2 filters included", array( 'rows' => 4 ) ); // phpcs:ignore
 					echo $f( 'textarea', 'specs', __( 'Specifications (Name: value)', 'a2e' ), "Compatible: Dyson V7, V8\nMaterial: HEPA, ABS\nQuantity: 2", array( 'rows' => 4 ) ); // phpcs:ignore
 					echo $f( 'text', 'box', __( 'In the box', 'a2e' ), '2 × post filter', array() ); // phpcs:ignore
 					echo $f( 'text', 'shipping', __( 'Shipping line', 'a2e' ), 'Free shipping. Dispatched within 2 business days with tracking.', array() ); // phpcs:ignore
@@ -454,19 +454,19 @@ function a2e_render_tool( $slug ) {
 					<?php
 					echo $f( 'number', 'sold30', __( 'Sold on eBay in last 30 days', 'a2e' ), '24', array( 'step' => '1' ) ); // phpcs:ignore
 					echo $f( 'number', 'str', __( 'Sell-through rate', 'a2e' ), '55', array( 'suffix' => '%' ) ); // phpcs:ignore
-					echo $f( 'select', 'competition', __( 'Competition', 'a2e' ), 'medium', array( 'options' => array( 'low' => __( 'Low — few sellers, weak listings', 'a2e' ), 'medium' => __( 'Medium', 'a2e' ), 'high' => __( 'High — many strong listings', 'a2e' ) ) ) ); // phpcs:ignore
+					echo $f( 'select', 'competition', __( 'Competition', 'a2e' ), 'medium', array( 'options' => array( 'low' => __( 'Low: few sellers, weak listings', 'a2e' ), 'medium' => __( 'Medium', 'a2e' ), 'high' => __( 'High: many strong listings', 'a2e' ) ) ) ); // phpcs:ignore
 					echo $f( 'number', 'margin', __( 'Margin after all fees', 'a2e' ), '22', array( 'suffix' => '%' ) ); // phpcs:ignore
 					echo $f( 'number', 'delivery', __( 'Supplier delivery time', 'a2e' ), '4', array( 'suffix' => __( 'days', 'a2e' ), 'step' => '1' ) ); // phpcs:ignore
-					echo $f( 'select', 'risk', __( 'Brand / return risk', 'a2e' ), 'low', array( 'options' => array( 'low' => __( 'Low — unbranded, sturdy', 'a2e' ), 'medium' => __( 'Medium — sizing or fragile', 'a2e' ), 'high' => __( 'High — VeRO brand or high returns', 'a2e' ) ) ) ); // phpcs:ignore
+					echo $f( 'select', 'risk', __( 'Brand / return risk', 'a2e' ), 'low', array( 'options' => array( 'low' => __( 'Low: unbranded, sturdy', 'a2e' ), 'medium' => __( 'Medium: sizing or fragile', 'a2e' ), 'high' => __( 'High: VeRO brand or high returns', 'a2e' ) ) ) ); // phpcs:ignore
 					?>
 				</div>
 			</form>
 			<div class="tool__results" aria-live="polite">
 				<div class="score score--lg">
 					<svg class="score__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="score__track"/><circle cx="60" cy="60" r="52" class="score__bar" data-ring/></svg>
-					<div class="score__num"><strong data-out="score">—</strong><span>/100</span></div>
+					<div class="score__num"><strong data-out="score">-</strong><span>/100</span></div>
 				</div>
-				<div class="verdict" data-verdict><span class="verdict__dot"></span><strong data-out="verdict">—</strong><span data-out="verdictText"></span></div>
+				<div class="verdict" data-verdict><span class="verdict__dot"></span><strong data-out="verdict">-</strong><span data-out="verdictText"></span></div>
 				<ul class="factor-bars" data-out-html="factors"></ul>
 			</div>
 			<?php
@@ -478,7 +478,7 @@ function a2e_render_tool( $slug ) {
 				<div class="tf-grid">
 					<?php
 					echo $f( 'number', 'listings', __( 'Active listings', 'a2e' ), '1000', array( 'step' => '1' ) ); // phpcs:ignore
-					echo $f( 'number', 'rate', __( 'Sales per listing per month', 'a2e' ), '0.12', array( 'step' => '0.01', 'help' => __( 'Typical stores: 0.05–0.3', 'a2e' ) ) ); // phpcs:ignore
+					echo $f( 'number', 'rate', __( 'Sales per listing per month', 'a2e' ), '0.12', array( 'step' => '0.01', 'help' => __( 'Typical stores: 0.05-0.3', 'a2e' ) ) ); // phpcs:ignore
 					echo $f( 'number', 'avgPrice', __( 'Average sale price', 'a2e' ), '32', array( 'prefix' => '$' ) ); // phpcs:ignore
 					echo $f( 'number', 'avgProfit', __( 'Average profit per sale', 'a2e' ), '6.5', array( 'prefix' => '$' ) ); // phpcs:ignore
 					echo $f( 'number', 'growth', __( 'New listings added per month', 'a2e' ), '150', array( 'step' => '1' ) ); // phpcs:ignore
@@ -500,7 +500,7 @@ function a2e_render_tool( $slug ) {
 					echo a2e_tout( 'months', __( 'Months to reach goal', 'a2e' ) ); // phpcs:ignore
 					?>
 				</div>
-				<p class="tool__note"><?php esc_html_e( 'Projection only — real results depend on products, competition and account health.', 'a2e' ); ?></p>
+				<p class="tool__note"><?php esc_html_e( 'Projection only. Real results depend on products, competition and account health.', 'a2e' ); ?></p>
 			</div>
 			<?php
 			break;
@@ -581,7 +581,7 @@ function a2e_render_tools_grid( $limit = 0, $filters = false ) {
 		$tools = array_slice( $tools, 0, $limit );
 	}
 	if ( $filters ) {
-		echo '<div class="tool-filter" data-tool-filter><label class="tool-filter__search"><span class="screen-reader-text">' . esc_html__( 'Search tools', 'a2e' ) . '</span>' . a2e_icon( 'search' ) . '<input type="search" placeholder="' . esc_attr__( 'Search tools — e.g. fee, title, profit', 'a2e' ) . '" data-tool-search></label><div class="chips" role="group" aria-label="' . esc_attr__( 'Filter by category', 'a2e' ) . '"><button type="button" class="chip is-active" data-cat="all">' . esc_html__( 'All tools', 'a2e' ) . '</button>'; // phpcs:ignore
+		echo '<div class="tool-filter" data-tool-filter><label class="tool-filter__search"><span class="screen-reader-text">' . esc_html__( 'Search tools', 'a2e' ) . '</span>' . a2e_icon( 'search' ) . '<input type="search" placeholder="' . esc_attr__( 'Search tools, e.g. fee, title, profit', 'a2e' ) . '" data-tool-search></label><div class="chips" role="group" aria-label="' . esc_attr__( 'Filter by category', 'a2e' ) . '"><button type="button" class="chip is-active" data-cat="all">' . esc_html__( 'All tools', 'a2e' ) . '</button>'; // phpcs:ignore
 		foreach ( a2e_tool_categories() as $key => $label ) {
 			echo '<button type="button" class="chip" data-cat="' . esc_attr( $key ) . '">' . esc_html( $label ) . '</button>';
 		}
@@ -594,7 +594,7 @@ function a2e_render_tools_grid( $limit = 0, $filters = false ) {
 	}
 	echo '</div>';
 	if ( $filters ) {
-		echo '<p class="tool-empty" data-tool-empty hidden>' . esc_html__( 'No tool matches that search yet — tell us what you need and we may build it.', 'a2e' ) . '</p>';
+		echo '<p class="tool-empty" data-tool-empty hidden>' . esc_html__( 'No tool matches that search yet. Tell us what you need and we may build it.', 'a2e' ) . '</p>';
 	}
 }
 

@@ -9,7 +9,7 @@ get_header();
 a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Contact', 'a2e' ),
-		'title'   => __( 'Talk to a real person — <em>not a ticket queue.</em>', 'a2e' ),
+		'title'   => __( 'Talk to a real person, <em>not a ticket queue.</em>', 'a2e' ),
 		'intro'   => __( 'Questions about a plan, your store or a subscription? WhatsApp is fastest; the form works just as well.', 'a2e' ),
 	)
 );

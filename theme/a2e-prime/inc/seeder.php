@@ -45,7 +45,7 @@ function a2e_seed_pages() {
 				array(
 					$p( 'A2E Dropshipping (“we”, “us”) respects your privacy. This policy explains what information we collect when you use this website, request a quote, subscribe to our newsletter or buy a service, and how we use it.' ),
 					$h( 'Information we collect' ),
-					$p( 'We collect the details you give us — such as your name, email address, phone or WhatsApp number, store details and messages — when you fill in a form, subscribe or contact us. When you buy a plan, our payment partner collects the billing information needed to process your payment.' ),
+					$p( 'We collect the details you give us (such as your name, email address, phone or WhatsApp number, store details and messages) when you fill in a form, subscribe or contact us. When you buy a plan, our payment partner collects the billing information needed to process your payment.' ),
 					$h( 'How we use it' ),
 					$p( 'We use your information to reply to you, deliver and manage the services you buy, send service updates and, if you subscribed, send our newsletter. We do not sell your personal information.' ),
 					$h( 'Payments' ),
@@ -70,7 +70,7 @@ function a2e_seed_pages() {
 					$h( 'Subscriptions and billing' ),
 					$p( 'Monthly plans are billed in advance and renew automatically each billing period until cancelled. Payments are processed by Whop. You can cancel future renewals at any time from your Whop account; cancellation stops the next renewal and does not refund the current period unless we agree otherwise in writing. One-time packages are charged once.' ),
 					$h( 'Refunds' ),
-					$p( 'Because our work is a service that starts soon after purchase, payments for work already started are generally non-refundable. If something is not right, contact us first — we will always try to fix it.' ),
+					$p( 'Because our work is a service that starts soon after purchase, payments for work already started are generally non-refundable. If something is not right, contact us first and we will always try to fix it.' ),
 					$h( 'Your responsibilities' ),
 					$p( 'You remain responsible for your marketplace accounts and their compliance with marketplace rules (including eBay’s dropshipping and selling policies), your suppliers, your customers, taxes and the final approval of listings and business decisions.' ),
 					$h( 'No guaranteed results' ),
@@ -171,7 +171,7 @@ function a2e_seed() {
 }
 
 /**
- * Example reviews, portfolio items and case studies — only when a type has none at all.
+ * Example reviews, portfolio items and case studies: only when a type has none at all.
  */
 function a2e_seed_examples() {
 	if ( ! wp_count_posts( 'a2e_testimonial' )->publish ) {

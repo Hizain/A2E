@@ -32,7 +32,7 @@
 				<label><input type="radio" name="sim-add" value="500" data-sim-in="add"><span>500</span></label>
 			</div>
 		</div>
-		<p class="sim__fine"><?php a2e_the_icon( 'info' ); ?><?php esc_html_e( 'An estimate to help you plan — not a promise. Real results depend on products, competition, account limits and season.', 'a2e' ); ?></p>
+		<p class="sim__fine"><?php a2e_the_icon( 'info' ); ?><?php esc_html_e( 'An estimate to help you plan, not a promise. Real results depend on products, competition, account limits and season.', 'a2e' ); ?></p>
 	</div>
 
 	<div class="sim__panel">

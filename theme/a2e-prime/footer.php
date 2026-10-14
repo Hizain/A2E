@@ -24,7 +24,7 @@ $a2e_social   = array(
 		<div class="footer-top">
 			<div class="footer-brand">
 				<?php echo a2e_logo( 'footer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<p class="footer-brand__text"><?php esc_html_e( 'Done-for-you Amazon to eBay dropshipping. We research products that sell, write listings that rank and run your store every day — so you can focus on growing.', 'a2e' ); ?></p>
+				<p class="footer-brand__text"><?php esc_html_e( 'Done-for-you Amazon to eBay dropshipping. We research products that sell, write listings that rank and run your store every day, so you can focus on growing.', 'a2e' ); ?></p>
 				<?php a2e_trust_row( 'trust--footer' ); ?>
 			</div>
 			<div class="footer-news">

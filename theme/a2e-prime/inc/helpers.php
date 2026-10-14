@@ -159,7 +159,7 @@ function a2e_logo( $location = 'header' ) {
 		$dark ? ' logo--has-dark' : '',
 		esc_url( home_url( '/' ) ),
 		/* translators: %s: site name. */
-		esc_attr( sprintf( __( '%s — home', 'a2e' ), $name ) ),
+		esc_attr( sprintf( __( '%s, home', 'a2e' ), $name ) ),
 		$light,
 		$dark
 	);

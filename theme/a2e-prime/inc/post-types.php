@@ -168,10 +168,10 @@ function a2e_lead_column_values( $column, $post_id ) {
 		echo esc_html( ucfirst( (string) get_post_meta( $post_id, '_a2e_form', true ) ) );
 	} elseif ( 'a2e_email' === $column ) {
 		$email = (string) get_post_meta( $post_id, '_a2e_email', true );
-		echo $email ? '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>' : '—';
+		echo $email ? '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>' : '-';
 	} elseif ( 'a2e_phone' === $column ) {
 		$phone = (string) get_post_meta( $post_id, '_a2e_phone', true );
-		echo $phone ? '<a href="' . esc_url( 'https://wa.me/' . preg_replace( '/\D+/', '', $phone ) ) . '" target="_blank" rel="noopener">' . esc_html( $phone ) . '</a>' : '—';
+		echo $phone ? '<a href="' . esc_url( 'https://wa.me/' . preg_replace( '/\D+/', '', $phone ) ) . '" target="_blank" rel="noopener">' . esc_html( $phone ) . '</a>' : '-';
 	}
 }
 add_action( 'manage_a2e_lead_posts_custom_column', 'a2e_lead_column_values', 10, 2 );

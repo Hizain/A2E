@@ -41,7 +41,7 @@ function a2e_form_success_text( $type ) {
 	if ( 'newsletter' === $type ) {
 		return __( 'You are on the list. We will email you when we publish new guides and tools.', 'a2e' );
 	}
-	return __( 'Thank you — your message is in. A real person will reply within one business day (usually much sooner). Want an instant answer? Message us on WhatsApp.', 'a2e' );
+	return __( 'Thank you, your message is in. A real person will reply within one business day (usually much sooner). Want an instant answer? Message us on WhatsApp.', 'a2e' );
 }
 
 /**
@@ -101,7 +101,7 @@ function a2e_render_form( $type = 'quote' ) {
 		$stages = array(
 			'new'     => array( 'rocket', __( 'Starting from scratch', 'a2e' ), __( 'No store yet, or brand new', 'a2e' ) ),
 			'slow'    => array( 'trend', __( 'Live, but few sales', 'a2e' ), __( 'Listings get little traction', 'a2e' ) ),
-			'scale'   => array( 'chart', __( 'Selling — want to scale', 'a2e' ), __( 'Ready for more volume', 'a2e' ) ),
+			'scale'   => array( 'chart', __( 'Selling, want to scale', 'a2e' ), __( 'Ready for more volume', 'a2e' ) ),
 			'multi'   => array( 'layers', __( 'Several stores', 'a2e' ), __( 'Agency or multi-store owner', 'a2e' ) ),
 		);
 		?>
@@ -140,7 +140,7 @@ function a2e_render_form( $type = 'quote' ) {
 					</div>
 					<div class="field"><label for="q-budget"><?php esc_html_e( 'Monthly budget', 'a2e' ); ?></label>
 						<select id="q-budget" name="budget">
-							<?php foreach ( array( 'under-200' => __( 'Under $200', 'a2e' ), '200-400' => '$200 – $400', '400-800' => '$400 – $800', '800+' => '$800+', 'unsure' => __( 'Not sure yet', 'a2e' ) ) as $v => $l ) : ?>
+							<?php foreach ( array( 'under-200' => __( 'Under $200', 'a2e' ), '200-400' => '$200 to $400', '400-800' => '$400 to $800', '800+' => '$800+', 'unsure' => __( 'Not sure yet', 'a2e' ) ) as $v => $l ) : ?>
 								<option value="<?php echo esc_attr( $v ); ?>" <?php selected( '200-400', $v ); ?>><?php echo esc_html( $l ); ?></option>
 							<?php endforeach; ?>
 						</select>
@@ -336,7 +336,7 @@ function a2e_handle_lead() {
 		array(
 			'post_type'    => 'a2e_lead',
 			'post_status'  => 'private',
-			'post_title'   => $titles[ $type ] . ' — ' . ( $name ? $name : $email ),
+			'post_title'   => $titles[ $type ] . ': ' . ( $name ? $name : $email ),
 			'post_content' => $body,
 		)
 	);
@@ -352,7 +352,7 @@ function a2e_handle_lead() {
 	$to = is_email( $to ) ? $to : get_option( 'admin_email' );
 	wp_mail(
 		$to,
-		sprintf( '[%1$s] %2$s — %3$s', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $titles[ $type ], $name ? $name : $email ),
+		sprintf( '[%1$s] %2$s from %3$s', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $titles[ $type ], $name ? $name : $email ),
 		$body . "\n\n" . admin_url( 'edit.php?post_type=a2e_lead' ),
 		array( 'Reply-To: ' . ( $name ? $name . ' ' : '' ) . '<' . $email . '>' )
 	);

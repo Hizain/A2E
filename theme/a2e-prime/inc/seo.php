@@ -21,15 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function a2e_seo_defaults() {
 	return array(
-		'home'                                  => array( 'Amazon to eBay Dropshipping Service — Done For You', 'Done-for-you Amazon to eBay dropshipping: profit-checked product research, SEO eBay listings and daily store management on simple monthly plans. Cancel anytime.' ),
+		'home'                                  => array( 'Done-For-You Amazon to eBay Dropshipping Service', 'Done-for-you Amazon to eBay dropshipping: profit-checked product research, SEO eBay listings and daily store management on simple monthly plans. Cancel anytime.' ),
 		'pricing'                               => array( 'Amazon to eBay Dropshipping Pricing & Plans', 'Simple, transparent plans for done-for-you eBay dropshipping: a one-time listing package or monthly store management. Profit-checked research, SEO listings, cancel anytime.' ),
 		'subscription-plans'                    => array( 'Monthly eBay Store Management Plans', 'Monthly Amazon to eBay dropshipping plans: new researched listings every month, daily store management, monthly reports. Secure billing through Whop, cancel anytime.' ),
-		'amazon-to-ebay-dropshipping-service'   => array( 'Amazon to eBay Dropshipping Services', 'Product research, SEO eBay listings, store setup, inventory monitoring, order fulfillment and account management — every eBay dropshipping service from one team.' ),
+		'amazon-to-ebay-dropshipping-service'   => array( 'Amazon to eBay Dropshipping Services', 'Product research, SEO eBay listings, store setup, inventory monitoring, order fulfillment and account management. Every eBay dropshipping service from one team.' ),
 		'free-tools'                            => array( 'Free eBay Seller Tools & Calculators', '13 free eBay seller tools: fee calculator, Amazon to eBay profit calculator, title checker, sell-through rate, bulk profit, product scorecard and more. No sign-up.' ),
-		'contact'                               => array( 'Contact A2E Dropshipping', 'Questions about eBay dropshipping, plans or your store? Message A2E on WhatsApp or send us a note — a real person replies within one business day.' ),
+		'contact'                               => array( 'Contact A2E Dropshipping', 'Questions about eBay dropshipping, plans or your store? Message A2E on WhatsApp or send us a note. A real person replies within one business day.' ),
 		'quote-request'                         => array( 'Free eBay Store Audit & Quote', 'Get a free eBay store audit and a fixed-price plan for product research, listings and store management. Takes two minutes, no obligation.' ),
 		'consultation'                          => array( 'Book an eBay Dropshipping Consultation', 'Book a consultation with A2E: a store review, product research direction, listing SEO and a prioritised growth plan before you spend money.' ),
-		'portfolio'                             => array( 'Portfolio — eBay Research, Listing & Management Projects', 'Recent A2E Dropshipping projects: eBay product research sprints, listing SEO clean-ups and account management — plus verified client reviews.' ),
+		'portfolio'                             => array( 'Portfolio: eBay Research, Listing & Management Projects', 'Recent A2E Dropshipping projects: eBay product research sprints, listing SEO clean-ups and account management, plus verified client reviews.' ),
 		'amazon-to-ebay-dropshipping-checklist' => array( 'Free Amazon to eBay Dropshipping Checklist', 'The interactive checklist we use to set up and run eBay dropshipping stores: store setup, product research, listings, inventory, orders and weekly account health.' ),
 		'about'                                 => array( 'About A2E Dropshipping', 'A2E Dropshipping is an eBay dropshipping team helping sellers since 2018 with profit-checked research, SEO listings and honest, hands-on store management.' ),
 		'account'                               => array( 'Client Area', 'Manage your A2E Dropshipping subscription, billing and support.' ),
@@ -69,14 +69,14 @@ function a2e_seo_for_request() {
 			$desc  = $defaults[ $post->post_name ][1];
 		}
 	} elseif ( is_home() ) {
-		$title = __( 'Amazon to eBay Dropshipping Blog — Guides & Tips', 'a2e' );
+		$title = __( 'Amazon to eBay Dropshipping Blog: Guides & Tips', 'a2e' );
 		$desc  = __( 'Practical guides on eBay dropshipping: product research, listing SEO, fees and pricing, account health and scaling a store that lasts.', 'a2e' );
 	} elseif ( is_post_type_archive( 'a2e_case_study' ) ) {
 		$title = __( 'eBay Dropshipping Case Studies', 'a2e' );
-		$desc  = __( 'How A2E fixes eBay stores: the problem, what we did and what changed — store foundations, research systems and listing SEO clean-ups.', 'a2e' );
+		$desc  = __( 'How A2E fixes eBay stores: the problem, what we did and what changed. Store foundations, research systems and listing SEO clean-ups.', 'a2e' );
 	} elseif ( is_post_type_archive( 'a2e_testimonial' ) ) {
 		/* translators: 1: rating 2: reviews */
-		$title = sprintf( __( 'Client Reviews — %1$s/5 from %2$s Reviews', 'a2e' ), a2e_opt( 'rating' ), a2e_opt( 'reviews' ) );
+		$title = sprintf( __( 'Client Reviews: %1$s/5 from %2$s Reviews', 'a2e' ), a2e_opt( 'rating' ), a2e_opt( 'reviews' ) );
 		$desc  = __( 'What eBay sellers say about A2E Dropshipping’s product research, listings and account management.', 'a2e' );
 	} elseif ( is_category() || is_tag() ) {
 		$title = single_term_title( '', false );
@@ -103,7 +103,10 @@ function a2e_seo_for_request() {
 	if ( ! $desc ) {
 		$desc = get_bloginfo( 'description' );
 	}
-	$seo = array( trim( (string) $title ), trim( wp_strip_all_tags( (string) $desc ) ) );
+	$seo = array(
+		trim( a2e_plain_dashes_title( (string) $title ) ),
+		trim( a2e_plain_dashes( wp_strip_all_tags( (string) $desc ) ) ),
+	);
 	return $seo;
 }
 
@@ -125,6 +128,16 @@ function a2e_document_title( $title ) {
 	return false === stripos( $seo_title, 'A2E' ) ? $seo_title . ' | ' . $site : $seo_title;
 }
 add_filter( 'pre_get_document_title', 'a2e_document_title', 20 );
+
+/**
+ * Use a pipe between page and site name in WordPress's own titles, matching the theme's titles.
+ *
+ * @return string
+ */
+function a2e_title_separator() {
+	return '|';
+}
+add_filter( 'document_title_separator', 'a2e_title_separator' );
 
 /**
  * Canonical URL for the request.

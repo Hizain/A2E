@@ -1,6 +1,6 @@
 <?php
 /**
- * /portfolio/ — projects + reviews.
+ * /portfolio/: projects + reviews.
  *
  * @package A2E_Prime
  */
@@ -10,7 +10,7 @@ a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Our work', 'a2e' ),
 		'title'   => __( 'Research, listings and stores <em>built to perform.</em>', 'a2e' ),
-		'intro'   => __( 'A look at recent product research, listing and account management projects — and what our clients say about them.', 'a2e' ),
+		'intro'   => __( 'A look at recent product research, listing and account management projects, and what our clients say about them.', 'a2e' ),
 		'class'   => 'phero--center',
 	)
 );

@@ -30,7 +30,7 @@ a2e_page_hero(
 	<div class="container">
 		<?php echo a2e_render_tool( $a2e_slug ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<div class="tool-strip" data-reveal>
-			<p><?php esc_html_e( 'Want products that pass these checks — listed for you?', 'a2e' ); ?> <span><?php esc_html_e( 'We research, price and list profit-checked products every month.', 'a2e' ); ?></span></p>
+			<p><?php esc_html_e( 'Want products that pass these checks, listed for you?', 'a2e' ); ?> <span><?php esc_html_e( 'We research, price and list profit-checked products every month.', 'a2e' ); ?></span></p>
 			<?php a2e_buttons( array( array( __( 'Get a free store audit', 'a2e' ), a2e_url( 'quote-request' ), 'primary' ) ) ); ?>
 		</div>
 	</div>
@@ -43,7 +43,7 @@ a2e_page_hero(
 			<aside class="tool-aside">
 				<div class="aside-card aside-card--dark">
 					<p class="aside-card__title"><?php esc_html_e( 'Rather not do the maths?', 'a2e' ); ?></p>
-					<p><?php esc_html_e( 'Our team researches, prices and lists products that pass every check — then manages your store daily.', 'a2e' ); ?></p>
+					<p><?php esc_html_e( 'Our team researches, prices and lists products that pass every check, then manages your store daily.', 'a2e' ); ?></p>
 					<a class="btn btn--light btn--sm btn--block" href="<?php echo esc_url( a2e_url( 'pricing' ) ); ?>"><span><?php esc_html_e( 'See plans', 'a2e' ); ?></span><?php a2e_the_icon( 'arrow-right', 'btn__icon' ); ?></a>
 				</div>
 				<div class="aside-card">
@@ -67,7 +67,7 @@ foreach ( $a2e_tool['faqs'] as $a2e_f ) {
 ?>
 <section class="section">
 	<div class="container container--mid">
-		<?php a2e_section_head( array( 'eyebrow' => __( 'FAQ', 'a2e' ), 'title' => esc_html( $a2e_tool['name'] ) . ' — <em>' . esc_html__( 'common questions', 'a2e' ) . '</em>' ) ); ?>
+		<?php a2e_section_head( array( 'eyebrow' => __( 'FAQ', 'a2e' ), 'title' => esc_html( $a2e_tool['name'] ) . ' <em>' . esc_html__( 'questions, answered', 'a2e' ) . '</em>' ) ); ?>
 		<?php a2e_render_faq( $a2e_faqs ); ?>
 	</div>
 </section>

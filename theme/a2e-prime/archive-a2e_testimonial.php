@@ -1,6 +1,6 @@
 <?php
 /**
- * /testimonials/ — client reviews.
+ * /testimonials/: client reviews.
  *
  * @package A2E_Prime
  */

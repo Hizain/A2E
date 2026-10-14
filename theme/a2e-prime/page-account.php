@@ -1,6 +1,6 @@
 <?php
 /**
- * /account/ — client area. With the A2E Whop Sync plugin active, the "Manage subscription"
+ * /account/: client area. With the A2E Whop Sync plugin active, the "Manage subscription"
  * link goes to the customer's Whop billing portal.
  *
  * @package A2E_Prime
@@ -12,8 +12,8 @@ $a2e_status = isset( $_GET['purchase'] ) ? sanitize_key( wp_unslash( $_GET['purc
 a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Client area', 'a2e' ),
-		'title'   => 'success' === $a2e_status ? __( 'Welcome aboard — <em>you are all set.</em>', 'a2e' ) : __( 'Your subscription, <em>billing and support.</em>', 'a2e' ),
-		'intro'   => 'success' === $a2e_status ? __( 'Thank you for subscribing. Check your email for your Whop receipt and our onboarding message — we will be in touch within one business day to confirm your store details and delivery schedule.', 'a2e' ) : __( 'Manage your plan and payment details through Whop, our secure billing partner, or reach the team directly.', 'a2e' ),
+		'title'   => 'success' === $a2e_status ? __( 'Welcome aboard, <em>you are all set.</em>', 'a2e' ) : __( 'Your subscription, <em>billing and support.</em>', 'a2e' ),
+		'intro'   => 'success' === $a2e_status ? __( 'Thank you for subscribing. Check your email for your Whop receipt and our onboarding message. We will be in touch within one business day to confirm your store details and delivery schedule.', 'a2e' ) : __( 'Manage your plan and payment details through Whop, our secure billing partner, or reach the team directly.', 'a2e' ),
 		'class'   => 'phero--center',
 	)
 );

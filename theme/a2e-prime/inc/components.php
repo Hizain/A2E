@@ -497,7 +497,7 @@ function a2e_render_reviews( $limit = 12, $variant = 'wall' ) {
 	$cards = array();
 	while ( $query->have_posts() ) {
 		$query->the_post();
-		$name    = preg_replace( '/\s+[-–—]\s+.*$/u', '', get_post_field( 'post_title', get_the_ID() ) );
+		$name    = preg_replace( '/\s+[-\x{2013}\x{2014}]\s+.*$/u', '', get_post_field( 'post_title', get_the_ID() ) );
 		$cards[] = array(
 			'name'    => $name,
 			'text'    => wp_strip_all_tags( get_the_content() ),
