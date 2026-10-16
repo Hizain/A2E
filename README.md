@@ -8,6 +8,7 @@ A full rebuild of [a2edropshipping.com](https://a2edropshipping.com/): a new Wor
 | [`dist/a2e-whop-sync.zip`](dist/a2e-whop-sync.zip) | The subscriptions plugin: Plugins → Add New → Upload |
 | [`dist/a2e-mail.zip`](dist/a2e-mail.zip) | The email studio plugin (optional): Plugins → Add New → Upload |
 | [`dist/a2e-health-checker.zip`](dist/a2e-health-checker.zip) | The eBay Account Health Checker plugin (optional, works with any theme): Plugins → Add New → Upload |
+| [`dist/a2e-menu.zip`](dist/a2e-menu.zip) | Header Link plugin (optional): adds a highlighted link to the header without editing the theme. Plugins → Add New → Upload |
 
 Source code lives in `theme/a2e-prime/` and the plugins in `plugin/`.
 
