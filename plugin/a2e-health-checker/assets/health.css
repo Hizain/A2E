@@ -1,35 +1,48 @@
 /**
  * eBay Account Health Checker - self-contained, theme-friendly styles.
  *
- * Everything is scoped under .a2ehc and uses local custom properties with fallbacks,
- * so the tool looks right in any theme. Where the A2E Prime theme is active it exposes
- * --a2e-* variables, and the fallbacks below pick those up automatically.
+ * Everything is scoped under .a2ehc. Colours read the host theme's own design tokens
+ * (A2E Prime exposes --surface, --text, --line, --brand, etc.) so the tool matches the
+ * site and follows its light / dark toggle automatically. When no theme defines those
+ * tokens, the local *-d defaults below are used instead, and only those standalone
+ * defaults follow the visitor's OS colour-scheme - never overriding a theme's toggle.
  */
 
 .a2ehc {
-	--hc-bg: var( --a2e-surface, #ffffff );
-	--hc-panel: var( --a2e-surface-2, #f6f8fb );
-	--hc-ink: var( --a2e-ink, #0f1b2d );
-	--hc-muted: var( --a2e-muted, #5a6b82 );
-	--hc-line: var( --a2e-line, #e4e9f0 );
-	--hc-brand: var( --a2e-accent, #1f6feb );
-	--hc-brand-ink: var( --a2e-accent-ink, #ffffff );
-	--hc-good: #1a9f68;
-	--hc-warn: #c98a12;
-	--hc-bad: #d6453d;
+	/* Standalone (no theme) light defaults - flipped for OS dark further down. */
+	--hc-bg-d: #ffffff;
+	--hc-panel-d: #f6f7fc;
+	--hc-ink-d: #0b1030;
+	--hc-muted-d: #5a6484;
+	--hc-line-d: rgba( 17, 24, 64, 0.11 );
+
+	/* Prefer the host theme's tokens; fall back to the standalone defaults. */
+	--hc-bg: var( --surface, var( --hc-bg-d ) );
+	--hc-panel: var( --surface-2, var( --hc-panel-d ) );
+	--hc-ink: var( --text, var( --hc-ink-d ) );
+	--hc-muted: var( --text-2, var( --hc-muted-d ) );
+	--hc-line: var( --line, var( --hc-line-d ) );
+	--hc-brand: var( --brand, #2b4cf2 );
+	--hc-brand-2: var( --brand-2, #1d8cf8 );
+	--hc-brand-3: var( --brand-3, #7a3cf0 );
+	--hc-brand-ink: #ffffff;
+	--hc-good: #12b76a;
+	--hc-warn: #f5a524;
+	--hc-bad: #f04438;
 	--hc-wa: #25d366;
-	--hc-radius: var( --a2e-radius, 16px );
-	--hc-shadow: var( --a2e-shadow, 0 18px 50px rgba( 15, 27, 45, 0.10 ) );
+	--hc-radius: var( --r, 16px );
+	--hc-radius-l: var( --r-l, 22px );
+	--hc-shadow: var( --shadow-2, 0 18px 50px rgba( 15, 27, 45, 0.10 ) );
 
 	box-sizing: border-box;
-	max-width: 1120px;
+	max-width: 1040px;
 	margin: 0 auto;
 	padding: clamp( 18px, 3vw, 30px );
 	color: var( --hc-ink );
 	background: var( --hc-bg );
 	border: 1px solid var( --hc-line );
-	border-radius: var( --hc-radius );
-	font-family: var( --a2e-font, inherit );
+	border-radius: var( --hc-radius-l );
+	font-family: var( --font, inherit );
 	line-height: 1.55;
 }
 
@@ -60,9 +73,9 @@
 	padding: clamp( 20px, 3.2vw, 34px );
 	background:
 		linear-gradient( var( --hc-bg ), var( --hc-bg ) ) padding-box,
-		linear-gradient( 135deg, var( --hc-brand ), #7b4dff 55%, var( --hc-wa ) ) border-box;
+		linear-gradient( 125deg, var( --hc-brand-2 ), var( --hc-brand ) 46%, var( --hc-brand-3 ) ) border-box;
 	border: 2px solid transparent;
-	border-radius: calc( var( --hc-radius ) + 6px );
+	border-radius: var( --hc-radius-l );
 	box-shadow: var( --hc-shadow );
 }
 
@@ -72,11 +85,11 @@
 	inset: 0;
 	border-radius: inherit;
 	padding: 2px;
-	background: linear-gradient( 135deg, var( --hc-brand ), #7b4dff 55%, var( --hc-wa ) );
+	background: linear-gradient( 125deg, var( --hc-brand-2 ), var( --hc-brand ) 46%, var( --hc-brand-3 ) );
 	-webkit-mask: linear-gradient( #000 0 0 ) content-box, linear-gradient( #000 0 0 );
 	-webkit-mask-composite: xor;
 	mask-composite: exclude;
-	opacity: 0.5;
+	opacity: 0.6;
 	pointer-events: none;
 }
 
@@ -116,9 +129,9 @@
 /* Layout */
 .a2ehc__grid {
 	display: grid;
-	grid-template-columns: minmax( 0, 0.9fr ) minmax( 0, 1.1fr );
+	grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
 	gap: clamp( 16px, 2.4vw, 26px );
-	align-items: start;
+	align-items: stretch;
 }
 
 @media ( max-width: 820px ) {
@@ -221,10 +234,18 @@
 .a2ehc__results {
 	display: grid;
 	gap: 16px;
+	align-content: start;
 	padding: clamp( 16px, 2.2vw, 22px );
 	background: var( --hc-panel );
 	border: 1px solid var( --hc-line );
 	border-radius: 14px;
+}
+
+/* Full-width panels below the form/score row, so nothing is left stretched. */
+.a2ehc__panels {
+	margin-top: clamp( 16px, 2.4vw, 24px );
+	display: grid;
+	gap: clamp( 16px, 2.4vw, 22px );
 }
 
 .a2ehc__scorerow {
@@ -353,9 +374,9 @@
 
 /* Recovery */
 .a2ehc-recover {
-	padding: 16px;
-	border-radius: 12px;
-	background: var( --hc-bg );
+	padding: clamp( 16px, 2.2vw, 22px );
+	border-radius: 14px;
+	background: var( --hc-panel );
 	border: 1px dashed color-mix( in srgb, var( --hc-brand ) 40%, var( --hc-line ) );
 }
 
@@ -383,7 +404,7 @@
 .a2ehc-rc {
 	padding: 14px;
 	border-radius: 10px;
-	background: var( --hc-panel );
+	background: var( --hc-bg );
 	border: 1px solid var( --hc-line );
 }
 
@@ -418,12 +439,23 @@
 }
 
 /* Suggestions */
+.a2ehc-fix {
+	padding: clamp( 16px, 2.2vw, 22px );
+	border-radius: 14px;
+	background: var( --hc-panel );
+	border: 1px solid var( --hc-line );
+}
+
 .a2ehc-fix__list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	display: grid;
-	gap: 12px;
+	gap: 14px 22px;
+}
+
+@media ( min-width: 680px ) {
+	.a2ehc-fix__list { grid-template-columns: 1fr 1fr; }
 }
 
 .a2ehc-fix__item {
@@ -454,7 +486,7 @@
 	padding: clamp( 18px, 2.6vw, 26px );
 	border-radius: 16px;
 	color: var( --hc-brand-ink );
-	background: linear-gradient( 135deg, var( --hc-brand ), #7b4dff );
+	background: linear-gradient( 135deg, var( --hc-brand-2 ), var( --hc-brand ) 42%, var( --hc-brand-3 ) );
 }
 
 .a2ehc-hire__copy { flex: 1 1 320px; }
@@ -603,13 +635,18 @@
 	.a2ehc-result.is-err { background: #fdecea; }
 }
 
-/* Dark theme: follow A2E Prime, or the visitor's preference when the theme is neutral. */
+/**
+ * Standalone dark mode. These *-d values are only ever used when the host theme does
+ * NOT define its own tokens (see the var() fallbacks at the top). When a theme like
+ * A2E Prime is active its tokens always win, so the tool follows the site's own
+ * light / dark toggle and this block never fights it.
+ */
 @media ( prefers-color-scheme: dark ) {
-	.a2ehc:not( [data-scheme="light"] ) {
-		--hc-bg: var( --a2e-surface, #121a27 );
-		--hc-panel: var( --a2e-surface-2, #192434 );
-		--hc-ink: var( --a2e-ink, #eef3fa );
-		--hc-muted: var( --a2e-muted, #9db0c7 );
-		--hc-line: var( --a2e-line, #2a384b );
+	.a2ehc {
+		--hc-bg-d: #0c1024;
+		--hc-panel-d: #10152d;
+		--hc-ink-d: #eef1ff;
+		--hc-muted-d: #a7afd2;
+		--hc-line-d: rgba( 160, 175, 255, 0.14 );
 	}
 }

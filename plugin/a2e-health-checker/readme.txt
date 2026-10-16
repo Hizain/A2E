@@ -4,7 +4,7 @@ Tags: ebay, seller, account health, dropshipping, lead generation
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,10 @@ If the A2E Mail Studio plugin is active, the lead is added there (and can enter 
 No. Scoring, recovery estimates and suggestions all run in the browser. Numbers are only transmitted if the visitor chooses to email themselves the report.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix: the tool now follows your theme's own light / dark toggle instead of the visitor's operating-system setting, so it no longer stays dark when the site is switched to light. It reads your theme's design tokens (colours, radius, shadow, font), so it matches the site in both modes.
+* Fix: rebalanced the layout. The form and score sit side by side, with the recovery estimate and suggestions as full-width panels below, so nothing looks stretched.
 
 = 1.0.0 =
 * First release: scoring against eBay US seller standards, recovery maths to Above Standard and Top Rated with a timeline, tailored suggestions, WhatsApp hire button, assignable page, shortcode and block, highlighted container, and A2E Mail Studio integration.

@@ -182,17 +182,19 @@ class Widget {
 					</div>
 
 					<ul class="a2ehc-metrics" data-out-html="metrics"></ul>
+				</div>
+			</div>
 
-					<div class="a2ehc-recover" data-recover hidden>
-						<p class="a2ehc-recover__title"><?php a2ehc_icon( 'trend' ); ?><?php esc_html_e( 'Your path back to the top', 'a2e-health' ); ?></p>
-						<div class="a2ehc-recover__grid" data-out-html="recover"></div>
-						<p class="a2ehc-recover__note" data-out="recoverNote"></p>
-					</div>
+			<div class="a2ehc__panels" aria-live="polite">
+				<div class="a2ehc-recover" data-recover hidden>
+					<p class="a2ehc-recover__title"><?php a2ehc_icon( 'trend' ); ?><?php esc_html_e( 'Your path back to the top', 'a2e-health' ); ?></p>
+					<div class="a2ehc-recover__grid" data-out-html="recover"></div>
+					<p class="a2ehc-recover__note" data-out="recoverNote"></p>
+				</div>
 
-					<div class="a2ehc-fix">
-						<p class="a2ehc-fix__title"><?php a2ehc_icon( 'wand' ); ?><?php esc_html_e( 'Suggestions to improve your health', 'a2e-health' ); ?></p>
-						<ul class="a2ehc-fix__list" data-out-html="suggestions"></ul>
-					</div>
+				<div class="a2ehc-fix">
+					<p class="a2ehc-fix__title"><?php a2ehc_icon( 'wand' ); ?><?php esc_html_e( 'Suggestions to improve your health', 'a2e-health' ); ?></p>
+					<ul class="a2ehc-fix__list" data-out-html="suggestions"></ul>
 				</div>
 			</div>
 
