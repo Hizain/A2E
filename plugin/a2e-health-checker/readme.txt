@@ -1,0 +1,66 @@
+=== A2E eBay Account Health Checker ===
+Contributors: a2edropshipping
+Tags: ebay, seller, account health, dropshipping, lead generation
+Requires at least: 6.3
+Tested up to: 6.7
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+A free, interactive eBay account health checker you can place on any page. It scores an account, shows how to recover Top Rated, gives suggestions, and offers a WhatsApp hire button.
+
+== Description ==
+
+Drop a polished, free lead-magnet onto your site in one click. Visitors enter a few numbers from their eBay Seller Dashboard and instantly see:
+
+* A health score out of 100 and where they stand against eBay US seller standards (Top Rated, Above Standard, or Below Standard risk).
+* A per-metric breakdown with coloured bars: defect rate, late shipment rate, cases without resolution, and valid tracking on time.
+* **Recovery maths** - how many clean transactions (with no new defects) are needed to climb back to Above Standard and Top Rated, which metric is holding them back, and roughly when they will get there based on their order velocity and their next evaluation date.
+* **Tailored suggestions** to improve store health, matched to the weak metrics.
+* A **"Hire us on WhatsApp"** button so they can ask your team to maintain their account health, plus an optional link to your plans.
+* An optional "email me my report" capture that stores the lead and, when the A2E Mail Studio plugin is active, adds the contact and can start an automatic follow-up sequence.
+
+Everything the visitor types stays in their browser. Nothing is uploaded unless they choose to email themselves the report.
+
+**It does not change your theme.** The plugin creates a ready-made page you can assign anywhere, and also provides a shortcode and a block. Styles are fully self-contained and adapt to any theme, matching the A2E Prime theme automatically when it is active. Wherever the tool appears it is wrapped in a highlighted, standout container (you can turn this off).
+
+== Installation ==
+
+1. Upload the `a2e-health-checker` folder to `/wp-content/plugins/`, or install the zip from Plugins > Add New > Upload Plugin.
+2. Activate it. A page titled "eBay Account Health Checker" is created for you automatically.
+3. Go to **Health Checker** in the admin menu to set your WhatsApp number, business name, where report requests are emailed, and the hire call to action.
+4. Add the ready page to your menu, or place `[a2e_health_checker]` on any page or post, or insert the "eBay Account Health Checker" block.
+
+== Usage ==
+
+**Shortcode**
+
+`[a2e_health_checker]`
+
+Turn the highlight off for one placement:
+
+`[a2e_health_checker highlight="0"]`
+
+**Block**
+
+Add the "eBay Account Health Checker" block and toggle the highlight in the sidebar.
+
+== Frequently Asked Questions ==
+
+= Does this change or require a specific theme? =
+
+No. It works with any theme and does not touch your theme files. When the A2E Prime theme is active it automatically matches its colours and style.
+
+= Where does the lead go? =
+
+If the A2E Mail Studio plugin is active, the lead is added there (and can enter a follow-up sequence) through the shared `a2e_lead_received` hook. Otherwise it is stored in a private "Health leads" list under the Health Checker menu. You also get an email for each request.
+
+= Is anything the visitor types sent to a server? =
+
+No. Scoring, recovery estimates and suggestions all run in the browser. Numbers are only transmitted if the visitor chooses to email themselves the report.
+
+== Changelog ==
+
+= 1.0.0 =
+* First release: scoring against eBay US seller standards, recovery maths to Above Standard and Top Rated with a timeline, tailored suggestions, WhatsApp hire button, assignable page, shortcode and block, highlighted container, and A2E Mail Studio integration.

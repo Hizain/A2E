@@ -7,8 +7,9 @@ A full rebuild of [a2edropshipping.com](https://a2edropshipping.com/): a new Wor
 | [`dist/a2e-prime.zip`](dist/a2e-prime.zip) | The theme: Appearance → Themes → Add New → Upload |
 | [`dist/a2e-whop-sync.zip`](dist/a2e-whop-sync.zip) | The subscriptions plugin: Plugins → Add New → Upload |
 | [`dist/a2e-mail.zip`](dist/a2e-mail.zip) | The email studio plugin (optional): Plugins → Add New → Upload |
+| [`dist/a2e-health-checker.zip`](dist/a2e-health-checker.zip) | The eBay Account Health Checker plugin (optional, works with any theme): Plugins → Add New → Upload |
 
-Source code lives in `theme/a2e-prime/` and `plugin/a2e-whop-sync/`.
+Source code lives in `theme/a2e-prime/` and the plugins in `plugin/`.
 
 ---
 
@@ -47,6 +48,7 @@ If you never used WooCommerce, the theme creates a **Services Shop** page at `/s
 
 ## What is new
 
+- **eBay Account Health Checker plugin**: a standalone, theme-independent version of the health tool, so you can feature it without touching your theme. On activation it creates a ready page (`/ebay-account-health-checker/`) you can assign anywhere, and also gives you a `[a2e_health_checker]` shortcode and a block. Wherever it appears it is wrapped in a highlighted, standout container. It scores an account against eBay US seller standards and then adds: a **next-evaluation date and recovery estimate** (how many clean transactions, with no new defects, are needed to climb back to Above Standard and Top Rated, which metric is holding you back, and roughly when, based on order velocity); **tailored suggestions** to improve store health; and a one-tap **"Hire us on WhatsApp"** button so visitors can hire your team to maintain their account health. Settings live under **Health Checker** in the admin. When A2E Mail Studio is active, the optional "email me my report" form feeds the same contacts and follow-up sequences. Everything a visitor types stays in their browser; nothing is uploaded unless they ask for the report.
 - **Services shop (6.2)**: one wide page with every monthly plan and one-time service, grouped by category, with a monthly / one-time switch, a category bar, service cards (icon, best for, delivery time, features, price with optional crossed-out regular price, Whop checkout) and a details window with the full description. It also has a "how ordering works" section, buying FAQ and structured data (OfferCatalog). "Shop" is added to the menu, and the pricing tables link to it.
 - **Logo fix (6.2)**: WooCommerce's stylesheet no longer blows the logo up on shop pages.
 
