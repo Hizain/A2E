@@ -188,7 +188,7 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 				<?php
 				a2e_section_head(
 					array(
-						'eyebrow' => __( '13 free seller tools', 'a2e' ),
+						'eyebrow' => sprintf( _n( '%d free seller tool', '%d free seller tools', count( a2e_tools() ), 'a2e' ), count( a2e_tools() ) ),
 						'title'   => __( 'Check fees and profit <em>before you list.</em>', 'a2e' ),
 						'intro'   => __( 'The same calculators our team uses every day. Free, no sign-up, fee rates kept up to date.', 'a2e' ),
 						'align'   => 'left',
@@ -215,7 +215,7 @@ $a2e_points = a2e_lines( a2e_opt( 'hero_points' ) );
 					echo a2e_tool_card( $a2e_all_tools[ $a2e_slug ], $a2e_i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 				?>
-				<a class="tool-card tool-card--all" href="<?php echo esc_url( a2e_url( 'free-tools' ) ); ?>" data-reveal><span class="tool-card__icon"><?php a2e_the_icon( 'grid' ); ?></span><h3 class="tool-card__title"><?php esc_html_e( 'See all 13 free tools', 'a2e' ); ?></h3><span class="tool-card__go"><?php esc_html_e( 'Browse tools', 'a2e' ); ?> <?php a2e_the_icon( 'arrow-right' ); ?></span></a>
+				<a class="tool-card tool-card--all" href="<?php echo esc_url( a2e_url( 'free-tools' ) ); ?>" data-reveal><span class="tool-card__icon"><?php a2e_the_icon( 'grid' ); ?></span><h3 class="tool-card__title"><?php printf( esc_html__( 'See all %d free tools', 'a2e' ), count( a2e_tools() ) ); ?></h3><span class="tool-card__go"><?php esc_html_e( 'Browse tools', 'a2e' ); ?> <?php a2e_the_icon( 'arrow-right' ); ?></span></a>
 			</div>
 		</div>
 	</div>

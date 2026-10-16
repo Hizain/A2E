@@ -3,7 +3,7 @@ Contributors: a2edropshipping
 Requires at least: 6.3
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 
 Design and send professional, on-brand emails to the people you already have a relationship with: your clients and everyone who contacted you or subscribed on your website.
@@ -26,6 +26,7 @@ Features:
 * **Ready-made templates** for welcoming clients, following up an audit request, a seasonal promotion, a monthly check-in, and a blank branded message. Edit the wording freely under Templates.
 * **Composer** with a live preview and a test send. Send to a group (all subscribers, clients, newsletter, form leads, or contacts you added) or to one person.
 * **A safe sending queue** with per-minute, per-hour and per-day limits so your domain is never flooded. Pause and resume any send.
+* **Automatic follow-up sequences (new in 1.1)**: set your follow-ups once and they send themselves. A trigger (a new audit request, a new client, a health-check signup, a new subscriber) enrols the person, and timed steps go out on the schedule you choose. Each sequence stops on its own when the person unsubscribes or becomes a client, so nobody is ever over-emailed. Two ready sequences are included (free audit follow-up, new client welcome), switched off until you review them.
 * **Automatic contact finding**: new form submissions are added the instant they arrive, and everything is re-checked every few minutes. A "Check for new contacts now" button and a "Search hard (full rescan)" button are on the dashboard.
 * **Your own sending server (SMTP)** with a test email, plus an SPF and DMARC check for your domain.
 * **One-click unsubscribe** (RFC 8058 List-Unsubscribe headers) and a suppression list that is always honoured.
@@ -39,6 +40,11 @@ This plugin reads contacts from your own WordPress site (form Leads and Whop cli
 A2E Mail → Settings: the From name and address, your contact details and postal address (required in the footer), sending limits, and optional SMTP. A2E Mail → Templates: edit the ready-made emails or add your own.
 
 == Changelog ==
+
+= 1.1.0 =
+* Automatic follow-up sequences (drip automations) with triggers, timed steps, stop-on-goal, and a one-off catch-up enrolment.
+* New contact source and segment for people who run the eBay account health checker.
+* Leads from the website now enrol into matching sequences automatically.
 
 = 1.0.0 =
 * First release.

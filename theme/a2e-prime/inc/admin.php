@@ -73,7 +73,7 @@ function a2e_activation_notice() {
 		return;
 	}
 	delete_transient( 'a2e_activated' );
-	echo '<div class="notice notice-success is-dismissible"><p><strong>' . esc_html__( 'A2E Prime is active.', 'a2e' ) . '</strong> ' . esc_html__( 'All pages, 13 free tools and service guides are ready, and every existing URL still works.', 'a2e' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=a2e-setup' ) ) . '">' . esc_html__( 'Finish setup →', 'a2e' ) . '</a></p></div>';
+	echo '<div class="notice notice-success is-dismissible"><p><strong>' . esc_html__( 'A2E Prime is active.', 'a2e' ) . '</strong> ' . sprintf( esc_html__( 'All pages, %d free tools and service guides are ready, and every existing URL still works.', 'a2e' ), count( a2e_tools() ) ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=a2e-setup' ) ) . '">' . esc_html__( 'Finish setup →', 'a2e' ) . '</a></p></div>';
 }
 add_action( 'admin_notices', 'a2e_activation_notice' );
 

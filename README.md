@@ -5,7 +5,8 @@ A full rebuild of [a2edropshipping.com](https://a2edropshipping.com/): a new Wor
 | Upload this | What it is |
 |---|---|
 | [`dist/a2e-prime.zip`](dist/a2e-prime.zip) | The theme: Appearance → Themes → Add New → Upload |
-| [`dist/a2e-whop-sync.zip`](dist/a2e-whop-sync.zip) | The plugin: Plugins → Add New → Upload |
+| [`dist/a2e-whop-sync.zip`](dist/a2e-whop-sync.zip) | The subscriptions plugin: Plugins → Add New → Upload |
+| [`dist/a2e-mail.zip`](dist/a2e-mail.zip) | The email studio plugin (optional): Plugins → Add New → Upload |
 
 Source code lives in `theme/a2e-prime/` and `plugin/a2e-whop-sync/`.
 
@@ -52,8 +53,8 @@ If you never used WooCommerce, the theme creates a **Services Shop** page at `/s
 - **Homepage**: centered headline with floating supplier logos (Amazon, Walmart, AliExpress, Target, Home Depot, eBay), an interactive example product board that walks one product from supplier to an SEO eBay listing to profit after every fee (tabs for four example products, typed title, live 30-day sales chart, profit breakdown), supplier logo marquee, count-up stats, “doing it alone vs with A2E” toggle, bento services grid, 4-step process, interactive **profit simulator** that recommends a plan, reviews wall, founder note, pricing, quick fee checker, latest posts, FAQ.
 - **No long dashes**: theme copy uses plain punctuation. Long dashes in your own posts, pages and titles are shown as commas or hyphens on the live site (switch off under **A2E → Site Settings → Business → Plain punctuation**).
 - **Light and dark mode**: follows the visitor's system setting, with a toggle in the header and footer (no flash on load).
-- **13 free tools** for search traffic, each on its own SEO page with an explainer, FAQ and structured data:
-  eBay Fee Calculator · Amazon to eBay Profit Calculator · eBay Listing Price Calculator · eBay Title Builder & Checker · eBay Sell-Through Rate Calculator · eBay Defect Rate Calculator · eBay Promoted Listings Calculator · eBay Store Name Generator · eBay Description Template Generator · **new:** Bulk eBay Profit Calculator · eBay Product Research Scorecard · eBay Dropshipping Income Calculator · eBay Store Management Cost Calculator.
+- **14 free tools** for search traffic, each on its own SEO page with an explainer, FAQ and structured data:
+  eBay Fee Calculator · Amazon to eBay Profit Calculator · eBay Listing Price Calculator · eBay Title Builder & Checker · eBay Sell-Through Rate Calculator · eBay Defect Rate Calculator · eBay Promoted Listings Calculator · eBay Store Name Generator · eBay Description Template Generator · **new:** Bulk eBay Profit Calculator · eBay Product Research Scorecard · eBay Dropshipping Income Calculator · eBay Store Management Cost Calculator · **new:** eBay Account Health Checker (with an optional "email me my report" lead capture).
 - **Designed pages**: services hub, 10 service guides, pricing (with comparison table), monthly plans, free-tools hub with search and filters, multi-step free-audit form, consultation, contact, portfolio, case studies, reviews, interactive checklist (progress saved in the browser), About, Client area, blog, 404.
 - **SEO**: titles, meta descriptions, canonical, Open Graph/Twitter cards, JSON-LD (Organization, WebSite, BreadcrumbList, BlogPosting, Service, Offer, WebApplication for tools, FAQPage), clean XML sitemap at `/wp-sitemap.xml`. If Yoast, Rank Math, AIOSEO, SEOPress or The SEO Framework is active, the theme steps back and only adds the tool, service and FAQ data those plugins do not.
 - **Speed**: no jQuery or page builder on the front end, self-hosted fonts (≈75 KB), deferred scripts, no block-library CSS on designed pages.

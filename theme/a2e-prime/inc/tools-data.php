@@ -296,6 +296,29 @@ function a2e_tools() {
 				array( 'q' => 'Is hiring a VA cheaper than a management service?', 'a' => 'A VA can cost less per hour, but you still have to train, manage and check their work, and research quality depends on their experience. Include your own management time when you compare.' ),
 			),
 		),
+		'ebay-account-health-checker'          => array(
+			'name'      => 'eBay Account Health Checker',
+			'icon'      => 'shield',
+			'cat'       => 'growth',
+			'short'     => 'Score your eBay account health against seller standards and see what to fix first.',
+			'seo_title' => 'Free eBay Account Health Checker: Seller Standards Score',
+			'meta'      => 'Free eBay account health checker. Enter your defect rate, late shipments, cases and valid tracking to get a 0-100 health score, your seller standards band and a clear list of what to fix for Top Rated status.',
+			'intro'     => 'Enter a few numbers from your Seller Dashboard to see a clear health score, where you stand against eBay’s seller standards, and the one or two things to fix first to protect your account and grow sales.',
+			'explainer' => '<h2>Why account health decides your sales</h2>
+<p>On eBay, account health is not a vanity number. Your seller standards decide how often your listings are shown, whether you keep Top Rated discounts, and in bad cases whether selling limits are placed on your account. A healthy account quietly compounds: better visibility brings more sales, and more clean sales keep the account healthy.</p>
+<h3>The numbers that matter</h3>
+<ul><li><strong>Transaction defect rate</strong>: the share of orders with a seller-caused problem, such as a case closed without your resolution or an out-of-stock cancellation. Top Rated is 0.5% or less; Above Standard is 2% or less.</li><li><strong>Late shipment rate</strong>: orders delivered or scanned late. Keep it at or below 3%.</li><li><strong>Cases closed without seller resolution</strong>: when eBay has to step in. Keep it at or below 0.3%.</li><li><strong>Valid tracking uploaded on time</strong>: upload tracking that scans before your handling time ends.</li></ul>
+<h3>How this score works</h3>
+<p>This checker weighs those four numbers the way eBay’s standards do, with the transaction defect rate counting the most, and returns a 0 to 100 health score with a clear band. It runs in your browser, and nothing you type is uploaded.</p>
+<h3>Done-for-you account health and growth</h3>
+<p>If your score is lower than you would like, that is exactly the work our team does every day for branded and growing eBay accounts: daily supplier and stock checks so you never cancel, fast valid tracking, quick case and buyer-message handling, and steady researched listings so revenue grows while the account stays clean. Get your free report below and we will send an honest, specific plan.</p>',
+			'faqs'      => array(
+				array( 'q' => 'What is a good eBay account health score?', 'a' => 'Aim to keep your transaction defect rate at 0.5% or less, late shipments at 3% or less, and cases closed without your resolution at 0.3% or less. Hit those and you are in Top Rated territory, which earns better visibility and fee discounts.' ),
+				array( 'q' => 'Can you fix an eBay account that is Below Standard?', 'a' => 'Often, yes. Most Below Standard accounts recover by stopping the source of defects (usually stock and late shipment problems), uploading valid tracking on time, and resolving buyer issues before they become cases. Because eBay evaluates on a rolling period, clean months steadily replace bad ones. This is a core part of our account management service.' ),
+				array( 'q' => 'Do you manage and grow branded eBay accounts, not just dropshipping?', 'a' => 'Yes. We manage established and branded eBay accounts for professional sellers: protecting account health, handling daily operations, and adding researched listings to grow revenue. Run the checker and request your report to talk it through.' ),
+				array( 'q' => 'Where do I find these numbers?', 'a' => 'Open your eBay Seller Dashboard (Seller Hub, then Performance, then Seller level). It shows your transaction defect rate, late shipment rate and cases closed without seller resolution for your current evaluation period.' ),
+			),
+		),
 	);
 
 	foreach ( $tools as $slug => &$tool ) {

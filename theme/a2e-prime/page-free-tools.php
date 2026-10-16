@@ -9,7 +9,7 @@ get_header();
 a2e_page_hero(
 	array(
 		'eyebrow' => __( 'Free seller tools', 'a2e' ),
-		'title'   => __( '13 free eBay tools to <em>price, list and grow.</em>', 'a2e' ),
+		'title'   => sprintf( __( '%d free eBay tools to <em>price, list and grow.</em>', 'a2e' ), count( a2e_tools() ) ),
 		'intro'   => __( 'Fee and profit calculators, title and description generators, research scorecards and growth planners. The same tools our team uses every day. Free, no sign-up, and nothing you type leaves your browser.', 'a2e' ),
 		'class'   => 'phero--center',
 		/* translators: %s: month and year */

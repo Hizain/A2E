@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'A2E_VERSION', '6.2.0' );
+define( 'A2E_VERSION', '6.3.0' );
 define( 'A2E_DIR', get_template_directory() );
 define( 'A2E_URI', get_template_directory_uri() );
 

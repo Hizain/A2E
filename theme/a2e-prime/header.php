@@ -81,7 +81,7 @@ $a2e_monthly  = array_values(
 						</div>
 					</li>
 					<li class="nav__item has-mega" data-mega>
-						<button type="button" class="nav__link" aria-expanded="false" aria-controls="mega-tools"><?php esc_html_e( 'Free Tools', 'a2e' ); ?><span class="nav__badge">13</span><?php a2e_the_icon( 'chevron-down', 'nav__chev' ); ?></button>
+						<button type="button" class="nav__link" aria-expanded="false" aria-controls="mega-tools"><?php esc_html_e( 'Free Tools', 'a2e' ); ?><span class="nav__badge"><?php echo (int) count( $a2e_tools ); ?></span><?php a2e_the_icon( 'chevron-down', 'nav__chev' ); ?></button>
 						<div class="mega mega--tools" id="mega-tools">
 							<div class="mega__inner">
 								<div class="mega__cols">

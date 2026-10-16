@@ -3,7 +3,7 @@
  * Plugin Name:       A2E Mail Studio
  * Plugin URI:        https://a2edropshipping.com/
  * Description:       Design and send professional, theme-styled emails to the people you already have a relationship with: your Whop clients and everyone who contacted you or subscribed through your website. Compose one-off messages, promotions and updates, preview them, send a test, and let the queue deliver them safely from your own address. Every message carries your WhatsApp, phone, email and a one-click unsubscribe.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            A2E Dropshipping
@@ -25,10 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION   = '1.0.0';
+const VERSION   = '1.1.0';
 const OPTION    = 'a2email_settings';
 const CPT       = 'a2email_message';
 const TEMPLATE  = 'a2email_template';
+const SEQUENCE  = 'a2email_sequence';
 const CRON_SYNC = 'a2email_sync_event';
 const CRON_SEND = 'a2email_send_event';
 
@@ -42,6 +43,7 @@ require_once A2EMAIL_DIR . 'includes/class-templates.php';
 require_once A2EMAIL_DIR . 'includes/class-mailer.php';
 require_once A2EMAIL_DIR . 'includes/class-queue.php';
 require_once A2EMAIL_DIR . 'includes/class-unsubscribe.php';
+require_once A2EMAIL_DIR . 'includes/class-automations.php';
 require_once A2EMAIL_DIR . 'includes/class-composer.php';
 require_once A2EMAIL_DIR . 'includes/class-admin.php';
 
@@ -54,7 +56,9 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\deactivate' );
 function activate() {
 	Contacts::install();
 	Queue::install();
+	Automations::install();
 	Templates::seed();
+	Automations::seed();
 	if ( ! wp_next_scheduled( CRON_SYNC ) ) {
 		wp_schedule_event( time() + 120, 'a2email_5min', CRON_SYNC );
 	}
@@ -90,13 +94,16 @@ add_action(
 		if ( get_option( 'a2email_db_version' ) !== VERSION ) {
 			Contacts::install();
 			Queue::install();
+			Automations::install();
 			Templates::seed();
+			Automations::seed();
 			update_option( 'a2email_db_version', VERSION, false );
 		}
 		Contacts::init();
 		Templates::init();
 		Queue::init();
 		Unsubscribe::init();
+		Automations::init();
 		Composer::init();
 		Admin::init();
 	}

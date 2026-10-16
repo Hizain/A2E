@@ -62,4 +62,37 @@
 	}
 
 	if (frame) { doPreview(); }
+
+	/* Automation editor: add and remove steps. */
+	var stepsWrap = $('a2email-steps');
+	var addStep = $('a2email-add-step');
+	var stepTpl = $('a2email-step-template');
+	function reindex() {
+		if (!stepsWrap) { return; }
+		var rows = stepsWrap.querySelectorAll('.a2email-step');
+		rows.forEach(function (row, i) {
+			row.querySelectorAll('[name]').forEach(function (el) {
+				el.name = el.name.replace(/steps\[[^\]]*\]/, 'steps[' + i + ']');
+			});
+		});
+	}
+	if (stepsWrap) {
+		if (addStep && stepTpl) {
+			addStep.addEventListener('click', function () {
+				var html = stepTpl.innerHTML.replace(/__i__/g, Date.now().toString());
+				var div = document.createElement('div');
+				div.innerHTML = html.trim();
+				stepsWrap.appendChild(div.firstChild);
+				reindex();
+			});
+		}
+		stepsWrap.addEventListener('click', function (e) {
+			if (e.target && e.target.classList.contains('a2email-step__remove')) {
+				var rows = stepsWrap.querySelectorAll('.a2email-step');
+				if (rows.length <= 1) { return; }
+				e.target.closest('.a2email-step').remove();
+				reindex();
+			}
+		});
+	}
 })();

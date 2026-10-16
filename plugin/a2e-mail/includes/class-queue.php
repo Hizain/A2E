@@ -232,6 +232,20 @@ class Queue {
 	}
 
 	/**
+	 * Record a send that happened outside a queued message (for example an automation step),
+	 * so it still counts toward the per-minute, per-hour and per-day limits.
+	 *
+	 * @param string $email Recipient.
+	 */
+	public static function note_external_send( $email ) {
+		global $wpdb;
+		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			self::table(),
+			array( 'message_id' => 0, 'contact_id' => 0, 'email' => $email, 'status' => 'sent', 'created_at' => current_time( 'mysql', true ), 'sent_at' => current_time( 'mysql', true ) )
+		);
+	}
+
+	/**
 	 * Send a single message to one existing contact immediately (manual one-to-one).
 	 *
 	 * @param int $contact_id Contact id.

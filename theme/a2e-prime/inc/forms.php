@@ -41,6 +41,9 @@ function a2e_form_success_text( $type ) {
 	if ( 'newsletter' === $type ) {
 		return __( 'You are on the list. We will email you when we publish new guides and tools.', 'a2e' );
 	}
+	if ( 'health-check' === $type ) {
+		return __( 'Your report is on its way. A real person will also look at your numbers and send a short, honest action plan, usually within one business day.', 'a2e' );
+	}
 	return __( 'Thank you, your message is in. A real person will reply within one business day (usually much sooner). Want an instant answer? Message us on WhatsApp.', 'a2e' );
 }
 
@@ -245,7 +248,7 @@ function a2e_render_newsletter( $button = '', $class = '' ) {
 function a2e_handle_lead() {
 	$is_ajax = ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) );
 	$type    = isset( $_POST['a2e_form'] ) ? sanitize_key( wp_unslash( $_POST['a2e_form'] ) ) : 'contact';
-	$type    = in_array( $type, array( 'quote', 'consultation', 'contact', 'newsletter' ), true ) ? $type : 'contact';
+	$type    = in_array( $type, array( 'quote', 'consultation', 'contact', 'newsletter', 'health-check' ), true ) ? $type : 'contact';
 	$back    = wp_get_referer() ? wp_get_referer() : home_url( '/' );
 	$back    = remove_query_arg( array( 'a2e_sent', 'a2e_error', 'a2e_form' ), $back );
 
@@ -292,6 +295,7 @@ function a2e_handle_lead() {
 		'topic'     => __( 'Topic', 'a2e' ),
 		'phone'     => __( 'WhatsApp / phone', 'a2e' ),
 		'message'   => __( 'Message', 'a2e' ),
+		'score'     => __( 'Health score', 'a2e' ),
 		'a2e_ref'   => __( 'Sent from', 'a2e' ),
 	);
 	$lines  = array(
@@ -331,6 +335,7 @@ function a2e_handle_lead() {
 		'consultation' => __( 'Consultation request', 'a2e' ),
 		'contact'      => __( 'Contact message', 'a2e' ),
 		'newsletter'   => __( 'Newsletter signup', 'a2e' ),
+		'health-check' => __( 'Account health report request', 'a2e' ),
 	);
 	$lead_id = wp_insert_post(
 		array(

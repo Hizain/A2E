@@ -40,6 +40,7 @@ class Admin {
 		add_submenu_page( 'a2e-mail', __( 'Dashboard', 'a2e-mail' ), __( 'Dashboard', 'a2e-mail' ), 'manage_options', 'a2e-mail', array( __CLASS__, 'render_dashboard' ) );
 		add_submenu_page( 'a2e-mail', __( 'Compose', 'a2e-mail' ), __( 'Compose', 'a2e-mail' ), 'manage_options', 'a2e-mail-compose', array( Composer::class, 'render_compose' ) );
 		add_submenu_page( 'a2e-mail', __( 'Messages', 'a2e-mail' ), __( 'Messages', 'a2e-mail' ), 'manage_options', 'a2e-mail-messages', array( __CLASS__, 'render_messages' ) );
+		add_submenu_page( 'a2e-mail', __( 'Automations', 'a2e-mail' ), __( 'Automations', 'a2e-mail' ), 'manage_options', 'a2e-mail-automations', array( Automations::class, 'render' ) );
 		add_submenu_page( 'a2e-mail', __( 'Contacts', 'a2e-mail' ), __( 'Contacts', 'a2e-mail' ), 'manage_options', 'a2e-mail-contacts', array( __CLASS__, 'render_contacts' ) );
 		add_submenu_page( 'a2e-mail', __( 'Templates', 'a2e-mail' ), __( 'Templates', 'a2e-mail' ), 'manage_options', 'edit.php?post_type=' . TEMPLATE );
 		add_submenu_page( 'a2e-mail', __( 'Settings', 'a2e-mail' ), __( 'Settings', 'a2e-mail' ), 'manage_options', 'a2e-mail-settings', array( __CLASS__, 'render_settings' ) );
@@ -253,7 +254,7 @@ class Admin {
 		$paged   = isset( $_GET['paged'] ) ? max( 1, absint( $_GET['paged'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$result  = Contacts::query( array( 'status' => $status, 'source' => $source, 'search' => $search, 'paged' => $paged, 'per_page' => 50 ) );
 		$stats   = Contacts::stats();
-		$sources = array( '' => __( 'All sources', 'a2e-mail' ), 'client' => __( 'Clients', 'a2e-mail' ), 'newsletter' => __( 'Newsletter', 'a2e-mail' ), 'quote' => __( 'Audit requests', 'a2e-mail' ), 'consultation' => __( 'Consultations', 'a2e-mail' ), 'contact' => __( 'Contact form', 'a2e-mail' ), 'manual' => __( 'Added by hand', 'a2e-mail' ) );
+		$sources = array( '' => __( 'All sources', 'a2e-mail' ), 'client' => __( 'Clients', 'a2e-mail' ), 'newsletter' => __( 'Newsletter', 'a2e-mail' ), 'quote' => __( 'Audit requests', 'a2e-mail' ), 'consultation' => __( 'Consultations', 'a2e-mail' ), 'contact' => __( 'Contact form', 'a2e-mail' ), 'health_check' => __( 'Health checker', 'a2e-mail' ), 'manual' => __( 'Added by hand', 'a2e-mail' ) );
 		?>
 		<div class="wrap a2email">
 			<h1 class="a2email-h1"><?php esc_html_e( 'Contacts', 'a2e-mail' ); ?></h1>
@@ -339,7 +340,7 @@ class Admin {
 	 * @return string
 	 */
 	protected static function source_label( $source ) {
-		$map = array( 'client' => __( 'Client', 'a2e-mail' ), 'newsletter' => __( 'Newsletter', 'a2e-mail' ), 'quote' => __( 'Audit request', 'a2e-mail' ), 'consultation' => __( 'Consultation', 'a2e-mail' ), 'contact' => __( 'Contact form', 'a2e-mail' ), 'manual' => __( 'Added by hand', 'a2e-mail' ) );
+		$map = array( 'client' => __( 'Client', 'a2e-mail' ), 'newsletter' => __( 'Newsletter', 'a2e-mail' ), 'quote' => __( 'Audit request', 'a2e-mail' ), 'consultation' => __( 'Consultation', 'a2e-mail' ), 'contact' => __( 'Contact form', 'a2e-mail' ), 'health_check' => __( 'Health checker', 'a2e-mail' ), 'manual' => __( 'Added by hand', 'a2e-mail' ) );
 		return isset( $map[ $source ] ) ? $map[ $source ] : $source;
 	}
 

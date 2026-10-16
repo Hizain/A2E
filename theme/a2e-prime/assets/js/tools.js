@@ -399,6 +399,71 @@
 			var max = Math.max(diy, va, plan, 1);
 			var rows = [['Doing it yourself (your time)', diy, '#f97316'], ['Hiring a VA (+ your management time)', va, 'var(--c5)'], ['Done-for-you plan', plan, 'var(--good)']];
 			html(root, 'bars', rows.map(function (r) { return '<div class="compare-bars__row"><div class="compare-bars__top"><span>' + esc(r[0]) + '</span><strong>' + money(r[1]) + '/mo</strong></div><div class="compare-bars__bar"><span style="width:' + (r[1] / max * 100).toFixed(1) + '%;background:' + r[2] + '"></span></div></div>'; }).join(''));
+		},
+
+		'ebay-account-health-checker': function (root, d) {
+			var tx = Math.max(0, num(d.transactions));
+			var defectRate = tx ? num(d.defects) / tx * 100 : 0;
+			var lateRate = tx ? num(d.late) / tx * 100 : 0;
+			var caseRate = tx ? num(d.cases) / tx * 100 : 0;
+			var trk = clamp(num(d.tracking), 0, 100);
+
+			// Sub-scores (0..1), weighted the way eBay's standards lean.
+			var sDef = defectRate <= 0.5 ? 1 : (defectRate >= 2 ? 0 : 1 - (defectRate - 0.5) / 1.5);
+			var sLate = lateRate <= 3 ? 1 : (lateRate >= 7 ? 0 : 1 - (lateRate - 3) / 4);
+			var sCase = caseRate <= 0.3 ? 1 : (caseRate >= 1 ? 0 : 1 - (caseRate - 0.3) / 0.7);
+			var sTrk = clamp((trk - 80) / 15, 0, 1);
+			var score = Math.round(35 * sDef + 25 * sLate + 20 * sCase + 20 * sTrk);
+			if (!tx) { score = 0; }
+
+			var band, state, bandText;
+			if (defectRate <= 0.5 && lateRate <= 3 && caseRate <= 0.3 && score >= 85) {
+				band = 'Top Rated territory'; state = 'good';
+				bandText = 'Your numbers are inside the Top Rated thresholds. Keep it steady to hold the visibility and fee discounts.';
+			} else if (defectRate <= 2) {
+				band = 'Above Standard'; state = 'warn';
+				bandText = 'You are in good standing, with room to tighten up and reach Top Rated.';
+			} else {
+				band = 'At risk (Below Standard)'; state = 'bad';
+				bandText = 'Your defect rate is above 2%, which lowers visibility and raises fees. This is fixable with the right routine.';
+			}
+			out(root, 'score', tx ? String(score) : '-');
+			ring(root, score, state);
+			verdict(root, state, band, bandText);
+
+			function metric(label, value, ok, warn) {
+				var st = ok ? 'good' : (warn ? 'warn' : 'bad');
+				var w = ok ? 100 : (warn ? 55 : 22);
+				var col = st === 'good' ? 'var(--good)' : (st === 'warn' ? 'var(--warn)' : 'var(--bad)');
+				return '<li><span>' + esc(label) + '</span><span class="bar"><span style="width:' + w + '%;background:' + col + '"></span></span><b>' + esc(value) + '</b></li>';
+			}
+			var metrics = [
+				metric('Defect rate (0.5% target)', pct(defectRate, 2), defectRate <= 0.5, defectRate <= 2),
+				metric('Late shipments (3% target)', pct(lateRate, 2), lateRate <= 3, lateRate <= 5),
+				metric('Unresolved cases (0.3% target)', pct(caseRate, 2), caseRate <= 0.3, caseRate <= 0.7),
+				metric('Valid tracking (95% target)', pct(trk, 0), trk >= 95, trk >= 90)
+			];
+			html(root, 'metrics', metrics.join(''));
+
+			var fixes = [];
+			if (defectRate > 0.5) { fixes.push('Stop the source of defects: check supplier stock daily so you never cancel, and resolve buyer issues yourself before they become cases.'); }
+			if (lateRate > 3) { fixes.push('Upload valid tracking that scans before your handling time ends, and set a handling time you can always meet.'); }
+			if (caseRate > 0.3) { fixes.push('Answer buyer messages quickly and offer a fix early, so fewer cases are escalated to eBay.'); }
+			if (trk < 95) { fixes.push('Add tracking to every order on time. Automate it where you can so none slip through.'); }
+			if (!fixes.length) { fixes.push('You are in strong shape. Keep the routine steady and add researched listings to grow sales while the account stays clean.'); }
+			html(root, 'actions', fixes.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join(''));
+
+			// Fill the hidden report fields for the "email me my report" capture.
+			var report = 'eBay account health report\n' +
+				'Health score: ' + (tx ? score + '/100 (' + band + ')' : 'enter your numbers') + '\n' +
+				'Transactions: ' + Math.round(tx) + '\n' +
+				'Transaction defect rate: ' + pct(defectRate, 2) + ' (target 0.5% or less)\n' +
+				'Late shipment rate: ' + pct(lateRate, 2) + ' (target 3% or less)\n' +
+				'Cases without resolution: ' + pct(caseRate, 2) + ' (target 0.3% or less)\n' +
+				'Valid tracking on time: ' + pct(trk, 0) + ' (target 95% or more)\n' +
+				'Top fixes: ' + fixes.join(' ');
+			out(root, 'reportMsg', report);
+			out(root, 'reportScore', tx ? score + '/100 ' + band : '');
 		}
 	};
 

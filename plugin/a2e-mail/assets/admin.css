@@ -59,3 +59,12 @@
 .a2email-dns { margin: 6px 0; }
 .a2email-dns li { margin: 0 0 6px; }
 .a2email-inline { margin-top: 14px; display: flex; gap: 8px; align-items: center; }
+
+/* Automation editor */
+.a2email-seq { max-width: 900px; }
+.a2email-checks label { display: inline-block; }
+.a2email-step { background: #fff; border: 1px solid #dcdcde; border-radius: 10px; padding: 14px 16px; margin: 0 0 12px; }
+.a2email-step__when { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; font-weight: 600; }
+.a2email-step__when .small-text { width: 70px; }
+.a2email-step__remove { margin-left: auto; color: #b32d2e; }
+.a2email-step input, .a2email-step textarea { margin-bottom: 8px; }

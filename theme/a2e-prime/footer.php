@@ -49,7 +49,7 @@ $a2e_social   = array(
 					<?php foreach ( array_slice( $a2e_tools, 0, 7 ) as $tool ) : ?>
 						<li><a href="<?php echo esc_url( a2e_tool_url( $tool['slug'] ) ); ?>"><?php echo esc_html( $tool['name'] ); ?></a></li>
 					<?php endforeach; ?>
-					<li><a class="footer-col__more" href="<?php echo esc_url( a2e_url( 'free-tools' ) ); ?>"><?php esc_html_e( 'All 13 tools →', 'a2e' ); ?></a></li>
+					<li><a class="footer-col__more" href="<?php echo esc_url( a2e_url( 'free-tools' ) ); ?>"><?php printf( esc_html__( 'All %d tools →', 'a2e' ), count( a2e_tools() ) ); ?></a></li>
 				</ul>
 			</div>
 			<div class="footer-col">

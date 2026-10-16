@@ -539,6 +539,52 @@ function a2e_render_tool( $slug ) {
 			</div>
 			<?php
 			break;
+
+		case 'ebay-account-health-checker':
+			?>
+			<form class="tool__form" onsubmit="return false">
+				<fieldset><legend><?php esc_html_e( 'From your eBay Seller Dashboard', 'a2e' ); ?></legend>
+					<div class="tf-grid">
+						<?php
+						echo $f( 'number', 'transactions', __( 'Transactions in the evaluation period', 'a2e' ), '400', array( 'step' => '1' ) ); // phpcs:ignore
+						echo $f( 'number', 'defects', __( 'Transactions with a defect', 'a2e' ), '3', array( 'step' => '1', 'help' => __( 'Cases closed without your resolution, plus your own cancellations.', 'a2e' ) ) ); // phpcs:ignore
+						echo $f( 'number', 'late', __( 'Late shipments', 'a2e' ), '6', array( 'step' => '1' ) ); // phpcs:ignore
+						echo $f( 'number', 'cases', __( 'Cases closed without your resolution', 'a2e' ), '1', array( 'step' => '1' ) ); // phpcs:ignore
+						echo $f( 'number', 'tracking', __( 'Valid tracking uploaded on time', 'a2e' ), '97', array( 'suffix' => '%' ) ); // phpcs:ignore
+						?>
+					</div>
+				</fieldset>
+			</form>
+			<div class="tool__results" aria-live="polite">
+				<div class="score score--lg">
+					<svg class="score__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="score__track"/><circle cx="60" cy="60" r="52" class="score__bar" data-ring/></svg>
+					<div class="score__num"><strong data-out="score">-</strong><span>/100</span></div>
+				</div>
+				<div class="verdict" data-verdict><span class="verdict__dot"></span><strong data-out="verdict">-</strong><span data-out="verdictText"></span></div>
+				<ul class="factor-bars" data-out-html="metrics"></ul>
+				<div class="health-fix">
+					<p class="health-fix__title"><?php a2e_the_icon( 'wand' ); ?><?php esc_html_e( 'What to fix first', 'a2e' ); ?></p>
+					<ul class="health-fix__list" data-out-html="actions"></ul>
+				</div>
+			</div>
+			<div class="tool-capture" data-capture>
+				<div class="tool-capture__copy">
+					<h3 class="tool-capture__title"><?php esc_html_e( 'Get your full report and a free action plan', 'a2e' ); ?></h3>
+					<p><?php esc_html_e( 'We will email your results with a short, honest plan to protect your account health and grow sales. No pressure, and you can unsubscribe any time.', 'a2e' ); ?></p>
+				</div>
+				<?php echo a2e_form_notice( 'health-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<form class="tool-capture__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-lead-form novalidate>
+					<?php a2e_form_hidden( 'health-check' ); ?>
+					<textarea class="screen-reader-text" name="message" data-out="reportMsg" tabindex="-1" aria-hidden="true"></textarea>
+					<textarea class="screen-reader-text" name="score" data-out="reportScore" tabindex="-1" aria-hidden="true"></textarea>
+					<input type="text" name="name" placeholder="<?php esc_attr_e( 'Your name', 'a2e' ); ?>" autocomplete="name">
+					<input type="email" name="email" required placeholder="<?php esc_attr_e( 'you@email.com', 'a2e' ); ?>" autocomplete="email">
+					<button type="submit" class="btn btn--primary"><span><?php esc_html_e( 'Email me my report', 'a2e' ); ?></span><?php a2e_the_icon( 'arrow-right', 'btn__icon' ); ?></button>
+					<div class="form-result" data-result hidden></div>
+				</form>
+			</div>
+			<?php
+			break;
 	}
 
 	echo '</div>';

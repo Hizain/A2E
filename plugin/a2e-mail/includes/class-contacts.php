@@ -92,6 +92,7 @@ class Contacts {
 			'clients'      => __( 'Clients (from Whop)', 'a2e-mail' ),
 			'newsletter'   => __( 'Newsletter subscribers', 'a2e-mail' ),
 			'form_leads'   => __( 'People who used a form (audit, consultation, contact)', 'a2e-mail' ),
+			'health_check' => __( 'Ran the account health checker', 'a2e-mail' ),
 			'manual'       => __( 'Contacts you added by hand', 'a2e-mail' ),
 		);
 		$out = array();
@@ -119,6 +120,9 @@ class Contacts {
 				break;
 			case 'form_leads':
 				$where .= " AND source IN ('quote','consultation','contact')";
+				break;
+			case 'health_check':
+				$where .= " AND source = 'health_check'";
 				break;
 			case 'manual':
 				$where .= " AND source = 'manual'";
@@ -265,12 +269,19 @@ class Contacts {
 			'quote'        => __( 'Requested a free store audit on your website', 'a2e-mail' ),
 			'consultation' => __( 'Requested a consultation on your website', 'a2e-mail' ),
 			'contact'      => __( 'Sent you a message through your contact form', 'a2e-mail' ),
+			'health-check' => __( 'Asked for their eBay account health report on your website', 'a2e-mail' ),
 		);
-		self::upsert(
+		$source = 'contact';
+		if ( 'health-check' === $type ) {
+			$source = 'health_check';
+		} elseif ( in_array( $type, array( 'newsletter', 'quote', 'consultation', 'contact' ), true ) ) {
+			$source = $type;
+		}
+		return self::upsert(
 			$email,
 			array(
 				'name'         => $name,
-				'source'       => in_array( $type, array( 'newsletter', 'quote', 'consultation', 'contact' ), true ) ? $type : 'contact',
+				'source'       => $source,
 				'consent_note' => isset( $notes[ $type ] ) ? $notes[ $type ] : $notes['contact'],
 				'wp_lead_id'   => $lead_id,
 			)
@@ -286,6 +297,9 @@ class Contacts {
 	public static function sync() {
 		$added  = 0;
 		$detail = array( 'leads' => 0, 'clients' => 0 );
+		// On the very first sync we import the existing base without starting any automations,
+		// so switching the plugin on never blasts people. New contacts after that can enroll.
+		$first = ! get_option( 'a2email_last_sync' );
 
 		// 1. Website leads (the theme's Leads post type).
 		if ( post_type_exists( 'a2e_lead' ) ) {
@@ -318,10 +332,22 @@ class Contacts {
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $members ) ) === $members ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery,WordPress.DB.PreparedSQL.NotPrepared
 			$rows = $wpdb->get_results( "SELECT id, email, name FROM {$members} WHERE email <> ''", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 			foreach ( (array) $rows as $row ) {
-				if ( ! is_email( $row['email'] ) || self::get_by_email( $row['email'] ) ) {
+				if ( ! is_email( $row['email'] ) ) {
 					continue;
 				}
-				self::upsert(
+				$existing = self::get_by_email( $row['email'] );
+				if ( $existing ) {
+					// A lead who has now bought becomes a client. Note the conversion so lead
+					// follow-ups can stop and a client welcome can start.
+					if ( 'client' !== $existing['source'] && self::STATUS_SUBSCRIBED === $existing['status'] ) {
+						$wpdb->update( self::table(), array( 'source' => 'client', 'whop_id' => $row['id'], 'consent_note' => __( 'Bought a plan from you through Whop', 'a2e-mail' ), 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $existing['id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+						if ( ! $first ) {
+							do_action( 'a2email_client_added', (int) $existing['id'] );
+						}
+					}
+					continue;
+				}
+				$cid = self::upsert(
 					$row['email'],
 					array(
 						'name'         => $row['name'],
@@ -330,6 +356,9 @@ class Contacts {
 						'whop_id'      => $row['id'],
 					)
 				);
+				if ( $cid && ! $first ) {
+					do_action( 'a2email_client_added', (int) $cid );
+				}
 				$added++;
 				$detail['clients']++;
 			}
