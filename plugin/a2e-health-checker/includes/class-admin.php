@@ -74,6 +74,26 @@ class Admin {
 				</ul>
 			</div>
 
+			<?php if ( Theme::active() ) : ?>
+				<div class="card" style="max-width:820px;padding:4px 20px 16px;margin-top:16px;">
+					<h2><?php esc_html_e( 'A2E Prime theme', 'a2e-health' ); ?></h2>
+					<?php if ( '1' === $s['theme_tool'] ) : ?>
+						<p>
+							<?php
+							printf(
+								/* translators: %d: number of tools */
+								esc_html__( 'The checker is one of your theme\'s free tools (%d in total). It shows in the header Free Tools menu, the mobile menu, the footer, the Free Tools page, the homepage tools section, related tools and account-health service guides, and every "free tools" heading counts it.', 'a2e-health' ),
+								(int) Theme::count()
+							);
+							?>
+						</p>
+						<p><?php esc_html_e( 'Tool page:', 'a2e-health' ); ?> <a href="<?php echo esc_url( Theme::url() ); ?>" target="_blank" rel="noopener"><?php echo esc_html( Theme::url() ); ?></a></p>
+					<?php else : ?>
+						<p><?php esc_html_e( 'Turn on "Add to the theme\'s free tools" below to list the checker with your other tools everywhere on the site.', 'a2e-health' ); ?></p>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
+
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<?php wp_nonce_field( 'a2ehc_save' ); ?>
 				<input type="hidden" name="action" value="a2ehc_save">
@@ -86,6 +106,11 @@ class Admin {
 					<tr><th scope="row"><?php esc_html_e( 'Plans page link (optional)', 'a2e-health' ); ?></th><td><input type="url" name="cta_url" class="regular-text" value="<?php echo esc_attr( $s['cta_url'] ); ?>" placeholder="https://a2edropshipping.com/pricing/"></td></tr>
 					<tr><th scope="row"><?php esc_html_e( 'Report capture', 'a2e-health' ); ?></th><td><label><input type="checkbox" name="capture" value="1" <?php checked( '1', $s['capture'] ); ?>> <?php esc_html_e( 'Show the "email me my report" form (recommended)', 'a2e-health' ); ?></label></td></tr>
 					<tr><th scope="row"><?php esc_html_e( 'Highlight', 'a2e-health' ); ?></th><td><label><input type="checkbox" name="highlight" value="1" <?php checked( '1', $s['highlight'] ); ?>> <?php esc_html_e( 'Wrap the tool in a highlighted, standout container wherever it appears', 'a2e-health' ); ?></label></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'A2E Prime free tools', 'a2e-health' ); ?></th><td>
+						<label><input type="checkbox" name="theme_tool" value="1" <?php checked( '1', $s['theme_tool'] ); ?>> <?php esc_html_e( 'Add to the theme\'s free tools (header menu, footer, tools page, homepage) and give it a /free-tools/ page', 'a2e-health' ); ?></label><br>
+						<label><input type="checkbox" name="tool_first" value="1" <?php checked( '1', $s['tool_first'] ); ?>> <?php esc_html_e( 'List it first, as the newest tool (so it also appears in short lists like the footer)', 'a2e-health' ); ?></label>
+						<p class="description"><?php esc_html_e( 'Only used with the A2E Prime theme. Nothing in the theme is edited.', 'a2e-health' ); ?></p>
+					</td></tr>
 				</table>
 				<?php submit_button( __( 'Save settings', 'a2e-health' ) ); ?>
 			</form>
@@ -112,8 +137,15 @@ class Admin {
 				'cta_url'       => isset( $in['cta_url'] ) ? esc_url_raw( $in['cta_url'] ) : '',
 				'capture'       => empty( $in['capture'] ) ? '0' : '1',
 				'highlight'     => empty( $in['highlight'] ) ? '0' : '1',
+				'theme_tool'    => empty( $in['theme_tool'] ) ? '0' : '1',
+				'tool_first'    => empty( $in['tool_first'] ) ? '0' : '1',
 			)
 		);
+		if ( empty( $in['theme_tool'] ) ) {
+			delete_option( 'a2ehc_tool_sync' );
+		} else {
+			Theme::sync_page();
+		}
 		set_transient( 'a2ehc_notice_' . get_current_user_id(), __( 'Settings saved.', 'a2e-health' ), 60 );
 		wp_safe_redirect( admin_url( 'admin.php?page=a2ehc-settings' ) );
 		exit;

@@ -143,18 +143,21 @@ class Widget {
 	 * Render the whole widget.
 	 *
 	 * @param bool $highlight Wrap in a highlighted container.
+	 * @param bool $embedded  Inside the theme's tool page, which already shows the title and intro.
 	 */
-	public static function render( $highlight = true ) {
+	public static function render( $highlight = true, $embedded = false ) {
 		$wa      = wa_link( __( 'Hi A2E! I ran the account health checker and would like help getting my eBay account to Top Rated.', 'a2e-health' ) );
 		$cta_url = setting( 'cta_url' );
-		$classes = 'a2ehc' . ( $highlight ? ' a2ehc--highlight' : '' );
+		$classes = 'a2ehc' . ( $highlight ? ' a2ehc--highlight' : '' ) . ( $embedded ? ' a2ehc--embedded' : '' );
 		?>
 		<div class="<?php echo esc_attr( $classes ); ?>" data-a2ehc>
+			<?php if ( ! $embedded ) : ?>
 			<div class="a2ehc__head">
 				<span class="a2ehc__badge"><?php a2ehc_icon( 'shield' ); ?><?php esc_html_e( 'Free eBay tool', 'a2e-health' ); ?></span>
 				<h2 class="a2ehc__title"><?php esc_html_e( 'eBay Account Health Checker', 'a2e-health' ); ?></h2>
 				<p class="a2ehc__intro"><?php esc_html_e( 'Enter the numbers from your eBay Seller Dashboard to see your exact seller level (Below Standard, Above Standard or Top Rated), checked against eBay US standards, and the precise number of clean sales it takes to reach Top Rated. Nothing you type leaves your browser.', 'a2e-health' ); ?></p>
 			</div>
+			<?php endif; ?>
 
 			<div class="a2ehc__grid">
 				<form class="a2ehc__form" onsubmit="return false" aria-label="<?php esc_attr_e( 'Account numbers', 'a2e-health' ); ?>">

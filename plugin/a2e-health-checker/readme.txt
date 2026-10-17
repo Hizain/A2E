@@ -4,7 +4,7 @@ Tags: ebay, seller, account health, dropshipping, lead generation
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,13 @@ If the A2E Mail Studio plugin is active, the lead is added there (and can enter 
 No. Scoring, recovery estimates and suggestions all run in the browser. Numbers are only transmitted if the visitor chooses to email themselves the report.
 
 == Changelog ==
+
+= 2.1.0 =
+* New: with the A2E Prime theme, the checker is one of the theme's free tools. It appears in the header Free Tools mega menu, the phone menu, the footer, the Free Tools page, the homepage tools section, the 404 and search pages, related tools, account-health service guides and the blog sidebar, listed first as the newest tool.
+* New: its page moves under Free Tools (/free-tools/ebay-account-health-checker/) and uses the theme's tool page, like the other tools. The old address redirects there.
+* New: every "13 free tools" heading, the announcement bar, the Free Tools badge and the Free Tools page description now show the live tool count (14).
+* New: settings to turn the theme integration on or off and to list the tool first.
+* Fix: the "Data from" and "Data to" date fields now line up.
 
 = 2.0.0 =
 * Accuracy rebuild. The tool now reports your exact eBay US seller level (Below Standard, Above Standard or Top Rated) using eBay's real rules, so it matches your Seller Dashboard.

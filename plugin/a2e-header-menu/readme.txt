@@ -1,48 +1,55 @@
-=== A2E Editable Header Menu ===
+=== A2E Header Menu (Mega Menu Editor) ===
 Contributors: a2edropshipping
-Tags: menu, header, navigation, appearance menus
+Tags: menu, mega menu, header, navigation
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Make your A2E Prime header editable from Appearance > Menus, with a ready starter menu and a one-click switch.
+Keep the A2E Prime designed mega menu and edit every part of it from Appearance > Menus.
 
 == Description ==
 
-The A2E Prime theme ships with a designed mega menu that is built in code, so it cannot be edited from Appearance > Menus. The theme does, however, support standard WordPress menus for the header. This plugin makes that easy:
+The A2E Prime header is built in code, so normally it cannot be edited. This plugin draws the header from a normal WordPress menu while keeping the exact designed look:
 
-* On activation it builds a ready "Header Menu" that mirrors your current navigation (Services with its guides, Free Tools with every tool, Pricing, Shop, Results, Blog, Contact) and adds your eBay Account Health Checker.
-* From **Appearance > Header Menu (A2E)** you switch your header to that editable menu with one click, and switch back to the built-in mega menu just as easily.
-* After switching, you edit everything the normal WordPress way: **Appearance > Menus**. Add pages, custom links, reorder by dragging, and create dropdowns by nesting.
-
-Switching is reversible and changes nothing else on your site. Your edits are saved in the "Header Menu" the normal way.
+* **Edit everything in Appearance > Menus.** Add, rename, reorder or remove any item, including Pricing and Shop.
+* **Designed mega panels on any item.** Each item has an "A2E header" box. Set its dropdown style to the Services panel or the Free Tools panel. The Free Tools panel lists every tool automatically (including tools added by plugins, such as the eBay Account Health Checker) with the live count badge.
+* **Card dropdowns.** Put items under a top-level item to get a dropdown of cards like Results. Choose an icon and short card text for each. Card text can use {rating}, {reviews} and {since} from A2E > Site Settings.
+* **Phone menu included.** The mobile menu follows the same menu, with an optional Client area link.
+* **Header button.** Change the label and link of the top-right button, or hide it. Also change the button in the Services panel (for example to point to your Shop instead of Pricing).
+* **Safe.** Nothing in the theme is edited. Switch back to the theme's built-in menu in one click, or deactivate the plugin to restore it.
 
 == Installation ==
 
-1. Make sure the A2E Prime theme is active.
-2. Upload the `a2e-header-menu` folder to `/wp-content/plugins/`, or install the zip from Plugins > Add New > Upload Plugin.
-3. Activate it.
-4. Go to **Appearance > Header Menu (A2E)** and click **Use the editable menu in my header**.
-5. Edit your header any time in **Appearance > Menus** (the menu is called "Header Menu").
+1. Upload the zip from Plugins > Add New > Upload Plugin. If version 1 is installed, choose "Replace current with uploaded".
+2. Go to Appearance > Header Menu (A2E). Your header now uses a ready "Header Menu" that matches the designed header exactly.
+3. Edit it in Appearance > Menus.
+
+Upgrading from version 1: the plain menu version 1 created is kept as "Header Menu (old)", and a new "Header Menu" with the designed mega panels is created and shown.
 
 == Frequently Asked Questions ==
 
-= Will I lose the designed mega menu? =
+= How do I remove Pricing or Shop from the header? =
 
-Switching replaces the mega menu (the Services and Free Tools dropdowns with icons and columns) with a standard WordPress menu. Your Services and Free Tools still appear as normal dropdowns. You can switch back to the mega menu with one click at any time.
+Appearance > Menus > Header Menu, open the item, click Remove, then Save Menu. It disappears from the desktop header and the phone menu.
 
-= How do I add the Health Checker, or any other page? =
+= How do I make an item open the Services or Free Tools panel? =
 
-It is already in the starter menu. To add anything else, go to Appearance > Menus, tick the page (or add a custom link) and drag it where you want it.
+Open the item in Appearance > Menus and set "Dropdown style" in its "A2E header" box.
 
-= Does it change my theme files? =
+= Can I go back to the original header? =
 
-No. It only creates a WordPress menu and sets the theme's existing "use WordPress menus" option. Nothing in the theme is edited.
+Yes. Appearance > Header Menu (A2E) > "Theme's built-in menu", or deactivate the plugin.
 
 == Changelog ==
 
+= 2.0.0 =
+* Rebuilt as a mega menu editor: the designed Services and Free Tools mega panels and card dropdowns are kept and driven by Appearance > Menus.
+* The phone menu follows the same menu.
+* Editable header button and Services panel button.
+* Upgrades version 1 automatically, keeping its menu as a backup.
+
 = 1.0.0 =
-* First release: starter header menu that mirrors the current navigation plus the Account Health Checker, with a one-click switch to and from WordPress menus.
+* First release: switch the header to a standard WordPress menu.

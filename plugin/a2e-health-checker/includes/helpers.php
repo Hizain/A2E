@@ -31,6 +31,8 @@ function settings() {
 		'cta_text'      => __( 'Our team manages eBay account health every day: daily stock and supplier checks so you never cancel, fast valid tracking, quick case handling, and steady researched listings so revenue grows while your account stays clean.', 'a2e-health' ),
 		'cta_url'       => '',
 		'highlight'     => '1',
+		'theme_tool'    => '1',
+		'tool_first'    => '1',
 	);
 	$saved = get_option( OPTION, array() );
 	return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
