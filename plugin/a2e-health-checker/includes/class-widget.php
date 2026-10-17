@@ -1,7 +1,8 @@
 <?php
 /**
- * The front-end widget: shortcode, block, assets and markup. The scoring, recovery maths,
- * suggestions and report capture all run in the browser from assets/health.js.
+ * The front-end widget: shortcode, block, assets and markup. The seller-level logic,
+ * recovery maths, suggestions and report capture all run in the browser from
+ * assets/health.js against eBay US seller standards.
  *
  * @package A2E_Health
  */
@@ -36,9 +37,9 @@ class Widget {
 			'a2ehc',
 			'a2ehcData',
 			array(
-				'ajax'      => admin_url( 'admin-post.php' ),
-				'capture'   => '1' === setting( 'capture' ) ? 1 : 0,
-				'business'  => setting( 'business_name' ),
+				'ajax'     => admin_url( 'admin-post.php' ),
+				'capture'  => '1' === setting( 'capture' ) ? 1 : 0,
+				'business' => setting( 'business_name' ),
 			)
 		);
 	}
@@ -106,20 +107,36 @@ class Widget {
 	}
 
 	/**
-	 * Number field.
+	 * A number field.
 	 *
 	 * @param string $name  Name.
 	 * @param string $label Label.
 	 * @param string $value Default value.
-	 * @param array  $opts  suffix, help, step, min.
+	 * @param array  $opts  suffix, help, step, min, placeholder.
 	 * @return string
 	 */
 	protected static function num( $name, $label, $value, $opts = array() ) {
 		$id   = 'a2ehc-' . $name;
 		$help = isset( $opts['help'] ) ? '<small class="a2ehc-help">' . esc_html( $opts['help'] ) . '</small>' : '';
 		$suf  = isset( $opts['suffix'] ) ? '<span class="a2ehc-suffix">' . esc_html( $opts['suffix'] ) . '</span>' : '';
+		$ph   = isset( $opts['placeholder'] ) ? ' placeholder="' . esc_attr( $opts['placeholder'] ) . '"' : '';
 		return '<p class="a2ehc-field"><label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label>'
-			. '<span class="a2ehc-input' . ( $suf ? ' a2ehc-input--suffix' : '' ) . '"><input type="number" inputmode="decimal" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" min="' . esc_attr( isset( $opts['min'] ) ? $opts['min'] : '0' ) . '" step="' . esc_attr( isset( $opts['step'] ) ? $opts['step'] : 'any' ) . '">' . $suf . '</span>' . $help . '</p>';
+			. '<span class="a2ehc-input' . ( $suf ? ' a2ehc-input--suffix' : '' ) . '"><input type="number" inputmode="decimal" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" min="' . esc_attr( isset( $opts['min'] ) ? $opts['min'] : '0' ) . '" step="' . esc_attr( isset( $opts['step'] ) ? $opts['step'] : 'any' ) . '"' . $ph . '>' . $suf . '</span>' . $help . '</p>';
+	}
+
+	/**
+	 * A date field.
+	 *
+	 * @param string $name  Name.
+	 * @param string $label Label.
+	 * @param string $help  Help text.
+	 * @return string
+	 */
+	protected static function date_field( $name, $label, $help = '' ) {
+		$id = 'a2ehc-' . $name;
+		return '<p class="a2ehc-field"><label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label>'
+			. '<span class="a2ehc-input"><input type="date" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"></span>'
+			. ( $help ? '<small class="a2ehc-help">' . esc_html( $help ) . '</small>' : '' ) . '</p>';
 	}
 
 	/**
@@ -128,57 +145,60 @@ class Widget {
 	 * @param bool $highlight Wrap in a highlighted container.
 	 */
 	public static function render( $highlight = true ) {
-		$wa    = wa_link( __( 'Hi A2E! I ran the account health checker and would like help with my eBay account.', 'a2e-health' ) );
+		$wa      = wa_link( __( 'Hi A2E! I ran the account health checker and would like help getting my eBay account to Top Rated.', 'a2e-health' ) );
 		$cta_url = setting( 'cta_url' );
 		$classes = 'a2ehc' . ( $highlight ? ' a2ehc--highlight' : '' );
 		?>
 		<div class="<?php echo esc_attr( $classes ); ?>" data-a2ehc>
 			<div class="a2ehc__head">
-				<span class="a2ehc__badge"><?php esc_html_e( 'Free tool', 'a2e-health' ); ?></span>
+				<span class="a2ehc__badge"><?php a2ehc_icon( 'shield' ); ?><?php esc_html_e( 'Free eBay tool', 'a2e-health' ); ?></span>
 				<h2 class="a2ehc__title"><?php esc_html_e( 'eBay Account Health Checker', 'a2e-health' ); ?></h2>
-				<p class="a2ehc__intro"><?php esc_html_e( 'Enter a few numbers from your Seller Dashboard to see your health score, where you stand against eBay standards, how to recover Top Rated, and what to fix first. Nothing you type is uploaded.', 'a2e-health' ); ?></p>
+				<p class="a2ehc__intro"><?php esc_html_e( 'Enter the numbers from your eBay Seller Dashboard to see your exact seller level (Below Standard, Above Standard or Top Rated), checked against eBay US standards, and the precise number of clean sales it takes to reach Top Rated. Nothing you type leaves your browser.', 'a2e-health' ); ?></p>
 			</div>
 
 			<div class="a2ehc__grid">
 				<form class="a2ehc__form" onsubmit="return false" aria-label="<?php esc_attr_e( 'Account numbers', 'a2e-health' ); ?>">
 					<fieldset>
-						<legend><?php esc_html_e( 'Your evaluation', 'a2e-health' ); ?></legend>
-						<p class="a2ehc-field"><label for="a2ehc-period"><?php esc_html_e( 'Evaluation period eBay uses', 'a2e-health' ); ?></label>
-							<span class="a2ehc-input"><select id="a2ehc-period" name="period">
-								<option value="3"><?php esc_html_e( 'Last 3 months (400+ sales)', 'a2e-health' ); ?></option>
-								<option value="12"><?php esc_html_e( 'Last 12 months (smaller sellers)', 'a2e-health' ); ?></option>
-							</select></span>
-						</p>
-						<p class="a2ehc-field"><label for="a2ehc-nextdate"><?php esc_html_e( 'Your next evaluation date', 'a2e-health' ); ?></label>
-							<span class="a2ehc-input"><input type="date" id="a2ehc-nextdate" name="nextdate"></span>
-							<small class="a2ehc-help"><?php esc_html_e( 'eBay evaluates on the 20th of each month. Leave blank to use the next 20th.', 'a2e-health' ); ?></small>
-						</p>
-						<?php
-						echo self::num( 'orders', __( 'Orders you get per month (for the estimate)', 'a2e-health' ), '', array( 'step' => '1', 'help' => __( 'Optional. Leave blank and we estimate it from your numbers.', 'a2e-health' ) ) ); // phpcs:ignore
-						?>
+						<legend><?php a2ehc_icon( 'calendar' ); ?><?php esc_html_e( 'Evaluation window', 'a2e-health' ); ?></legend>
+						<div class="a2ehc-row">
+							<?php
+							echo self::date_field( 'startdate', __( 'Data from', 'a2e-health' ) ); // phpcs:ignore
+							echo self::date_field( 'enddate', __( 'Data to', 'a2e-health' ) ); // phpcs:ignore
+							?>
+						</div>
+						<?php echo self::date_field( 'nextdate', __( 'Your next evaluation date', 'a2e-health' ), __( 'eBay evaluates on the 20th each month. Leave blank to use the next 20th.', 'a2e-health' ) ); // phpcs:ignore ?>
 					</fieldset>
 					<fieldset>
-						<legend><?php esc_html_e( 'From your Seller Dashboard', 'a2e-health' ); ?></legend>
+						<legend><?php a2ehc_icon( 'info' ); ?><?php esc_html_e( 'From your Seller Dashboard', 'a2e-health' ); ?></legend>
 						<?php
-						echo self::num( 'transactions', __( 'Transactions in the evaluation period', 'a2e-health' ), '400', array( 'step' => '1' ) ); // phpcs:ignore
-						echo self::num( 'defects', __( 'Transactions with a defect', 'a2e-health' ), '3', array( 'step' => '1', 'help' => __( 'Cases closed without your resolution, plus your own cancellations.', 'a2e-health' ) ) ); // phpcs:ignore
-						echo self::num( 'late', __( 'Late shipments', 'a2e-health' ), '6', array( 'step' => '1' ) ); // phpcs:ignore
-						echo self::num( 'cases', __( 'Cases closed without your resolution', 'a2e-health' ), '1', array( 'step' => '1' ) ); // phpcs:ignore
+						echo self::num( 'transactions', __( 'Transactions in this window', 'a2e-health' ), '400', array( 'step' => '1' ) ); // phpcs:ignore
+						echo self::num( 'defects', __( 'Transactions with a defect', 'a2e-health' ), '2', array( 'step' => '1', 'help' => __( 'Your own cancellations plus cases closed without your resolution.', 'a2e-health' ) ) ); // phpcs:ignore
+						echo self::num( 'buyers', __( 'Of those, from different buyers', 'a2e-health' ), '', array( 'step' => '1', 'placeholder' => __( 'same as above', 'a2e-health' ), 'help' => __( 'eBay only counts your defect rate when 4 or more different buyers are involved.', 'a2e-health' ) ) ); // phpcs:ignore
+						echo self::num( 'late', __( 'Late shipments', 'a2e-health' ), '3', array( 'step' => '1' ) ); // phpcs:ignore
+						echo self::num( 'cases', __( 'Cases closed without your resolution', 'a2e-health' ), '0', array( 'step' => '1' ) ); // phpcs:ignore
 						echo self::num( 'tracking', __( 'Valid tracking uploaded on time', 'a2e-health' ), '97', array( 'suffix' => '%' ) ); // phpcs:ignore
 						?>
+						<p class="a2ehc-check"><label><input type="checkbox" name="eligible" value="1" checked> <?php esc_html_e( 'Account is 90+ days old with 100+ sales and $1,000+ to US buyers in the last 12 months', 'a2e-health' ); ?></label></p>
 					</fieldset>
 				</form>
 
 				<div class="a2ehc__results" aria-live="polite">
-					<div class="a2ehc__scorerow">
-						<div class="a2ehc-score">
-							<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="a2ehc-score__track"/><circle cx="60" cy="60" r="52" class="a2ehc-score__bar" data-ring/></svg>
-							<div class="a2ehc-score__num"><strong data-out="score">-</strong><span>/100</span></div>
+					<div class="a2ehc-level" data-level>
+						<div class="a2ehc-level__top">
+							<span class="a2ehc-level__pill" data-out="level"><?php esc_html_e( 'Enter your numbers', 'a2e-health' ); ?></span>
+							<span class="a2ehc-level__eval" data-out="evalNote"></span>
 						</div>
-						<div class="a2ehc-band" data-band>
-							<strong data-out="band">-</strong>
-							<p data-out="bandText"></p>
+						<div class="a2ehc-meter" data-meter>
+							<div class="a2ehc-meter__track">
+								<span class="a2ehc-meter__fill" data-meter-fill></span>
+							</div>
+							<ul class="a2ehc-meter__ticks">
+								<li data-seg="below"><?php esc_html_e( 'Below', 'a2e-health' ); ?></li>
+								<li data-seg="above"><?php esc_html_e( 'Above Standard', 'a2e-health' ); ?></li>
+								<li data-seg="top"><?php esc_html_e( 'Top Rated', 'a2e-health' ); ?></li>
+							</ul>
 						</div>
+						<p class="a2ehc-level__text" data-out="levelText"><?php esc_html_e( 'Fill in the fields to see where this account stands against eBay US seller standards.', 'a2e-health' ); ?></p>
 					</div>
 
 					<ul class="a2ehc-metrics" data-out-html="metrics"></ul>
@@ -187,14 +207,15 @@ class Widget {
 
 			<div class="a2ehc__panels" aria-live="polite">
 				<div class="a2ehc-recover" data-recover hidden>
-					<p class="a2ehc-recover__title"><?php a2ehc_icon( 'trend' ); ?><?php esc_html_e( 'Your path back to the top', 'a2e-health' ); ?></p>
+					<p class="a2ehc-recover__title"><?php a2ehc_icon( 'target' ); ?><?php esc_html_e( 'Your path to Top Rated', 'a2e-health' ); ?></p>
 					<div class="a2ehc-recover__grid" data-out-html="recover"></div>
 					<p class="a2ehc-recover__note" data-out="recoverNote"></p>
 				</div>
 
 				<div class="a2ehc-fix">
-					<p class="a2ehc-fix__title"><?php a2ehc_icon( 'wand' ); ?><?php esc_html_e( 'Suggestions to improve your health', 'a2e-health' ); ?></p>
+					<p class="a2ehc-fix__title"><?php a2ehc_icon( 'wand' ); ?><?php esc_html_e( 'What to fix first', 'a2e-health' ); ?></p>
 					<ul class="a2ehc-fix__list" data-out-html="suggestions"></ul>
+					<p class="a2ehc-trplus" data-out-html="trplus"></p>
 				</div>
 			</div>
 
@@ -217,7 +238,7 @@ class Widget {
 				<div class="a2ehc-capture" data-capture>
 					<div class="a2ehc-capture__copy">
 						<h3><?php esc_html_e( 'Get your full report and a free action plan', 'a2e-health' ); ?></h3>
-						<p><?php esc_html_e( 'We will email your results with a short, honest plan. No pressure, and you can unsubscribe any time.', 'a2e-health' ); ?></p>
+						<p><?php esc_html_e( 'We will email your results with a short, honest plan to reach Top Rated. No pressure, unsubscribe any time.', 'a2e-health' ); ?></p>
 					</div>
 					<form class="a2ehc-capture__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-capture-form novalidate>
 						<input type="hidden" name="action" value="a2ehc_lead">
@@ -232,7 +253,7 @@ class Widget {
 				</div>
 			<?php endif; ?>
 
-			<p class="a2ehc__fine"><?php esc_html_e( 'Estimates based on eBay US seller standards. eBay evaluates monthly and needs a minimum number of defects from different buyers before your level changes, so treat this as guidance and confirm in your Seller Dashboard.', 'a2e-health' ); ?></p>
+			<p class="a2ehc__fine"><?php esc_html_e( 'Estimates based on eBay US seller standards. eBay evaluates monthly and only counts your defect rate when 4 or more different buyers are involved, so treat this as guidance and confirm in your Seller Dashboard.', 'a2e-health' ); ?></p>
 		</div>
 		<?php
 	}

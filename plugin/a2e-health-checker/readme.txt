@@ -4,7 +4,7 @@ Tags: ebay, seller, account health, dropshipping, lead generation
 Requires at least: 6.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,13 @@ If the A2E Mail Studio plugin is active, the lead is added there (and can enter 
 No. Scoring, recovery estimates and suggestions all run in the browser. Numbers are only transmitted if the visitor chooses to email themselves the report.
 
 == Changelog ==
+
+= 2.0.0 =
+* Accuracy rebuild. The tool now reports your exact eBay US seller level (Below Standard, Above Standard or Top Rated) using eBay's real rules, so it matches your Seller Dashboard.
+* Fixed: an account with valid tracking under 95% is no longer shown as Top Rated. The 95% tracking requirement, the case and late-shipment count rules (max 2 / max 5, or 0.3% / 3%), the 4-different-buyers rule for defects, and Top Rated eligibility (90+ days, 100+ sales, $1,000+) are all enforced.
+* New: custom data-window start and end dates, and a custom next-evaluation date.
+* New: a clear seller-level badge and tier meter, a per-metric breakdown showing each metric against its Top Rated target with a pass / blocks / below chip, the exact clean sales needed to reach Top Rated (and to clear Below Standard first), and a note on Top Rated Plus.
+* Redesign: animated meter, bars and counters, tidy aligned headings and values, and perfect light / dark that follows the A2E Prime theme.
 
 = 1.0.1 =
 * Fix: the tool now follows your theme's own light / dark toggle instead of the visitor's operating-system setting, so it no longer stays dark when the site is switched to light. It reads your theme's design tokens (colours, radius, shadow, font), so it matches the site in both modes.
