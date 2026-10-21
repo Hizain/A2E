@@ -3,7 +3,7 @@ Contributors: a2edropshipping
 Requires at least: 6.3
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 
 Design and send professional, on-brand emails to the people you already have a relationship with: your clients and everyone who contacted you or subscribed on your website.
@@ -40,6 +40,13 @@ This plugin reads contacts from your own WordPress site (form Leads and Whop cli
 A2E Mail → Settings: the From name and address, your contact details and postal address (required in the footer), sending limits, and optional SMTP. A2E Mail → Templates: edit the ready-made emails or add your own.
 
 == Changelog ==
+
+= 1.2.0 =
+* Fix: contact, quote and consultation form notifications (and Health Checker reports and WordPress emails) now use your From address and, when it is on, your SMTP server. Before, only A2E Mail's own emails did, so notifications went out from "wordpress@" your domain through the server's basic mail function and were often rejected or sent to spam without anyone being told. New setting "Use these settings for every email this site sends", on by default.
+* New: a log of recent website emails on the Settings screen, showing who each one went to and whether it was sent, with the exact error when one fails.
+* New: a warning on the Dashboard and A2E Mail screens when a website email fails.
+* New: "Send a test notification" sends a message exactly the way your contact form does, to the same address.
+* Campaign headers (List-Unsubscribe, bulk precedence) stay on A2E Mail's own emails only.
 
 = 1.1.0 =
 * Automatic follow-up sequences (drip automations) with triggers, timed steps, stop-on-goal, and a one-off catch-up enrolment.

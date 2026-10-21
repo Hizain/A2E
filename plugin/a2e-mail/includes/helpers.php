@@ -38,6 +38,7 @@ function settings() {
 		'smtp_user'       => '',
 		'smtp_pass'       => '',
 		'smtp_from_forced' => '1',
+		'site_mail'       => '1',
 	);
 	$saved = get_option( OPTION, array() );
 	return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );

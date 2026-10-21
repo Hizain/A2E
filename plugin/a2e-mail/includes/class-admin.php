@@ -421,6 +421,7 @@ class Admin {
 					<tr><th><label for="smtp_port"><?php esc_html_e( 'Port', 'a2e-mail' ); ?></label></th><td><input type="number" id="smtp_port" name="smtp_port" class="small-text" value="<?php echo esc_attr( $s['smtp_port'] ); ?>"> <select name="smtp_secure"><?php foreach ( array( 'tls' => 'TLS', 'ssl' => 'SSL', 'none' => __( 'None', 'a2e-mail' ) ) as $k => $l ) : ?><option value="<?php echo esc_attr( $k ); ?>" <?php selected( $s['smtp_secure'], $k ); ?>><?php echo esc_html( $l ); ?></option><?php endforeach; ?></select></td></tr>
 					<tr><th><label for="smtp_user"><?php esc_html_e( 'Username', 'a2e-mail' ); ?></label></th><td><input type="text" id="smtp_user" name="smtp_user" class="regular-text" value="<?php echo esc_attr( $s['smtp_user'] ); ?>" autocomplete="off"></td></tr>
 					<tr><th><label for="smtp_pass"><?php esc_html_e( 'Password', 'a2e-mail' ); ?></label></th><td><input type="password" id="smtp_pass" name="smtp_pass" class="regular-text" value="" autocomplete="new-password" placeholder="<?php echo $s['smtp_pass'] ? esc_attr__( 'saved; leave blank to keep', 'a2e-mail' ) : ''; ?>"><p class="description"><?php esc_html_e( 'Stored encrypted. You can also define A2EMAIL_SMTP_PASS in wp-config.php.', 'a2e-mail' ); ?></p></td></tr>
+					<tr><th><?php esc_html_e( 'Website emails', 'a2e-mail' ); ?></th><td><label><input type="checkbox" name="site_mail" value="1" <?php checked( '1', $s['site_mail'] ); ?>> <?php esc_html_e( 'Use these settings for every email this site sends (contact form notifications, Health Checker reports, WordPress emails)', 'a2e-mail' ); ?></label><p class="description"><?php esc_html_e( 'Recommended. Otherwise WordPress sends them from "wordpress@" your domain through the server\'s basic mail function, which is often rejected or sent to spam.', 'a2e-mail' ); ?></p></td></tr>
 				</table>
 
 				<?php submit_button( __( 'Save settings', 'a2e-mail' ) ); ?>
@@ -445,6 +446,8 @@ class Admin {
 					<button type="submit" class="button"><?php esc_html_e( 'Send a test email', 'a2e-mail' ); ?></button>
 				</form>
 			</div>
+
+			<?php Site_Mail::render_panel(); ?>
 		</div>
 		<?php
 	}
@@ -478,6 +481,7 @@ class Admin {
 			'smtp_port'      => (string) max( 1, (int) ( $in['smtp_port'] ?? 587 ) ),
 			'smtp_secure'    => in_array( ( $in['smtp_secure'] ?? 'tls' ), array( 'tls', 'ssl', 'none' ), true ) ? $in['smtp_secure'] : 'tls',
 			'smtp_user'      => $text( 'smtp_user' ),
+			'site_mail'      => empty( $in['site_mail'] ) ? '0' : '1',
 		);
 		if ( ! empty( $in['smtp_pass'] ) ) {
 			$values['smtp_pass'] = encrypt( $in['smtp_pass'] );

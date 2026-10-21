@@ -26,6 +26,13 @@ class Mailer {
 	protected static $current_unsub = '';
 
 	/**
+	 * True while A2E Mail is sending one of its own emails (site-wide hooks step aside).
+	 *
+	 * @var bool
+	 */
+	public static $sending = false;
+
+	/**
 	 * Send one email. Applies SMTP + headers around wp_mail.
 	 *
 	 * @param string $to        Recipient.
@@ -52,7 +59,9 @@ class Mailer {
 			$GLOBALS['a2email_alt_body'] = $text;
 		}
 
-		$ok = wp_mail( $to, $subject, $html, $headers );
+		self::$sending = true;
+		$ok            = wp_mail( $to, $subject, $html, $headers );
+		self::$sending = false;
 
 		remove_filter( 'wp_mail_from', array( __CLASS__, 'from_email' ), 99 );
 		remove_filter( 'wp_mail_from_name', array( __CLASS__, 'from_name' ), 99 );
@@ -111,7 +120,26 @@ class Mailer {
 	 * @param \PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer.
 	 */
 	public static function configure( $phpmailer ) {
-		if ( '1' === setting( 'smtp_enabled' ) && setting( 'smtp_host' ) ) {
+		self::transport( $phpmailer );
+		self::marketing_headers( $phpmailer );
+	}
+
+	/**
+	 * Is SMTP switched on and filled in?
+	 *
+	 * @return bool
+	 */
+	public static function smtp_on() {
+		return '1' === setting( 'smtp_enabled' ) && '' !== (string) setting( 'smtp_host' );
+	}
+
+	/**
+	 * Apply the sending server (SMTP) and align the From / envelope sender.
+	 *
+	 * @param \PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer.
+	 */
+	public static function transport( $phpmailer ) {
+		if ( self::smtp_on() ) {
 			$phpmailer->isSMTP();
 			$phpmailer->Host       = setting( 'smtp_host' ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 			$phpmailer->Port       = (int) setting( 'smtp_port' ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
@@ -133,7 +161,14 @@ class Mailer {
 				$phpmailer->Sender = $from; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 			}
 		}
+	}
 
+	/**
+	 * Headers that only belong on A2E Mail's own emails (not on site notifications).
+	 *
+	 * @param \PHPMailer\PHPMailer\PHPMailer $phpmailer PHPMailer.
+	 */
+	public static function marketing_headers( $phpmailer ) {
 		if ( self::$current_unsub ) {
 			$phpmailer->addCustomHeader( 'List-Unsubscribe', '<' . self::$current_unsub . '>, <mailto:' . self::from_email() . '?subject=unsubscribe>' );
 			$phpmailer->addCustomHeader( 'List-Unsubscribe-Post', 'List-Unsubscribe=One-Click' );
