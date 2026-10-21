@@ -34,7 +34,15 @@ class Automations {
 		add_action( 'admin_post_a2email_save_sequence', array( __CLASS__, 'save_sequence' ) );
 		add_action( 'admin_post_a2email_toggle_sequence', array( __CLASS__, 'toggle_sequence' ) );
 		add_action( 'admin_post_a2email_enroll_existing', array( __CLASS__, 'enroll_existing' ) );
+		add_action( 'admin_post_a2email_test_sequence', array( __CLASS__, 'test_sequence' ) );
 	}
+
+	/**
+	 * Result of the last start() call (how many emails went out straight away).
+	 *
+	 * @var array
+	 */
+	public static $last_start = array( 'enrolled' => 0, 'sent' => 0 );
 
 	/**
 	 * The triggers a sequence can start from.
@@ -48,6 +56,7 @@ class Automations {
 			'contact'      => array( 'label' => __( 'Someone uses the contact form', 'a2e-mail' ), 'source' => 'contact', 'lead' => true ),
 			'newsletter'   => array( 'label' => __( 'Someone subscribes to the newsletter', 'a2e-mail' ), 'source' => 'newsletter', 'lead' => true ),
 			'health_check' => array( 'label' => __( 'Someone runs the account health checker', 'a2e-mail' ), 'source' => 'health_check', 'lead' => true ),
+			'manual'       => array( 'label' => __( 'You add a contact by hand', 'a2e-mail' ), 'source' => 'manual', 'lead' => true ),
 			'new_client'   => array( 'label' => __( 'Someone becomes a client (Whop)', 'a2e-mail' ), 'source' => 'client', 'lead' => false ),
 		);
 	}
@@ -114,14 +123,22 @@ class Automations {
 		if ( ! $post || SEQUENCE !== $post->post_type ) {
 			return null;
 		}
-		$steps = json_decode( (string) get_post_meta( $id, '_steps', true ), true );
+		$steps    = json_decode( (string) get_post_meta( $id, '_steps', true ), true );
+		$triggers = json_decode( (string) get_post_meta( $id, '_triggers', true ), true );
+		if ( ! is_array( $triggers ) || ! $triggers ) {
+			// Sequences saved before 1.3 have a single trigger.
+			$triggers = array_filter( array( (string) get_post_meta( $id, '_trigger', true ) ) );
+		}
+		$triggers = array_values( array_intersect( $triggers, array_keys( self::triggers() ) ) );
 		return array(
-			'id'            => $post->ID,
-			'name'          => $post->post_title,
-			'trigger'       => (string) get_post_meta( $id, '_trigger', true ),
-			'active'        => '1' === get_post_meta( $id, '_active', true ),
+			'id'             => $post->ID,
+			'name'           => $post->post_title,
+			'trigger'        => $triggers ? $triggers[0] : '',
+			'triggers'       => $triggers,
+			'active'         => '1' === get_post_meta( $id, '_active', true ),
 			'stop_on_client' => '1' === get_post_meta( $id, '_stop_on_client', true ),
-			'steps'         => is_array( $steps ) ? $steps : array(),
+			'once'           => '1' === get_post_meta( $id, '_once', true ),
+			'steps'          => is_array( $steps ) ? $steps : array(),
 		);
 	}
 
@@ -144,7 +161,7 @@ class Automations {
 	public static function active_for( $trigger ) {
 		$out = array();
 		foreach ( self::all() as $seq ) {
-			if ( $seq && $seq['active'] && $seq['trigger'] === $trigger && ! empty( $seq['steps'] ) ) {
+			if ( $seq && $seq['active'] && in_array( $trigger, $seq['triggers'], true ) && ! empty( $seq['steps'] ) ) {
 				$out[] = $seq;
 			}
 		}
@@ -167,8 +184,23 @@ class Automations {
 		}
 		$contact = Contacts::get_by_email( $email );
 		if ( $contact ) {
-			self::enroll_contact( (int) $contact['id'], $trigger );
+			self::start( (int) $contact['id'], $trigger );
 		}
+	}
+
+	/**
+	 * Enrol a contact for a trigger and send any step that is due now (a "wait 0" first step)
+	 * straight away, so a new contact gets the welcome email the moment they are added.
+	 *
+	 * @param int    $contact_id Contact id.
+	 * @param string $trigger    Trigger key.
+	 * @return array enrolled, sent.
+	 */
+	public static function start( $contact_id, $trigger ) {
+		$enrolled         = self::enroll_contact( $contact_id, $trigger );
+		$sent             = $enrolled ? self::run_for_contact( $contact_id ) : 0;
+		self::$last_start = array( 'enrolled' => $enrolled, 'sent' => $sent );
+		return self::$last_start;
 	}
 
 	/**
@@ -195,29 +227,43 @@ class Automations {
 		if ( ! $contact || Contacts::STATUS_SUBSCRIBED !== $contact['status'] ) {
 			return 0;
 		}
-		$table = self::table();
-		$made  = 0;
+		$made = 0;
 		foreach ( self::active_for( $trigger ) as $seq ) {
-			$exists = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE sequence_id = %d AND contact_id = %d AND status = 'active'", $seq['id'], $contact_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
-			if ( $exists ) {
-				continue;
-			}
-			$first_delay = isset( $seq['steps'][0] ) ? self::delay_seconds( $seq['steps'][0] ) : 0;
-			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-				$table,
-				array(
-					'sequence_id' => $seq['id'],
-					'contact_id'  => $contact_id,
-					'step_index'  => 0,
-					'status'      => 'active',
-					'next_run'    => gmdate( 'Y-m-d H:i:s', time() + $first_delay ),
-					'created_at'  => current_time( 'mysql', true ),
-					'updated_at'  => current_time( 'mysql', true ),
-				)
-			);
-			$made++;
+			$made += self::enroll_in( $seq, $contact_id );
 		}
 		return $made;
+	}
+
+	/**
+	 * Enrol one contact into one sequence. Skips people already in it, and, for "once per
+	 * person" sequences, anyone who was ever in it.
+	 *
+	 * @param array $seq        Sequence.
+	 * @param int   $contact_id Contact id.
+	 * @return int 1 when enrolled, else 0.
+	 */
+	protected static function enroll_in( $seq, $contact_id ) {
+		global $wpdb;
+		$table  = self::table();
+		$status = $seq['once'] ? '' : " AND status = 'active'";
+		$exists = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE sequence_id = %d AND contact_id = %d" . $status, $seq['id'], $contact_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+		if ( $exists ) {
+			return 0;
+		}
+		$first_delay = isset( $seq['steps'][0] ) ? self::delay_seconds( $seq['steps'][0] ) : 0;
+		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$table,
+			array(
+				'sequence_id' => $seq['id'],
+				'contact_id'  => $contact_id,
+				'step_index'  => 0,
+				'status'      => 'active',
+				'next_run'    => gmdate( 'Y-m-d H:i:s', time() + $first_delay ),
+				'created_at'  => current_time( 'mysql', true ),
+				'updated_at'  => current_time( 'mysql', true ),
+			)
+		);
+		return 1;
 	}
 
 	/**
@@ -262,8 +308,37 @@ class Automations {
 			return 0;
 		}
 		$table = self::table();
+		$due   = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE status = 'active' AND next_run <= %s ORDER BY next_run ASC LIMIT %d", current_time( 'mysql', true ), min( $allow, 50 ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
+		return self::process_rows( $due );
+	}
+
+	/**
+	 * Send the due steps for one contact right now (within the sending limits).
+	 *
+	 * @param int $contact_id Contact id.
+	 * @return int Number sent.
+	 */
+	public static function run_for_contact( $contact_id ) {
+		global $wpdb;
+		$allow = Queue::allowance();
+		if ( $allow < 1 ) {
+			return 0;
+		}
+		$table = self::table();
+		$due   = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE contact_id = %d AND status = 'active' AND next_run <= %s ORDER BY next_run ASC LIMIT %d", $contact_id, current_time( 'mysql', true ), min( $allow, 5 ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
+		return self::process_rows( $due );
+	}
+
+	/**
+	 * Send the given due enrollment rows and move each one on to its next step.
+	 *
+	 * @param array $due Enrollment rows.
+	 * @return int Number sent.
+	 */
+	protected static function process_rows( $due ) {
+		global $wpdb;
+		$table = self::table();
 		$now   = current_time( 'mysql', true );
-		$due   = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE status = 'active' AND next_run <= %s ORDER BY next_run ASC LIMIT %d", $now, min( $allow, 50 ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
 		$sent  = 0;
 
 		foreach ( (array) $due as $row ) {
@@ -275,13 +350,18 @@ class Automations {
 				continue;
 			}
 			// Goal reached for lead sequences.
-			if ( $seq['stop_on_client'] && 'client' === $contact['source'] && 'new_client' !== $seq['trigger'] ) {
+			if ( $seq['stop_on_client'] && 'client' === $contact['source'] && ! in_array( 'new_client', $seq['triggers'], true ) ) {
 				$wpdb->update( $table, array( 'status' => 'stopped', 'updated_at' => $now ), array( 'id' => $row['id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 				continue;
 			}
 			$index = (int) $row['step_index'];
 			if ( ! isset( $seq['steps'][ $index ] ) ) {
 				$wpdb->update( $table, array( 'status' => 'completed', 'updated_at' => $now ), array( 'id' => $row['id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				continue;
+			}
+			// Claim the step first, so a scheduled run and an instant send never both send it.
+			$claimed = $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET next_run = %s WHERE id = %d AND status = 'active' AND step_index = %d AND next_run = %s", gmdate( 'Y-m-d H:i:s', time() + 900 ), $row['id'], $index, $row['next_run'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
+			if ( ! $claimed ) {
 				continue;
 			}
 			$step   = $seq['steps'][ $index ];
@@ -307,7 +387,8 @@ class Automations {
 			}
 		}
 		if ( $sent > 0 ) {
-			log( 'automation', sprintf( __( 'Sent %d follow-up emails.', 'a2e-mail' ), $sent ) );
+			/* translators: %d: emails */
+			log( 'automation', sprintf( _n( 'Sent %d automatic email.', 'Sent %d automatic emails.', $sent, 'a2e-mail' ), $sent ) );
 		}
 		return $sent;
 	}
@@ -348,23 +429,111 @@ class Automations {
 	}
 
 	/**
-	 * Create a sequence.
+	 * The welcome email every new contact gets straight away: who A2E is and what we offer.
 	 *
-	 * @param string $name           Name.
-	 * @param string $trigger        Trigger.
-	 * @param array  $steps          Steps.
-	 * @param bool   $stop_on_client Stop when the contact becomes a client.
+	 * @return array Step.
+	 */
+	public static function welcome_step() {
+		return array(
+			'delay'     => 0,
+			'unit'      => 'minutes',
+			'subject'   => __( '{{first_name}}, here is how A2E Dropshipping can grow your store', 'a2e-mail' ),
+			'preheader' => __( 'Amazon to eBay dropshipping, branded eBay stores and Shopify stores, powered by Claude automation.', 'a2e-mail' ),
+			'body'      => __( "Hello {{first_name}},
+
+Thank you for connecting with us. We are **A2E Dropshipping**, and we help sellers like you grow their online stores, with a real team behind you and Claude automation doing the heavy lifting.
+
+## What we can do for you
+
+- **Amazon to eBay dropshipping stores:** profit-checked products, SEO titles that get found, and daily price and stock checks so you do not sell at a loss
+- **Branded eBay stores:** your own brand, a clean store design and listings that build trust and repeat buyers
+- **Shopify stores:** setup, products and ongoing management, so your store keeps selling
+- **Claude automation:** we use Claude AI to research products, write listings and handle routine store work faster and more consistently
+
+## How we work
+
+- Real people you can message on WhatsApp
+- Honest advice: if something will not work for your store, we tell you first
+- Clear plans and prices, and monthly plans you can cancel any time
+
+The easiest first step is a free store audit. We look at your store and send you a short, practical plan.
+
+[[Get my free store audit|{{audit_url}}]]
+
+Prefer to talk first? Reply to this email or message us on WhatsApp {{whatsapp}}. We are happy to answer questions.
+
+{{weekly_invite}}
+
+{{signature}}", 'a2e-mail' ),
+		);
+	}
+
+	/**
+	 * Create the welcome automation once, switched on, for every new contact. It only starts
+	 * for people added from now on, never for contacts you already have.
+	 */
+	public static function seed_welcome() {
+		if ( get_option( 'a2email_welcome_seeded' ) ) {
+			return;
+		}
+		update_option( 'a2email_welcome_seeded', VERSION, false );
+		$id = self::create(
+			__( 'Welcome: what we offer', 'a2e-mail' ),
+			array( 'manual', 'newsletter', 'contact', 'audit', 'consultation', 'health_check' ),
+			array( self::welcome_step() ),
+			true,
+			true
+		);
+		if ( $id ) {
+			update_post_meta( $id, '_active', '1' );
+			update_option( 'a2email_welcome_sequence', $id, false );
+		}
+	}
+
+	/**
+	 * The welcome automation (if it still exists).
+	 *
+	 * @return array|null
+	 */
+	public static function welcome() {
+		$id = (int) get_option( 'a2email_welcome_sequence', 0 );
+		return $id ? self::get( $id ) : null;
+	}
+
+	/**
+	 * How many people an automation has emailed at least once.
+	 *
+	 * @param int $sequence_id Sequence id.
 	 * @return int
 	 */
-	public static function create( $name, $trigger, $steps, $stop_on_client = true ) {
+	public static function reached_count( $sequence_id ) {
+		global $wpdb;
+		$table = self::table();
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE sequence_id = %d AND ( step_index > 0 OR status = 'completed' )", $sequence_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * Create a sequence.
+	 *
+	 * @param string       $name           Name.
+	 * @param string|array $triggers       Trigger key, or several.
+	 * @param array        $steps          Steps.
+	 * @param bool         $stop_on_client Stop when the contact becomes a client.
+	 * @param bool         $once           Send to each person only once, ever.
+	 * @return int
+	 */
+	public static function create( $name, $triggers, $steps, $stop_on_client = true, $once = false ) {
 		$id = wp_insert_post( array( 'post_type' => SEQUENCE, 'post_status' => 'publish', 'post_title' => $name ) );
 		if ( ! $id || is_wp_error( $id ) ) {
 			return 0;
 		}
-		update_post_meta( $id, '_trigger', $trigger );
+		$triggers = array_values( (array) $triggers );
+		update_post_meta( $id, '_trigger', $triggers[0] );
+		update_post_meta( $id, '_triggers', wp_json_encode( $triggers ) );
 		update_post_meta( $id, '_steps', wp_slash( wp_json_encode( $steps ) ) );
 		update_post_meta( $id, '_active', '0' );
 		update_post_meta( $id, '_stop_on_client', $stop_on_client ? '1' : '0' );
+		update_post_meta( $id, '_once', $once ? '1' : '0' );
 		return (int) $id;
 	}
 
@@ -378,9 +547,10 @@ class Automations {
 		}
 		$id      = isset( $_POST['sequence_id'] ) ? absint( $_POST['sequence_id'] ) : 0;
 		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : __( 'Untitled automation', 'a2e-mail' );
-		$trigger = isset( $_POST['trigger'] ) ? sanitize_key( wp_unslash( $_POST['trigger'] ) ) : 'audit';
-		if ( ! array_key_exists( $trigger, self::triggers() ) ) {
-			$trigger = 'audit';
+		$picked   = isset( $_POST['triggers'] ) && is_array( $_POST['triggers'] ) ? array_map( 'sanitize_key', wp_unslash( $_POST['triggers'] ) ) : array();
+		$triggers = array_values( array_intersect( array_keys( self::triggers() ), $picked ) );
+		if ( ! $triggers ) {
+			self::bail( __( 'Tick at least one "Start when" option.', 'a2e-mail' ), 'error', $id );
 		}
 		$steps_in = isset( $_POST['steps'] ) && is_array( $_POST['steps'] ) ? wp_unslash( $_POST['steps'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$steps    = array();
@@ -403,9 +573,11 @@ class Automations {
 		} else {
 			$id = wp_insert_post( array( 'post_type' => SEQUENCE, 'post_status' => 'publish', 'post_title' => $name ) );
 		}
-		update_post_meta( $id, '_trigger', $trigger );
+		update_post_meta( $id, '_trigger', $triggers[0] );
+		update_post_meta( $id, '_triggers', wp_json_encode( $triggers ) );
 		update_post_meta( $id, '_steps', wp_slash( wp_json_encode( $steps ) ) );
 		update_post_meta( $id, '_stop_on_client', empty( $_POST['stop_on_client'] ) ? '0' : '1' );
+		update_post_meta( $id, '_once', empty( $_POST['once'] ) ? '0' : '1' );
 		update_post_meta( $id, '_active', empty( $_POST['active'] ) ? '0' : '1' );
 		set_transient( 'a2email_notice_' . get_current_user_id(), array( 'success', __( 'Automation saved.', 'a2e-mail' ) ), 60 );
 		wp_safe_redirect( admin_page_url( 'automations', array( 'sequence' => $id ) ) );
@@ -436,37 +608,55 @@ class Automations {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'a2e-mail' ) );
 		}
-		$id      = isset( $_POST['sequence_id'] ) ? absint( $_POST['sequence_id'] ) : 0;
-		$seq     = self::get( $id );
-		$trigger = self::triggers();
-		if ( ! $seq || ! isset( $trigger[ $seq['trigger'] ] ) ) {
+		$id       = isset( $_POST['sequence_id'] ) ? absint( $_POST['sequence_id'] ) : 0;
+		$seq      = self::get( $id );
+		$triggers = self::triggers();
+		if ( ! $seq || ! $seq['triggers'] ) {
 			self::bail( __( 'Automation not found.', 'a2e-mail' ) );
 		}
 		if ( ! $seq['active'] ) {
 			self::bail( __( 'Turn the automation on first, then enrol existing contacts.', 'a2e-mail' ) );
 		}
-		$source = $trigger[ $seq['trigger'] ]['source'];
-		$rows   = Contacts::recipients( self::segment_for_source( $source ) );
-		$made   = 0;
-		foreach ( $rows as $r ) {
-			$made += self::enroll_contact( (int) $r['id'], $seq['trigger'] );
+		$sources = array();
+		foreach ( $seq['triggers'] as $t ) {
+			$sources[] = $triggers[ $t ]['source'];
+		}
+		$made = 0;
+		foreach ( Contacts::recipients_by_sources( $sources ) as $r ) {
+			$made += self::enroll_in( $seq, (int) $r['id'] );
 		}
 		log( 'automation', sprintf( __( 'Enrolled %1$d existing contacts into "%2$s".', 'a2e-mail' ), $made, $seq['name'] ) );
 		self::bail( sprintf( __( 'Enrolled %d existing contacts. They will receive the sequence on schedule.', 'a2e-mail' ), $made ), 'success', $id );
 	}
 
 	/**
-	 * Map a source to the matching segment key.
-	 *
-	 * @param string $source Source.
-	 * @return string
+	 * Send every step of a sequence to one address, as a test.
 	 */
-	protected static function segment_for_source( $source ) {
-		$map = array( 'client' => 'clients', 'newsletter' => 'newsletter', 'health_check' => 'health_check', 'manual' => 'manual' );
-		if ( isset( $map[ $source ] ) ) {
-			return $map[ $source ];
+	public static function test_sequence() {
+		check_admin_referer( 'a2email_test_sequence' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Not allowed.', 'a2e-mail' ) );
 		}
-		return 'form_leads';
+		$id  = isset( $_POST['sequence_id'] ) ? absint( $_POST['sequence_id'] ) : 0;
+		$to  = isset( $_POST['to'] ) ? sanitize_email( wp_unslash( $_POST['to'] ) ) : '';
+		$seq = self::get( $id );
+		if ( ! $seq || ! is_email( $to ) ) {
+			self::bail( __( 'Enter a valid email address to test.', 'a2e-mail' ), 'error', $id );
+		}
+		$contact = array( 'name' => wp_get_current_user()->display_name, 'email' => $to, 'token' => 'preview' );
+		$sent    = 0;
+		foreach ( $seq['steps'] as $i => $step ) {
+			$render = Templates::render( array( 'subject' => $step['subject'], 'preheader' => isset( $step['preheader'] ) ? $step['preheader'] : '', 'body' => $step['body'] ), $contact );
+			/* translators: 1: step number 2: subject */
+			$subject = count( $seq['steps'] ) > 1 ? sprintf( __( '[Test step %1$d] %2$s', 'a2e-mail' ), $i + 1, $render['subject'] ) : sprintf( __( '[Test] %s', 'a2e-mail' ), $render['subject'] );
+			if ( Mailer::send( $to, $subject, $render['html'], $render['text'], Unsubscribe::url( 'preview' ) ) ) {
+				$sent++;
+			}
+		}
+		if ( $sent ) {
+			self::bail( sprintf( __( 'Sent %1$d test email(s) to %2$s.', 'a2e-mail' ), $sent, $to ), 'success', $id );
+		}
+		self::bail( __( 'The test could not be sent. Check A2E Mail > Settings.', 'a2e-mail' ), 'error', $id );
 	}
 
 	/**
@@ -500,7 +690,7 @@ class Automations {
 		?>
 		<div class="wrap a2email">
 			<h1 class="a2email-h1"><?php esc_html_e( 'Automations', 'a2e-mail' ); ?> <a class="page-title-action" href="<?php echo esc_url( admin_page_url( 'automations', array( 'new' => 1 ) ) ); ?>"><?php esc_html_e( 'Add automation', 'a2e-mail' ); ?></a></h1>
-			<p class="a2email-lead"><?php esc_html_e( 'Set up your follow-ups once, and they send themselves. A trigger (like a new audit request or a new client) enrols the person, and the steps go out on the schedule you choose. Each sequence stops on its own when the person unsubscribes or becomes a client, so nobody is ever over-emailed.', 'a2e-mail' ); ?></p>
+			<p class="a2email-lead"><?php esc_html_e( 'Set up your follow-ups once, and they send themselves. A trigger (like a new contact, a new audit request or a new client) enrols the person, and the steps go out on the schedule you choose. A first step set to wait 0 minutes is sent the moment the person is added. Each sequence stops on its own when the person unsubscribes or becomes a client, so nobody is ever over-emailed.', 'a2e-mail' ); ?></p>
 			<?php Admin::print_notice(); ?>
 
 			<?php if ( ! $sequences ) : ?>
@@ -519,7 +709,7 @@ class Automations {
 					<?php foreach ( $sequences as $seq ) : ?>
 						<tr>
 							<td><strong><?php echo esc_html( $seq['name'] ); ?></strong></td>
-							<td><?php echo esc_html( isset( $triggers[ $seq['trigger'] ] ) ? $triggers[ $seq['trigger'] ]['label'] : $seq['trigger'] ); ?></td>
+							<td><?php echo esc_html( implode( '; ', array_map( function ( $t ) use ( $triggers ) { return $triggers[ $t ]['label']; }, $seq['triggers'] ) ) ); ?></td>
 							<td><?php echo (int) count( $seq['steps'] ); ?></td>
 							<td><?php echo (int) self::active_count( $seq['id'] ); ?></td>
 							<td><span class="a2email-pill a2email-pill--<?php echo $seq['active'] ? 'sent' : 'paused'; ?>"><?php echo $seq['active'] ? esc_html__( 'On', 'a2e-mail' ) : esc_html__( 'Off', 'a2e-mail' ); ?></span></td>
@@ -542,9 +732,11 @@ class Automations {
 	 * @param int $id Sequence id (0 for new).
 	 */
 	protected static function render_editor( $id ) {
-		$seq = $id ? self::get( $id ) : array( 'id' => 0, 'name' => '', 'trigger' => 'audit', 'active' => false, 'stop_on_client' => true, 'steps' => array( array( 'delay' => 0, 'unit' => 'days', 'subject' => '', 'preheader' => '', 'body' => '' ) ) );
+		$blank = array( 'id' => 0, 'name' => '', 'trigger' => 'audit', 'triggers' => array( 'audit' ), 'active' => false, 'stop_on_client' => true, 'once' => false, 'steps' => array() );
+		$seq   = $id ? self::get( $id ) : null;
 		if ( ! $seq ) {
-			$seq = array( 'id' => 0, 'name' => '', 'trigger' => 'audit', 'active' => false, 'stop_on_client' => true, 'steps' => array() );
+			$id  = 0;
+			$seq = $blank;
 		}
 		if ( empty( $seq['steps'] ) ) {
 			$seq['steps'] = array( array( 'delay' => 0, 'unit' => 'days', 'subject' => '', 'preheader' => '', 'body' => '' ) );
@@ -561,21 +753,21 @@ class Automations {
 
 				<p class="a2email-field"><label><?php esc_html_e( 'Name', 'a2e-mail' ); ?></label><input type="text" name="name" class="a2email-input" value="<?php echo esc_attr( $seq['name'] ); ?>" placeholder="<?php esc_attr_e( 'Free audit follow-up', 'a2e-mail' ); ?>"></p>
 
-				<p class="a2email-field"><label><?php esc_html_e( 'Start this sequence when', 'a2e-mail' ); ?></label>
-					<select name="trigger" class="a2email-input">
-						<?php foreach ( $triggers as $key => $t ) : ?>
-							<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $seq['trigger'], $key ); ?>><?php echo esc_html( $t['label'] ); ?></option>
-						<?php endforeach; ?>
-					</select>
-				</p>
+				<fieldset class="a2email-field a2email-triggers"><legend><?php esc_html_e( 'Start this sequence when (tick any)', 'a2e-mail' ); ?></legend>
+					<?php foreach ( $triggers as $key => $t ) : ?>
+						<label><input type="checkbox" name="triggers[]" value="<?php echo esc_attr( $key ); ?>" <?php checked( in_array( $key, $seq['triggers'], true ) ); ?>> <?php echo esc_html( $t['label'] ); ?></label>
+					<?php endforeach; ?>
+					<span class="a2email-help"><?php esc_html_e( 'Tip: if two automations start from the same form and both send straight away, that person gets two emails at once. Untick the form in one of them, or make one wait a day.', 'a2e-mail' ); ?></span>
+				</fieldset>
 
 				<p class="a2email-field a2email-checks">
+					<label><input type="checkbox" name="once" value="1" <?php checked( $seq['once'] ); ?>> <?php esc_html_e( 'Send to each person only once, even if they use another form later', 'a2e-mail' ); ?></label><br>
 					<label><input type="checkbox" name="stop_on_client" value="1" <?php checked( $seq['stop_on_client'] ); ?>> <?php esc_html_e( 'Stop sending to anyone who becomes a client (the goal is reached)', 'a2e-mail' ); ?></label><br>
 					<label><input type="checkbox" name="active" value="1" <?php checked( $seq['active'] ); ?>> <?php esc_html_e( 'Turn this automation on', 'a2e-mail' ); ?></label>
 				</p>
 
 				<h2 class="a2email-h2"><?php esc_html_e( 'Steps', 'a2e-mail' ); ?></h2>
-				<p class="a2email-help"><?php esc_html_e( 'Each step waits the chosen time after the previous one, then sends. Use merge tags like {{first_name}}, {{whatsapp}}, {{phone}}, {{contact_email}}. Long dashes are removed and your details and an unsubscribe link are added automatically.', 'a2e-mail' ); ?></p>
+				<p class="a2email-help"><?php esc_html_e( 'Each step waits the chosen time after the previous one, then sends (wait 0 minutes = straight away). Merge tags: {{first_name}}, {{whatsapp}}, {{phone}}, {{contact_email}}, {{site_url}}, {{audit_url}}, {{consultation_url}}, {{pricing_url}}, {{tools_url}}, {{blog_url}}. {{weekly_invite}} adds a "join our weekly tips" button when your weekly newsletter is on (and nothing for people already on it). Long dashes are removed and your details and an unsubscribe link are added automatically.', 'a2e-mail' ); ?></p>
 
 				<div id="a2email-steps">
 					<?php foreach ( $seq['steps'] as $i => $step ) : ?>
@@ -588,13 +780,24 @@ class Automations {
 				<a class="button" href="<?php echo esc_url( admin_page_url( 'automations' ) ); ?>"><?php esc_html_e( 'Back', 'a2e-mail' ); ?></a></p>
 			</form>
 
+			<?php if ( $id ) : ?>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="a2email-inline">
+					<?php wp_nonce_field( 'a2email_test_sequence' ); ?>
+					<input type="hidden" name="action" value="a2email_test_sequence">
+					<input type="hidden" name="sequence_id" value="<?php echo (int) $id; ?>">
+					<input type="email" name="to" class="regular-text" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" required>
+					<button type="submit" class="button"><?php esc_html_e( 'Send me a test of every step', 'a2e-mail' ); ?></button>
+					<span class="a2email-muted"><?php esc_html_e( 'Saved version. Sent with sample details.', 'a2e-mail' ); ?></span>
+				</form>
+			<?php endif; ?>
+
 			<?php if ( $id && $seq['active'] ) : ?>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="a2email-inline" onsubmit="return confirm('<?php echo esc_js( __( 'Enrol the contacts you already have that match this trigger?', 'a2e-mail' ) ); ?>');">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="a2email-inline" onsubmit="return confirm('<?php echo esc_js( __( 'Send this automation to the contacts you already have that match it? Each person gets it only once.', 'a2e-mail' ) ); ?>');">
 					<?php wp_nonce_field( 'a2email_enroll_existing' ); ?>
 					<input type="hidden" name="action" value="a2email_enroll_existing">
 					<input type="hidden" name="sequence_id" value="<?php echo (int) $id; ?>">
-					<button type="submit" class="button"><?php esc_html_e( 'Enrol my existing matching contacts', 'a2e-mail' ); ?></button>
-					<span class="a2email-muted"><?php esc_html_e( 'Optional one-off catch-up. New people are enrolled automatically from now on.', 'a2e-mail' ); ?></span>
+					<button type="submit" class="button"><?php esc_html_e( 'Send it to my existing matching contacts', 'a2e-mail' ); ?></button>
+					<span class="a2email-muted"><?php esc_html_e( 'Optional one-off catch-up for people you already have. New people get it automatically from now on.', 'a2e-mail' ); ?></span>
 				</form>
 			<?php endif; ?>
 
@@ -626,7 +829,7 @@ class Automations {
 			</div>
 			<input type="text" name="steps[<?php echo esc_attr( $i ); ?>][subject]" value="<?php echo esc_attr( $step['subject'] ); ?>" class="a2email-input" placeholder="<?php esc_attr_e( 'Subject line', 'a2e-mail' ); ?>">
 			<input type="text" name="steps[<?php echo esc_attr( $i ); ?>][preheader]" value="<?php echo esc_attr( $step['preheader'] ); ?>" class="a2email-input" placeholder="<?php esc_attr_e( 'Preview text (optional)', 'a2e-mail' ); ?>">
-			<textarea name="steps[<?php echo esc_attr( $i ); ?>][body]" rows="7" class="a2email-input a2email-body" placeholder="<?php esc_attr_e( 'Message. Blank line between paragraphs, ## heading, - bullet, [[Label|link]] button.', 'a2e-mail' ); ?>"><?php echo esc_textarea( $step['body'] ); ?></textarea>
+			<textarea name="steps[<?php echo esc_attr( $i ); ?>][body]" rows="14" class="a2email-input a2email-body" placeholder="<?php esc_attr_e( 'Message. Blank line between paragraphs, ## heading, - bullet, [[Label|link]] button.', 'a2e-mail' ); ?>"><?php echo esc_textarea( $step['body'] ); ?></textarea>
 		</div>
 		<?php
 	}

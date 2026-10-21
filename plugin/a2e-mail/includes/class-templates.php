@@ -146,6 +146,34 @@ class Templates {
 	}
 
 	/**
+	 * Add the "What we offer" template once (for one-off sends from Compose).
+	 */
+	public static function seed_offer() {
+		if ( get_option( 'a2email_templates_v13' ) ) {
+			return;
+		}
+		update_option( 'a2email_templates_v13', VERSION, false );
+		if ( get_page_by_path( 'what-we-offer', OBJECT, TEMPLATE ) ) {
+			return;
+		}
+		$step = Automations::welcome_step();
+		$id   = wp_insert_post(
+			array(
+				'post_type'    => TEMPLATE,
+				'post_status'  => 'publish',
+				'post_name'    => 'what-we-offer',
+				'post_title'   => __( 'What we offer (A2E Dropshipping)', 'a2e-mail' ),
+				'post_content' => $step['body'],
+			)
+		);
+		if ( $id && ! is_wp_error( $id ) ) {
+			update_post_meta( $id, '_subject', $step['subject'] );
+			update_post_meta( $id, '_preheader', $step['preheader'] );
+			update_post_meta( $id, '_category', 'promotions' );
+		}
+	}
+
+	/**
 	 * All templates for a dropdown.
 	 *
 	 * @return array id => [ name, subject, preheader, body ]
@@ -172,9 +200,11 @@ class Templates {
 	 * @return array
 	 */
 	public static function merge_values( $contact ) {
-		$name  = isset( $contact['name'] ) ? trim( $contact['name'] ) : '';
-		$first = $name ? preg_split( '/\s+/', $name )[0] : __( 'there', 'a2e-mail' );
-		$token = isset( $contact['token'] ) ? $contact['token'] : '';
+		$name    = isset( $contact['name'] ) ? trim( $contact['name'] ) : '';
+		$first   = $name ? preg_split( '/\s+/', $name )[0] : __( 'there', 'a2e-mail' );
+		$token   = isset( $contact['token'] ) ? $contact['token'] : '';
+		$on_list = Contacts::has_tag( $contact, Contacts::TAG_WEEKLY ) || ( isset( $contact['source'] ) && 'newsletter' === $contact['source'] );
+		$blog_id = (int) get_option( 'page_for_posts' );
 		return array(
 			'first_name'      => $first,
 			'name'            => $name ? $name : __( 'there', 'a2e-mail' ),
@@ -184,8 +214,43 @@ class Templates {
 			'phone'           => setting( 'phone' ) ? setting( 'phone' ) : setting( 'whatsapp' ),
 			'contact_email'   => setting( 'contact_email' ),
 			'site_url'        => home_url( '/' ),
+			'audit_url'       => self::page_url( 'quote-request' ),
+			'consultation_url' => self::page_url( 'consultation' ),
+			'pricing_url'     => self::page_url( 'pricing' ),
+			'tools_url'       => self::page_url( 'free-tools' ),
+			'blog_url'        => $blog_id ? get_permalink( $blog_id ) : self::page_url( 'blog' ),
+			'weekly_join_url' => ( Newsletter::enabled() && ! $on_list ) ? Newsletter::join_url( $token ) : '',
 			'unsubscribe_url' => Unsubscribe::url( $token ),
 		);
+	}
+
+	/**
+	 * A page on this site by path (an A2E Prime page when the theme is active), else the homepage.
+	 *
+	 * @param string $path Page path.
+	 * @return string
+	 */
+	public static function page_url( $path ) {
+		$page = get_page_by_path( $path );
+		if ( $page && 'publish' === $page->post_status ) {
+			return get_permalink( $page );
+		}
+		return function_exists( 'a2e_url' ) ? a2e_url( $path ) : home_url( '/' );
+	}
+
+	/**
+	 * Expand the blocks that are written as one tag: {{signature}} and {{weekly_invite}}.
+	 *
+	 * @param string $body   Body source.
+	 * @param array  $values Merge values.
+	 * @return string
+	 */
+	protected static function expand_blocks( $body, $values ) {
+		$invite = '';
+		if ( ! empty( $values['weekly_join_url'] ) ) {
+			$invite = __( "## Free weekly tips\n\nWant practical ideas to grow your eBay and Shopify stores? Join our short weekly newsletter: one email a week, and you can leave any time.\n\n[[Yes, send me the weekly tips|{{weekly_join_url}}]]", 'a2e-mail' );
+		}
+		return str_replace( array( '{{signature}}', '{{weekly_invite}}' ), array( self::signature_text(), $invite ), $body );
 	}
 
 	/**
@@ -213,7 +278,7 @@ class Templates {
 	 */
 	public static function body_to_html( $body, $values ) {
 		$c    = self::palette();
-		$body = str_replace( "{{signature}}", self::signature_text(), $body );
+		$body = self::expand_blocks( $body, $values );
 		$body = self::apply_merge( $body, $values );
 		$body = no_dashes( $body );
 		$blocks = preg_split( "/\n\s*\n/", str_replace( array( "\r\n", "\r" ), "\n", trim( $body ) ) );
@@ -226,6 +291,21 @@ class Templates {
 			// Button: [[Label|url]]
 			if ( preg_match( '/^\[\[(.+?)\|(.+?)\]\]$/', $block, $m ) ) {
 				$html .= self::button( $m[1], $m[2] );
+				continue;
+			}
+			// Image: ![alt](https://image-url)
+			if ( preg_match( '/^!\[(.*?)\]\((https?:\/\/[^\s)]+)\)$/', $block, $m ) ) {
+				$html .= '<img src="' . esc_url( $m[2] ) . '" alt="' . esc_attr( $m[1] ) . '" width="544" style="display:block;width:100%;max-width:544px;height:auto;border:0;border-radius:12px;margin:6px 0 14px;">';
+				continue;
+			}
+			// Divider.
+			if ( '---' === $block ) {
+				$html .= '<hr style="border:0;border-top:1px solid ' . $c['line'] . ';margin:26px 0 4px;">';
+				continue;
+			}
+			// Small heading.
+			if ( 0 === strpos( $block, '### ' ) ) {
+				$html .= '<h3 style="margin:20px 0 6px;font-size:16px;line-height:1.4;color:' . $c['ink'] . ';font-weight:700;">' . self::inline( trim( substr( $block, 4 ) ) ) . '</h3>';
 				continue;
 			}
 			// Heading.
@@ -264,7 +344,16 @@ class Templates {
 		$text = esc_html( $text );
 		$text = preg_replace( '/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text );
 		$c    = self::palette();
-		$text = preg_replace( '#(https?://[^\s<]+)#', '<a href="$1" style="color:' . $c['brand'] . ';text-decoration:underline;">$1</a>', $text );
+		// [label](https://link) or a bare https://link.
+		$text = preg_replace_callback(
+			'#\[([^\]]+)\]\((https?://[^\s)]+)\)|(https?://[^\s<]+)#',
+			function ( $m ) use ( $c ) {
+				$url   = isset( $m[3] ) && '' !== $m[3] ? $m[3] : $m[2];
+				$label = isset( $m[3] ) && '' !== $m[3] ? $m[3] : $m[1];
+				return '<a href="' . $url . '" style="color:' . $c['brand'] . ';text-decoration:underline;">' . $label . '</a>';
+			},
+			$text
+		);
 		return $text;
 	}
 
@@ -372,7 +461,13 @@ class Templates {
 	 */
 	public static function render( $message, $contact ) {
 		$values    = self::merge_values( $contact );
-		$subject   = no_dashes( self::apply_merge( (string) $message['subject'], $values ) );
+		$subject   = (string) $message['subject'];
+		if ( '' === trim( isset( $contact['name'] ) ? (string) $contact['name'] : '' ) ) {
+			// No name: "{{first_name}}, here is..." becomes "Here is..." rather than "there, here is...".
+			$subject = preg_replace( array( '/^\s*\{\{first_name\}\}\s*,?\s*/', '/\s*,?\s*\{\{first_name\}\}/' ), '', $subject );
+			$subject = ucfirst( $subject );
+		}
+		$subject   = no_dashes( self::apply_merge( $subject, $values ) );
 		$preheader = isset( $message['preheader'] ) ? (string) $message['preheader'] : '';
 		$body_html = self::body_to_html( (string) $message['body'], $values );
 		$html      = self::wrap( $body_html, $values, $preheader );
@@ -388,11 +483,14 @@ class Templates {
 	 * @return string
 	 */
 	public static function to_text( $body, $values ) {
-		$body = str_replace( '{{signature}}', self::signature_text(), $body );
+		$body = self::expand_blocks( $body, $values );
 		$body = self::apply_merge( $body, $values );
 		$body = no_dashes( $body );
-		$body = preg_replace( '/^##\s+/m', '', $body );
+		$body = preg_replace( '/^!\[.*?\]\(\S+\)\s*$/m', '', $body );
+		$body = preg_replace( '/^#{2,3}\s+/m', '', $body );
 		$body = preg_replace( '/\[\[(.+?)\|(.+?)\]\]/', '$1: $2', $body );
+		$body = preg_replace( '/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/', '$1 ($2)', $body );
+		$body = preg_replace( "/\n{3,}/", "\n\n", $body );
 		$body = preg_replace( '/\*\*(.+?)\*\*/', '$1', $body );
 		$foot = "\n\n----\n" . sprintf( __( 'WhatsApp %1$s  |  Call %2$s  |  %3$s', 'a2e-mail' ), $values['whatsapp'], $values['phone'], $values['contact_email'] );
 		$foot .= "\n" . sprintf( __( 'Unsubscribe: %s', 'a2e-mail' ), $values['unsubscribe_url'] );

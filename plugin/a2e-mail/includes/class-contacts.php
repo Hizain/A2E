@@ -30,6 +30,12 @@ class Contacts {
 	const STATUS_BOUNCED      = 'bounced';
 
 	/**
+	 * Tag for people on the weekly newsletter list (newsletter sign-ups, people who joined from
+	 * an email, and contacts you add who asked for it).
+	 */
+	const TAG_WEEKLY = 'weekly';
+
+	/**
 	 * Hooks.
 	 */
 	public static function init() {
@@ -89,6 +95,7 @@ class Contacts {
 	public static function segments() {
 		$base = array(
 			'all'          => __( 'Everyone subscribed', 'a2e-mail' ),
+			'weekly'       => __( 'Weekly newsletter list', 'a2e-mail' ),
 			'clients'      => __( 'Clients (from Whop)', 'a2e-mail' ),
 			'newsletter'   => __( 'Newsletter subscribers', 'a2e-mail' ),
 			'form_leads'   => __( 'People who used a form (audit, consultation, contact)', 'a2e-mail' ),
@@ -117,6 +124,9 @@ class Contacts {
 				break;
 			case 'newsletter':
 				$where .= " AND source = 'newsletter'";
+				break;
+			case 'weekly':
+				$where .= " AND CONCAT(',', tags, ',') LIKE '%," . self::TAG_WEEKLY . ",%'";
 				break;
 			case 'form_leads':
 				$where .= " AND source IN ('quote','consultation','contact')";
@@ -158,6 +168,24 @@ class Contacts {
 			$sql .= $wpdb->prepare( ' LIMIT %d', $limit );
 		}
 		return $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * Subscribed recipient rows whose source is one of the given sources.
+	 *
+	 * @param array $sources Source keys.
+	 * @return array
+	 */
+	public static function recipients_by_sources( $sources ) {
+		global $wpdb;
+		$sources = array_values( array_filter( array_map( 'sanitize_key', (array) $sources ) ) );
+		if ( ! $sources ) {
+			return array();
+		}
+		$table = self::table();
+		$in    = implode( ',', array_fill( 0, count( $sources ), '%s' ) );
+		$sql   = "SELECT id, email, name, token FROM {$table} WHERE status = %s AND source IN ({$in}) ORDER BY id ASC";
+		return $wpdb->get_results( $wpdb->prepare( $sql, array_merge( array( self::STATUS_SUBSCRIBED ), $sources ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 	}
 
 	/**
@@ -277,7 +305,7 @@ class Contacts {
 		} elseif ( in_array( $type, array( 'newsletter', 'quote', 'consultation', 'contact' ), true ) ) {
 			$source = $type;
 		}
-		return self::upsert(
+		$id = self::upsert(
 			$email,
 			array(
 				'name'         => $name,
@@ -286,6 +314,10 @@ class Contacts {
 				'wp_lead_id'   => $lead_id,
 			)
 		);
+		if ( $id && 'newsletter' === $source ) {
+			self::add_tag( $id, self::TAG_WEEKLY );
+		}
+		return $id;
 	}
 
 	/**
@@ -396,6 +428,7 @@ class Contacts {
 	 * @return array result: ok (bool), message, id.
 	 */
 	public static function add_manual( $email, $name, $note, $tags = '' ) {
+		$tags = self::clean_tags( $tags );
 		$email = sanitize_email( $email );
 		if ( ! is_email( $email ) ) {
 			return array( 'ok' => false, 'message' => __( 'That email address does not look valid.', 'a2e-mail' ) );
@@ -453,6 +486,79 @@ class Contacts {
 	public static function mark_sent( $id ) {
 		global $wpdb;
 		$wpdb->update( self::table(), array( 'last_sent' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * Normalise a comma list of tags (lowercase, no spaces, no duplicates).
+	 *
+	 * @param string|array $tags Tags.
+	 * @return string
+	 */
+	public static function clean_tags( $tags ) {
+		$list = is_array( $tags ) ? $tags : explode( ',', (string) $tags );
+		$list = array_filter( array_unique( array_map( 'sanitize_key', array_map( 'trim', $list ) ) ) );
+		return implode( ',', $list );
+	}
+
+	/**
+	 * Does a tag list (or contact row) carry a tag?
+	 *
+	 * @param string|array $tags Tag list, or a contact row.
+	 * @param string       $tag  Tag.
+	 * @return bool
+	 */
+	public static function has_tag( $tags, $tag ) {
+		if ( is_array( $tags ) ) {
+			$tags = isset( $tags['tags'] ) ? $tags['tags'] : '';
+		}
+		return in_array( $tag, explode( ',', (string) $tags ), true );
+	}
+
+	/**
+	 * Add a tag to a contact.
+	 *
+	 * @param int    $id  Contact id.
+	 * @param string $tag Tag.
+	 */
+	public static function add_tag( $id, $tag ) {
+		global $wpdb;
+		$contact = self::get( $id );
+		if ( ! $contact || self::has_tag( $contact['tags'], $tag ) ) {
+			return;
+		}
+		$wpdb->update( self::table(), array( 'tags' => self::clean_tags( $contact['tags'] . ',' . $tag ), 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * Remove a tag from a contact.
+	 *
+	 * @param int    $id  Contact id.
+	 * @param string $tag Tag.
+	 */
+	public static function remove_tag( $id, $tag ) {
+		global $wpdb;
+		$contact = self::get( $id );
+		if ( ! $contact || ! self::has_tag( $contact['tags'], $tag ) ) {
+			return;
+		}
+		$left = array_diff( explode( ',', (string) $contact['tags'] ), array( $tag ) );
+		$wpdb->update( self::table(), array( 'tags' => self::clean_tags( $left ), 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * One-time upgrade: everyone who signed up through the newsletter form joins the weekly list.
+	 */
+	public static function migrate_weekly() {
+		global $wpdb;
+		if ( get_option( 'a2email_weekly_migrated' ) ) {
+			return;
+		}
+		update_option( 'a2email_weekly_migrated', VERSION, false );
+		$table = self::table();
+		$ids   = $wpdb->get_col( "SELECT id FROM {$table} WHERE source = 'newsletter'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
+		foreach ( (array) $ids as $id ) {
+			self::add_tag( (int) $id, self::TAG_WEEKLY );
+		}
 	}
 
 	/**

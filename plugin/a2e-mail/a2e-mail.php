@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       A2E Mail Studio
  * Plugin URI:        https://a2edropshipping.com/
- * Description:       Design and send professional, theme-styled emails to the people you already have a relationship with: your Whop clients and everyone who contacted you or subscribed through your website. Compose one-off messages, promotions and updates, preview them, send a test, and let the queue deliver them safely from your own address. Every message carries your WhatsApp, phone, email and a one-click unsubscribe.
- * Version:           1.2.0
+ * Description:       Design and send professional, theme-styled emails to the people you already have a relationship with: your Whop clients and everyone who contacted you or subscribed through your website. Every new contact gets a welcome email with what you offer straight away, a weekly newsletter builds itself from your blog, tips and free tools, and you can compose one-off messages, previews and tests. Mail goes out safely from your own address, and every message carries your WhatsApp, phone, email and a one-click unsubscribe.
+ * Version:           1.3.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            A2E Dropshipping
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION   = '1.2.0';
+const VERSION   = '1.3.0';
 const OPTION    = 'a2email_settings';
 const CPT       = 'a2email_message';
 const TEMPLATE  = 'a2email_template';
@@ -44,6 +44,7 @@ require_once A2EMAIL_DIR . 'includes/class-mailer.php';
 require_once A2EMAIL_DIR . 'includes/class-queue.php';
 require_once A2EMAIL_DIR . 'includes/class-unsubscribe.php';
 require_once A2EMAIL_DIR . 'includes/class-automations.php';
+require_once A2EMAIL_DIR . 'includes/class-newsletter.php';
 require_once A2EMAIL_DIR . 'includes/class-composer.php';
 require_once A2EMAIL_DIR . 'includes/class-admin.php';
 require_once A2EMAIL_DIR . 'includes/class-site-mail.php';
@@ -60,6 +61,9 @@ function activate() {
 	Automations::install();
 	Templates::seed();
 	Automations::seed();
+	Automations::seed_welcome();
+	Templates::seed_offer();
+	Contacts::migrate_weekly();
 	if ( ! wp_next_scheduled( CRON_SYNC ) ) {
 		wp_schedule_event( time() + 120, 'a2email_5min', CRON_SYNC );
 	}
@@ -98,6 +102,9 @@ add_action(
 			Automations::install();
 			Templates::seed();
 			Automations::seed();
+			Automations::seed_welcome();
+			Templates::seed_offer();
+			Contacts::migrate_weekly();
 			update_option( 'a2email_db_version', VERSION, false );
 		}
 		Contacts::init();
@@ -105,6 +112,7 @@ add_action(
 		Queue::init();
 		Unsubscribe::init();
 		Automations::init();
+		Newsletter::init();
 		Composer::init();
 		Admin::init();
 		Site_Mail::init();

@@ -40,6 +40,7 @@ class Admin {
 		add_submenu_page( 'a2e-mail', __( 'Dashboard', 'a2e-mail' ), __( 'Dashboard', 'a2e-mail' ), 'manage_options', 'a2e-mail', array( __CLASS__, 'render_dashboard' ) );
 		add_submenu_page( 'a2e-mail', __( 'Compose', 'a2e-mail' ), __( 'Compose', 'a2e-mail' ), 'manage_options', 'a2e-mail-compose', array( Composer::class, 'render_compose' ) );
 		add_submenu_page( 'a2e-mail', __( 'Messages', 'a2e-mail' ), __( 'Messages', 'a2e-mail' ), 'manage_options', 'a2e-mail-messages', array( __CLASS__, 'render_messages' ) );
+		add_submenu_page( 'a2e-mail', __( 'Weekly newsletter', 'a2e-mail' ), __( 'Newsletter', 'a2e-mail' ), 'manage_options', 'a2e-mail-newsletter', array( Newsletter::class, 'render' ) );
 		add_submenu_page( 'a2e-mail', __( 'Automations', 'a2e-mail' ), __( 'Automations', 'a2e-mail' ), 'manage_options', 'a2e-mail-automations', array( Automations::class, 'render' ) );
 		add_submenu_page( 'a2e-mail', __( 'Contacts', 'a2e-mail' ), __( 'Contacts', 'a2e-mail' ), 'manage_options', 'a2e-mail-contacts', array( __CLASS__, 'render_contacts' ) );
 		add_submenu_page( 'a2e-mail', __( 'Templates', 'a2e-mail' ), __( 'Templates', 'a2e-mail' ), 'manage_options', 'edit.php?post_type=' . TEMPLATE );
@@ -129,6 +130,40 @@ class Admin {
 						<button type="submit" class="button button-primary"><?php esc_html_e( 'Check for new contacts now', 'a2e-mail' ); ?></button>
 						<button type="submit" name="deep" value="1" class="button"><?php esc_html_e( 'Search hard (full rescan)', 'a2e-mail' ); ?></button>
 					</form>
+				</div>
+				<?php
+				$welcome = Automations::welcome();
+				$nl      = Newsletter::settings();
+				$nl_on   = '1' === $nl['enabled'];
+				$nl_seg  = isset( $segments[ $nl['audience'] ] ) ? $segments[ $nl['audience'] ] : $segments['weekly'];
+				?>
+				<div class="a2email-card">
+					<h2><?php esc_html_e( 'Welcome email', 'a2e-mail' ); ?> <span class="a2email-pill a2email-pill--<?php echo ( $welcome && $welcome['active'] ) ? 'sent' : 'paused'; ?>"><?php echo ( $welcome && $welcome['active'] ) ? esc_html__( 'On', 'a2e-mail' ) : esc_html__( 'Off', 'a2e-mail' ); ?></span></h2>
+					<p><?php esc_html_e( 'Every new contact (added by hand, or from a form or newsletter sign-up) gets "who we are and what we offer" straight away: Amazon to eBay dropshipping, branded eBay stores, Shopify stores and Claude automation.', 'a2e-mail' ); ?></p>
+					<?php if ( $welcome ) : ?>
+						<?php $reached = Automations::reached_count( $welcome['id'] ); ?>
+						<p class="a2email-muted"><?php /* translators: %d: people */ printf( esc_html( _n( 'Sent to %d person so far.', 'Sent to %d people so far.', $reached, 'a2e-mail' ) ), (int) $reached ); ?></p>
+						<a class="button button-primary" href="<?php echo esc_url( admin_page_url( 'automations', array( 'sequence' => $welcome['id'] ) ) ); ?>"><?php esc_html_e( 'Edit welcome email', 'a2e-mail' ); ?></a>
+					<?php else : ?>
+						<a class="button" href="<?php echo esc_url( admin_page_url( 'automations' ) ); ?>"><?php esc_html_e( 'Automations', 'a2e-mail' ); ?></a>
+					<?php endif; ?>
+				</div>
+				<div class="a2email-card">
+					<h2><?php esc_html_e( 'Weekly newsletter', 'a2e-mail' ); ?> <span class="a2email-pill a2email-pill--<?php echo $nl_on ? 'sent' : 'paused'; ?>"><?php echo $nl_on ? esc_html__( 'On', 'a2e-mail' ) : esc_html__( 'Off', 'a2e-mail' ); ?></span></h2>
+					<p><?php esc_html_e( 'An issue built for you each week from your new blog posts, a tip of the week, a free tool of the week and your offer.', 'a2e-mail' ); ?></p>
+					<p class="a2email-muted">
+						<?php
+						if ( $nl_on ) {
+							$next = Newsletter::state()['next_at'];
+							/* translators: 1: date 2: people */
+							printf( esc_html__( 'Next issue: %1$s, to %2$d people.', 'a2e-mail' ), esc_html( Newsletter::format_time( $next ? $next : Newsletter::next_slot( time() ) ) ), (int) $nl_seg['count'] );
+						} else {
+							/* translators: %d: people */
+							printf( esc_html__( 'Off. %d people are on the weekly list.', 'a2e-mail' ), (int) $segments['weekly']['count'] );
+						}
+						?>
+					</p>
+					<a class="button button-primary" href="<?php echo esc_url( admin_page_url( 'newsletter' ) ); ?>"><?php echo $nl_on ? esc_html__( 'Open newsletter', 'a2e-mail' ) : esc_html__( 'Set up the newsletter', 'a2e-mail' ); ?></a>
 				</div>
 				<div class="a2email-card">
 					<h2><?php esc_html_e( 'Write a message', 'a2e-mail' ); ?></h2>
@@ -268,7 +303,14 @@ class Admin {
 					<p><input type="email" name="email" class="regular-text" placeholder="<?php esc_attr_e( 'name@business.com', 'a2e-mail' ); ?>" required></p>
 					<p><input type="text" name="name" class="regular-text" placeholder="<?php esc_attr_e( 'Name (optional)', 'a2e-mail' ); ?>"></p>
 					<p><input type="text" name="note" class="regular-text" placeholder="<?php esc_attr_e( 'How you know them, e.g. met at a seller meetup', 'a2e-mail' ); ?>"></p>
+					<p class="a2email-consent"><label><input type="checkbox" name="weekly" value="1"> <?php esc_html_e( 'They asked for the weekly newsletter too', 'a2e-mail' ); ?></label></p>
 					<p class="a2email-consent"><label><input type="checkbox" name="confirm" value="1" required> <?php esc_html_e( 'I confirm this person asked to hear from us or gave us their address to be contacted. I am not adding a bought or scraped list.', 'a2e-mail' ); ?></label></p>
+					<?php
+					$welcome = Automations::welcome();
+					if ( $welcome && $welcome['active'] && in_array( 'manual', $welcome['triggers'], true ) ) :
+						?>
+						<p class="a2email-muted"><?php esc_html_e( 'They will get your welcome email ("what we offer") the moment you add them.', 'a2e-mail' ); ?> <a href="<?php echo esc_url( admin_page_url( 'automations', array( 'sequence' => $welcome['id'] ) ) ); ?>"><?php esc_html_e( 'Edit it', 'a2e-mail' ); ?></a></p>
+					<?php endif; ?>
 					<p><button type="submit" class="button button-primary"><?php esc_html_e( 'Add contact', 'a2e-mail' ); ?></button></p>
 				</form>
 			</details>
@@ -309,7 +351,7 @@ class Admin {
 							<td><?php echo esc_html( $row['name'] ); ?></td>
 							<td><?php echo esc_html( self::source_label( $row['source'] ) ); ?></td>
 							<td class="a2email-muted"><?php echo esc_html( $row['consent_note'] ); ?></td>
-							<td><span class="a2email-pill a2email-pill--<?php echo esc_attr( $row['status'] ); ?>"><?php echo esc_html( $row['status'] ); ?></span></td>
+							<td><span class="a2email-pill a2email-pill--<?php echo esc_attr( $row['status'] ); ?>"><?php echo esc_html( $row['status'] ); ?></span><?php if ( Contacts::STATUS_SUBSCRIBED === $row['status'] && Contacts::has_tag( $row['tags'], Contacts::TAG_WEEKLY ) ) : ?> <span class="a2email-pill a2email-pill--queued"><?php esc_html_e( 'Weekly', 'a2e-mail' ); ?></span><?php endif; ?></td>
 							<td class="a2email-row-actions">
 								<?php if ( Contacts::STATUS_SUBSCRIBED === $row['status'] ) : ?>
 									<a href="<?php echo esc_url( admin_page_url( 'compose' ) ); ?>"><?php esc_html_e( 'Email', 'a2e-mail' ); ?></a>
@@ -358,9 +400,23 @@ class Admin {
 		$res = Contacts::add_manual(
 			isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '',
 			isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
-			isset( $_POST['note'] ) ? sanitize_text_field( wp_unslash( $_POST['note'] ) ) : ''
+			isset( $_POST['note'] ) ? sanitize_text_field( wp_unslash( $_POST['note'] ) ) : '',
+			empty( $_POST['weekly'] ) ? '' : Contacts::TAG_WEEKLY
 		);
-		self::back( 'contacts', $res['ok'] ? 'success' : 'error', $res['message'] );
+		if ( ! $res['ok'] ) {
+			self::back( 'contacts', 'error', $res['message'] );
+		}
+		// Start "you add a contact by hand" automations and send the welcome email now.
+		$auto    = Automations::start( (int) $res['id'], 'manual' );
+		$contact = Contacts::get( (int) $res['id'] );
+		$msg     = $res['message'];
+		if ( $auto['sent'] ) {
+			/* translators: %s: email */
+			$msg .= ' ' . sprintf( __( 'Your welcome email was sent to %s.', 'a2e-mail' ), $contact['email'] );
+		} elseif ( $auto['enrolled'] ) {
+			$msg .= ' ' . __( 'Their welcome email is queued and goes out within a few minutes.', 'a2e-mail' );
+		}
+		self::back( 'contacts', 'success', $msg );
 	}
 
 	/**

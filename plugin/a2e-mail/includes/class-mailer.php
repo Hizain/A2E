@@ -146,6 +146,9 @@ class Mailer {
 			$secure                = setting( 'smtp_secure' );
 			$phpmailer->SMTPSecure = in_array( $secure, array( 'tls', 'ssl' ), true ) ? $secure : ''; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 			$phpmailer->SMTPAutoTLS = 'none' !== $secure; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
+			// Fail fast if the server does not answer (the default waits 5 minutes, which would
+			// hold up a visitor's form submit while their welcome email is sent).
+			$phpmailer->Timeout = 20; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 			if ( setting( 'smtp_user' ) ) {
 				$phpmailer->SMTPAuth = true; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
 				$phpmailer->Username = setting( 'smtp_user' ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase

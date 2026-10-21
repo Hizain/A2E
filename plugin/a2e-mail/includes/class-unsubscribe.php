@@ -45,7 +45,8 @@ class Unsubscribe {
 	 * Handle a click (GET shows a confirm page) or a one-click POST (unsubscribes at once).
 	 */
 	public static function handle() {
-		$token = isset( $_GET['t'] ) ? sanitize_text_field( wp_unslash( $_GET['t'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// The token comes in the link (GET, and the inbox one-click POST) or from the confirm form.
+		$token = isset( $_REQUEST['t'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['t'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$post  = 'POST' === ( isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : 'GET' );
 
 		if ( 'preview' === $token ) {
@@ -54,6 +55,12 @@ class Unsubscribe {
 		$contact = Contacts::get_by_token( $token );
 		if ( ! $contact ) {
 			self::page( __( 'Link not recognised', 'a2e-mail' ), __( 'This unsubscribe link is not valid. If you keep getting emails, reply to one and we will remove you by hand.', 'a2e-mail' ) );
+		}
+
+		if ( $post && isset( $_POST['scope'] ) && 'weekly' === sanitize_key( wp_unslash( $_POST['scope'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			Contacts::remove_tag( (int) $contact['id'], Contacts::TAG_WEEKLY );
+			log( 'unsub', sprintf( '%s left the weekly newsletter.', $contact['email'] ) );
+			self::page( __( 'You have left the weekly newsletter', 'a2e-mail' ), sprintf( __( 'Done. %s will no longer get the weekly newsletter. We will still reply to anything you ask us, and you can unsubscribe from all emails with the link in any message.', 'a2e-mail' ), $contact['email'] ) );
 		}
 
 		if ( $post ) {
@@ -93,6 +100,14 @@ class Unsubscribe {
 			. '<input type="hidden" name="t" value="' . esc_attr( $contact['token'] ) . '">'
 			. '<button type="submit" class="a2e-btn">' . esc_html__( 'Yes, unsubscribe me', 'a2e-mail' ) . '</button>'
 			. '</form>';
+		if ( Contacts::STATUS_SUBSCRIBED === $contact['status'] && Contacts::has_tag( $contact, Contacts::TAG_WEEKLY ) ) {
+			$body .= '<form method="post" action="' . $action . '" style="margin-top:14px;">'
+				. '<input type="hidden" name="action" value="a2email_unsub">'
+				. '<input type="hidden" name="t" value="' . esc_attr( $contact['token'] ) . '">'
+				. '<input type="hidden" name="scope" value="weekly">'
+				. '<button type="submit" style="border:0;background:none;padding:0;color:#2b4cf2;font-size:15px;text-decoration:underline;cursor:pointer;">' . esc_html__( 'Only stop the weekly newsletter', 'a2e-mail' ) . '</button>'
+				. '</form>';
+		}
 		self::page( __( 'Unsubscribe', 'a2e-mail' ), $body, true );
 	}
 
@@ -109,13 +124,27 @@ class Unsubscribe {
 	}
 
 	/**
+	 * Post HTML plus the small forms these pages use (wp_kses_post alone strips form and input,
+	 * which would leave the confirm buttons doing nothing).
+	 *
+	 * @return array
+	 */
+	protected static function allowed_html() {
+		$tags           = wp_kses_allowed_html( 'post' );
+		$tags['form']   = array( 'method' => true, 'action' => true, 'style' => true );
+		$tags['input']  = array( 'type' => true, 'name' => true, 'value' => true );
+		$tags['button'] = array( 'type' => true, 'class' => true, 'style' => true, 'name' => true, 'value' => true );
+		return $tags;
+	}
+
+	/**
 	 * A minimal branded page.
 	 *
 	 * @param string $title Title.
 	 * @param string $body  HTML body.
 	 * @param bool   $raw   True if body is already HTML.
 	 */
-	protected static function page( $title, $body, $raw = false ) {
+	public static function page( $title, $body, $raw = false ) {
 		$c        = Templates::palette();
 		$business = setting( 'business_name' );
 		if ( ! $raw ) {
@@ -135,7 +164,7 @@ body{margin:0;background:<?php echo esc_attr( $c['bg'] ); ?>;font-family:-apple-
 .a2e-btn{display:inline-block;padding:12px 24px;border:0;border-radius:10px;background:linear-gradient(120deg,<?php echo esc_attr( $c['brand2'] ); ?>,<?php echo esc_attr( $c['brand'] ); ?>);color:#fff;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;}
 a{color:<?php echo esc_attr( $c['brand'] ); ?>;}
 </style></head>
-<body><div class="wrap"><div class="card"><div class="head"><?php echo esc_html( $business ); ?></div><div class="body"><h1><?php echo esc_html( $title ); ?></h1><?php echo wp_kses_post( $body ); ?></div></div></div></body></html>
+<body><div class="wrap"><div class="card"><div class="head"><?php echo esc_html( $business ); ?></div><div class="body"><h1><?php echo esc_html( $title ); ?></h1><?php echo wp_kses( $body, self::allowed_html() ); ?></div></div></div></body></html>
 		<?php
 		exit;
 	}

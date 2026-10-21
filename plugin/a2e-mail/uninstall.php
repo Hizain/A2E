@@ -16,7 +16,7 @@ foreach ( array( 'a2email_contacts', 'a2email_queue', 'a2email_enrollments' ) as
 	$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery
 }
 
-foreach ( array( 'a2email_settings', 'a2email_log', 'a2email_db_version', 'a2email_last_sync', 'a2email_templates_seeded', 'a2email_sequences_seeded', 'a2email_processing', 'a2email_delivery', 'a2email_last_fail' ) as $opt ) {
+foreach ( array( 'a2email_settings', 'a2email_log', 'a2email_db_version', 'a2email_last_sync', 'a2email_templates_seeded', 'a2email_sequences_seeded', 'a2email_processing', 'a2email_delivery', 'a2email_last_fail', 'a2email_newsletter', 'a2email_newsletter_state', 'a2email_nl_lock', 'a2email_welcome_seeded', 'a2email_welcome_sequence', 'a2email_weekly_migrated', 'a2email_templates_v13' ) as $opt ) {
 	delete_option( $opt );
 }
 

@@ -3,7 +3,7 @@ Contributors: a2edropshipping
 Requires at least: 6.3
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 
 Design and send professional, on-brand emails to the people you already have a relationship with: your clients and everyone who contacted you or subscribed on your website.
@@ -24,6 +24,8 @@ Features:
 
 * **Branded, email-safe designs** in your theme's colours. Write in a simple format (paragraphs, ## headings, - bullets, [[Label|link]] buttons) with merge tags like {{first_name}}. Long dashes are removed automatically, and your WhatsApp, call number, email and a one-click unsubscribe are added to every message.
 * **Ready-made templates** for welcoming clients, following up an audit request, a seasonal promotion, a monthly check-in, and a blank branded message. Edit the wording freely under Templates.
+* **Welcome email for every new contact (new in 1.3)**: the moment someone is added (by you, or through a form or newsletter sign-up) they get "who we are and what we offer": Amazon to eBay dropshipping stores, branded eBay stores, Shopify stores and Claude automation, with a free audit button. It is sent once per person and is fully editable under Automations.
+* **Weekly newsletter (new in 1.3)**: on the day and time you choose, an issue is built for you from your new blog posts, a tip of the week, a free tool of the week and your offer, then sent to your weekly list. Preview it, send yourself a test, add a note for the next issue, send it now or skip a week. People join through your newsletter form, the "Yes, send me the weekly tips" button in the welcome email, or when you add them and tick that they asked for it. They can leave the weekly newsletter alone or unsubscribe from everything.
 * **Composer** with a live preview and a test send. Send to a group (all subscribers, clients, newsletter, form leads, or contacts you added) or to one person.
 * **A safe sending queue** with per-minute, per-hour and per-day limits so your domain is never flooded. Pause and resume any send.
 * **Automatic follow-up sequences (new in 1.1)**: set your follow-ups once and they send themselves. A trigger (a new audit request, a new client, a health-check signup, a new subscriber) enrols the person, and timed steps go out on the schedule you choose. Each sequence stops on its own when the person unsubscribes or becomes a client, so nobody is ever over-emailed. Two ready sequences are included (free audit follow-up, new client welcome), switched off until you review them.
@@ -40,6 +42,18 @@ This plugin reads contacts from your own WordPress site (form Leads and Whop cli
 A2E Mail → Settings: the From name and address, your contact details and postal address (required in the footer), sending limits, and optional SMTP. A2E Mail → Templates: edit the ready-made emails or add your own.
 
 == Changelog ==
+
+= 1.3.0 =
+* New: welcome email. Every new contact gets "what we offer" straight away: added by hand, contact, audit and consultation forms, newsletter sign-ups and the health checker. Sent once per person, switched on, and editable (A2E Mail > Automations > Welcome: what we offer). Existing contacts are not emailed unless you press "Send it to my existing matching contacts".
+* New: weekly newsletter (A2E Mail > Newsletter). Choose the day, time and audience; each issue is built from new blog posts, a rotating tip of the week (13 included, editable), a free tool of the week from A2E Prime and your offer section. Preview, test, send now, skip a week, a one-off note for the next issue, and a list of past issues with delivery progress. Off until you switch it on.
+* New: weekly list. Newsletter form sign-ups join it automatically, the welcome email offers a join button (with a confirm step so link scanners never sign anyone up), and the add-contact form has "They asked for the weekly newsletter too". The unsubscribe page offers "Only stop the weekly newsletter".
+* New: automations can start from several triggers, including "You add a contact by hand", can send only once per person, send a "wait 0" first step the moment the person is added, and have a "Send me a test of every step" button.
+* New: email format supports [text](https://link) links, ![alt](https://image) images, ### small headings and --- dividers, plus merge tags {{audit_url}}, {{consultation_url}}, {{pricing_url}}, {{tools_url}}, {{blog_url}} and {{weekly_invite}}.
+* New: "What we offer (A2E Dropshipping)" template for one-off sends from Compose.
+* Fix: the "Yes, unsubscribe me" button on the unsubscribe page now works when clicked (the page's form was being stripped). One-click unsubscribe from the inbox always worked.
+* Fix: subjects like "{{first_name}}, ..." no longer read "there, ..." when the contact has no name.
+* Fix: admin screens fit on a phone.
+* Improvement: an SMTP server that does not answer now fails after 20 seconds instead of 5 minutes.
 
 = 1.2.0 =
 * Fix: contact, quote and consultation form notifications (and Health Checker reports and WordPress emails) now use your From address and, when it is on, your SMTP server. Before, only A2E Mail's own emails did, so notifications went out from "wordpress@" your domain through the server's basic mail function and were often rejected or sent to spam without anyone being told. New setting "Use these settings for every email this site sends", on by default.
