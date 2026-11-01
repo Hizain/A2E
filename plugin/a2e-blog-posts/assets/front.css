@@ -1,0 +1,57 @@
+/* A2E Blog Posts. With A2E Prime the sections use the theme's own cards and colours. */
+
+/* Columns (the theme's grid already drops to 2 columns at 1000px and 1 at 760px). */
+@media (min-width: 1001px) {
+	.a2ebp--cols-2 .a2ebp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.a2ebp--cols-4 .a2ebp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1241px) {
+	.a2ebp--cols-4 .a2ebp-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+	.a2ebp--cols-4 .post-card__title { font-size: 1.05rem; }
+}
+
+/* Inside page content (shortcode): keep the theme's card look, not the article text styles. */
+.a2ebp--inline { margin: 2.4em 0; }
+.a2ebp--inline .sec-row { margin-bottom: 24px; }
+.prose .a2ebp { font-size: 1rem; line-height: 1.6; }
+.prose .a2ebp a { text-decoration: none; }
+.prose .a2ebp h2 + *,
+.prose .a2ebp h3 + * { margin-top: 0; }
+.prose .a2ebp h2,
+.prose .a2ebp h3 { margin-top: 0; }
+.prose .a2ebp .sec-head__title { font-size: clamp(1.5rem, 2.6vw, 2rem); }
+.prose .a2ebp .post-card__title { font-size: 1.12rem; }
+.prose .a2ebp .post-card__title a { color: var(--text); }
+.prose .a2ebp .post-card__title a:hover { color: var(--brand-ink); }
+.prose .a2ebp img { border-radius: 0; }
+.prose .a2ebp .tag { text-decoration: none; }
+@media (min-width: 761px) {
+	.container--narrow .a2ebp-grid,
+	.prose .a2ebp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Other themes: a simple, self-contained card grid. */
+.a2ebp--own { --a2ebp-text: #0b1030; --a2ebp-muted: #4b5375; --a2ebp-line: #e4e7f2; --a2ebp-surface: #fff; --a2ebp-brand: #2b4cf2; }
+@media (prefers-color-scheme: dark) {
+	.a2ebp--own { --a2ebp-text: #eef1ff; --a2ebp-muted: #a9b0cf; --a2ebp-line: #262c4d; --a2ebp-surface: #11152e; --a2ebp-brand: #8ea2ff; }
+}
+section.a2ebp--own { padding: 64px 0; }
+section.a2ebp--own .container { width: min(1200px, 100% - 32px); margin: 0 auto; }
+.a2ebp--own .a2ebp-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 24px; }
+.a2ebp--own .a2ebp-eyebrow { margin: 0 0 6px; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--a2ebp-brand); }
+.a2ebp--own .a2ebp-title { margin: 0; font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1.15; color: var(--a2ebp-text); }
+.a2ebp--own .a2ebp-title em { font-style: italic; color: var(--a2ebp-brand); }
+.a2ebp--own .a2ebp-intro { margin: 8px 0 0; color: var(--a2ebp-muted); max-width: 640px; }
+.a2ebp--own .a2ebp-btn { display: inline-flex; align-items: center; min-height: 42px; padding: 0 18px; border: 1px solid var(--a2ebp-line); border-radius: 999px; color: var(--a2ebp-text); font-weight: 600; text-decoration: none; }
+.a2ebp--own .a2ebp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.a2ebp--own .a2ebp-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--a2ebp-line); border-radius: 18px; background: var(--a2ebp-surface); }
+.a2ebp--own .a2ebp-card__img { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--a2ebp-line); }
+.a2ebp--own .a2ebp-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.a2ebp--own .a2ebp-card__body { display: flex; flex-direction: column; gap: 8px; flex: 1; padding: 18px 20px 20px; }
+.a2ebp--own .a2ebp-card__cat { align-self: flex-start; font-size: .75rem; font-weight: 650; color: var(--a2ebp-brand); text-decoration: none; }
+.a2ebp--own .a2ebp-card__title { margin: 0; font-size: 1.1rem; line-height: 1.3; }
+.a2ebp--own .a2ebp-card__title a { color: var(--a2ebp-text); text-decoration: none; }
+.a2ebp--own .a2ebp-card__excerpt { margin: 0; font-size: .92rem; color: var(--a2ebp-muted); }
+.a2ebp--own .a2ebp-card__date { margin-top: auto; font-size: .8rem; color: var(--a2ebp-muted); }
+@media (max-width: 1000px) { .a2ebp--own .a2ebp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .a2ebp--own .a2ebp-grid { grid-template-columns: minmax(0, 1fr); } }
